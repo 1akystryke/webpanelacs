@@ -1,16 +1,86 @@
-from flask import Flask, jsonify, request,send_file
+from flask import Flask, jsonify, request, send_file, session, redirect, url_for, render_template
 
 import os
+import secrets
 import threading
 import time
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="vue")
+app.secret_key = os.getenv("SESSION_SECRET", "dev-insecure-secret")
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+app.config["SESSION_COOKIE_SECURE"] = os.getenv("SESSION_COOKIE_SECURE", "0") == "1"
 
 def _get_env():
     return {
         "server_path": os.getenv("SERVER_PATH", ""),
         "port": int(os.getenv("PORT", "5000")),
     }
+
+def _get_auth_env():
+    return {
+        "username": os.getenv("AUTH_USER", ""),
+        "password": os.getenv("AUTH_PASS", ""),
+    }
+
+login_attempts = {}
+LOGIN_WINDOW_SECONDS = 300
+LOGIN_MAX_FAILS = 5
+LOGIN_BLOCK_SECONDS = 300
+
+def _get_client_ip():
+    forwarded = request.headers.get("X-Forwarded-For", "")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    return request.remote_addr or "unknown"
+
+def _login_is_blocked(ip):
+    record = login_attempts.get(ip)
+    if not record:
+        return False
+    return record.get("blocked_until", 0) > time.time()
+
+def _record_login_failure(ip):
+    now = time.time()
+    record = login_attempts.setdefault(ip, {"fails": [], "blocked_until": 0})
+    record["fails"] = [t for t in record["fails"] if now - t < LOGIN_WINDOW_SECONDS]
+    record["fails"].append(now)
+    if len(record["fails"]) >= LOGIN_MAX_FAILS:
+        record["blocked_until"] = now + LOGIN_BLOCK_SECONDS
+
+def _clear_login_failures(ip):
+    if ip in login_attempts:
+        login_attempts.pop(ip, None)
+
+def _ensure_csrf_token():
+    token = session.get("csrf_token")
+    if not token:
+        token = secrets.token_urlsafe(32)
+        session["csrf_token"] = token
+    return token
+
+def _validate_csrf(token):
+    return token and session.get("csrf_token") == token
+
+def _is_logged_in():
+    return session.get("auth") is True
+
+@app.before_request
+def require_login():
+    if request.path.startswith("/api/") or request.path == "/":
+        if not _is_logged_in():
+            if request.path.startswith("/api/"):
+                return jsonify({"error": "unauthorized"}), 401
+            return redirect(url_for("login", next=request.path))
+    if request.path == "/login" and _is_logged_in():
+        return redirect("/")
+    if request.method in {"POST", "PUT", "PATCH", "DELETE"}:
+        if request.path.startswith("/api/") or request.path in {"/logout", "/login"}:
+            token = request.headers.get("X-CSRF-Token") or request.form.get("csrf_token")
+            if not _validate_csrf(token):
+                if request.path.startswith("/api/"):
+                    return jsonify({"error": "csrf"}), 400
+                return redirect(url_for("login", error="3"))
 
 # ----------------------
 # Mock server state
@@ -90,6 +160,7 @@ def get_session():
 @app.route("/api/session", methods=["PUT"])
 def update_session():
     data = request.json
+    print(data)
     session_state.update(data)
     logs.append("Session updated")
     return jsonify({"success": True})
@@ -127,9 +198,37 @@ def get_logs():
     limit = int(request.args.get("limit", 100))
     return jsonify(logs[-limit:])
 
+@app.route("/api/csrf")
+def get_csrf():
+    return jsonify({"token": _ensure_csrf_token()})
+
 # ----------------------
 # WEB APP
 # ----------------------
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "GET":
+        csrf_token = _ensure_csrf_token()
+        return render_template("login.html", csrf_token=csrf_token)
+    ip = _get_client_ip()
+    if _login_is_blocked(ip):
+        return redirect(url_for("login", error="2"))
+    auth_env = _get_auth_env()
+    username = request.form.get("username", "")
+    password = request.form.get("password", "")
+    if username == auth_env["username"] and password == auth_env["password"] and username:
+        session["auth"] = True
+        _clear_login_failures(ip)
+        next_url = request.form.get("next") or request.args.get("next") or "/"
+        return redirect(next_url)
+    _record_login_failure(ip)
+    return redirect(url_for("login", error="1"))
+
+@app.route("/logout", methods=["POST"])
+def logout():
+    session.clear()
+    return redirect(url_for("login"))
+
 @app.route("/")
 def index():
     return send_file("vue/index.html")

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Вход</title>
+    <style>
+      :root {
+        color-scheme: light;
+      }
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, sans-serif;
+        background: #f2f4f8;
+        color: #111827;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .card {
+        width: 100%;
+        max-width: 360px;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        padding: 28px;
+      }
+      h1 {
+        margin: 0 0 16px;
+        font-size: 20px;
+        font-weight: 700;
+      }
+      label {
+        display: block;
+        margin-top: 12px;
+        font-size: 14px;
+        color: #374151;
+      }
+      input {
+        width: 100%;
+        padding: 10px 12px;
+        margin-top: 6px;
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+        font-size: 14px;
+      }
+      button {
+        margin-top: 18px;
+        width: 100%;
+        background: #1f2937;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      .error {
+        margin-top: 12px;
+        color: #b91c1c;
+        font-size: 13px;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>Вход в панель</h1>
+      <form method="post" action="/login">
+        <input id="csrf_token" name="csrf_token" type="hidden" value="{{ csrf_token }}" />
+        <input id="next" name="next" type="hidden" value="" />
+        <label for="username">Логин</label>
+        <input id="username" name="username" type="text" autocomplete="username" required />
+        <label for="password">Пароль</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required />
+        <button type="submit">Войти</button>
+        <div class="error" id="error">Неверный логин или пароль</div>
+      </form>
+    </div>
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const error = params.get("error");
+      const errorBox = document.getElementById("error");
+      if (error === "1") {
+        errorBox.textContent = "Неверный логин или пароль";
+        errorBox.style.display = "block";
+      }
+      if (error === "2") {
+        errorBox.textContent = "Слишком много попыток. Попробуйте позже.";
+        errorBox.style.display = "block";
+      }
+      if (error === "3") {
+        errorBox.textContent = "Сессия устарела. Обновите страницу.";
+        errorBox.style.display = "block";
+      }
+      const nextValue = params.get("next") || "";
+      document.getElementById("next").value = nextValue;
+    </script>
+  </body>
+</html>
