@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AC Control • Production</title>
+<script src="https://unpkg.com/vue@3"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui;background:#f6f7fb;color:#111}
+.app{display:flex;height:100vh}
+.sidebar{width:260px;background:#0f172a;color:#fff;padding:24px;display:flex;flex-direction:column}
+.logo{font-weight:700;font-size:22px;margin-bottom:30px;background:linear-gradient(90deg,#ff2a2a,#ff6a6a);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-item{padding:12px;border-radius:12px;color:#94a3b8;text-decoration:none;margin-bottom:8px;cursor:pointer;transition:.2s}
+.nav-item.active,.nav-item:hover{background:#ff2a2a;color:#fff}
+.main{flex:1;display:flex;flex-direction:column}
+.header{padding:16px 24px;background:#fff;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center}
+.content{padding:24px;overflow:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px}
+.card{background:#fff;border-radius:20px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,0.05);transition:.2s}
+.card:hover{transform:translateY(-3px)}
+.btn{padding:10px 14px;border:none;border-radius:10px;cursor:pointer;font-weight:600;transition:.2s}
+.btn-primary{background:linear-gradient(90deg,#ff2a2a,#ff6a6a);color:#fff}
+.btn-primary:hover{opacity:.9}
+.btn-secondary{background:#f1f5f9}
+.input,select{width:100%;padding:10px;border-radius:10px;border:1px solid #e2e8f0;margin-bottom:10px}
+.status{padding:6px 12px;border-radius:999px;font-size:12px;font-weight:600}
+.online{background:#dcfce7;color:#166534}
+.offline{background:#fee2e2;color:#991b1b}
+.loading{background:#fef3c7;color:#92400e}
+.fade-enter-active,.fade-leave-active{transition:opacity .2s}
+.fade-enter-from,.fade-leave-to{opacity:0}
+</style>
+</head>
+<body>
+<div id="app" class="app">
+
+<div class="sidebar">
+  <div class="logo">AC Control</div>
+  <div class="nav-item" :class="{active:tab==='dashboard'}" @click="tab='dashboard'">Dashboard</div>
+  <div class="nav-item" :class="{active:tab==='session'}" @click="tab='session'">Session</div>
+  <div class="nav-item" :class="{active:tab==='players'}" @click="tab='players'">Players</div>
+</div>
+
+<div class="main">
+  <div class="header">
+    <strong>{{ tab.toUpperCase() }}</strong>
+    <span :class="['status',statusClass]">{{ server.status || '...' }}</span>
+  </div>
+
+  <div class="content">
+
+    <transition name="fade" mode="out-in">
+
+    <!-- DASHBOARD -->
+    <div v-if="tab==='dashboard'" key="dash" class="grid">
+      <div class="card">
+        <h3>Server Status</h3>
+        <p><b>{{ server.players || 0 }}/{{ server.maxPlayers || 0 }}</b> players</p>
+        <p>Uptime: {{ server.uptime || 0 }}s</p>
+        <div style="display:flex;gap:10px;margin-top:10px">
+          <button class="btn btn-primary" @click="start">Start</button>
+          <button class="btn btn-secondary" @click="stop">Stop</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SESSION -->
+    <div v-if="tab==='session'" key="sess" class="card">
+      <h3>Session Config</h3>
+
+      <label>Track</label>
+      <select v-model="session.track">
+        <option v-for="t in tracks" :value="t.id">{{ t.id }}</option>
+      </select>
+
+      <label>Cars</label>
+      <div v-for="(c,i) in session.cars" :key="i" style="display:flex;gap:10px">
+        <select v-model="session.cars[i]">
+          <option v-for="car in cars" :value="car.id">{{ car.name }}</option>
+        </select>
+        <button class="btn btn-secondary" @click="removeCar(i)">✕</button>
+      </div>
+      <button class="btn btn-primary" @click="addCar">+ Add car</button>
+      <button class="btn btn-primary" style="margin-top:10px" @click="saveSession">Save</button>
+    </div>
+
+    <!-- PLAYERS -->
+    <div v-if="tab==='players'" key="pl" class="card">
+      <h3>Players</h3>
+      <div v-if="!players.length">No players</div>
+      <div v-for="p in players" :key="p.name" style="padding:8px 0;border-bottom:1px solid #eee">
+        <b>{{ p.name }}</b> — {{ p.ping }} ms
+      </div>
+    </div>
+
+    </transition>
+
+  </div>
+</div>
+</div>
+
+<script>
+const {createApp}=Vue
+createApp({
+ data(){return{
+  tab:'dashboard',
+  server:{},
+  session:{cars:[]},
+  cars:[],
+  tracks:[],
+  players:[],
+  loading:false
+ }},
+ computed:{
+  statusClass(){
+    if(this.server.status==='ONLINE')return 'online'
+    if(this.server.status==='OFFLINE')return 'offline'
+    return 'loading'
+  }
+ },
+ methods:{
+  async api(url,options){
+    const res=await fetch(url,options)
+    return res.json()
+  },
+  async fetchAll(){
+    try{
+      this.loading=true
+      const [s,se,c,t,p]=await Promise.all([
+        this.api('/api/server/status'),
+        this.api('/api/session'),
+        this.api('/api/cars'),
+        this.api('/api/tracks'),
+        this.api('/api/players')
+      ])
+      this.server=s
+      this.session=se
+      this.cars=c
+      this.tracks=t
+      this.players=p
+    }finally{
+      this.loading=false
+    }
+  },
+  async start(){await this.api('/api/server/start',{method:'POST'});this.fetchAll()},
+  async stop(){await this.api('/api/server/stop',{method:'POST'});this.fetchAll()},
+  addCar(){if(this.cars.length)this.session.cars.push(this.cars[0].id)},
+  removeCar(i){this.session.cars.splice(i,1)},
+  async saveSession(){
+    await this.api('/api/session',{
+      method:'PUT',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(this.session)
+    })
+  }
+ },
+ mounted(){
+  this.fetchAll()
+ }
+}).mount('#app')
+</script>
+
+</body>
+</html>
