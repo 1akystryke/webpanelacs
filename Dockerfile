@@ -10,6 +10,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app.py ./
 COPY vue  ./vue/
+COPY core ./core/
 
 EXPOSE 5000
 

@@ -3,9 +3,15 @@ from flask import Flask, jsonify, request, send_file, session, redirect, url_for
 import os
 import secrets
 import threading
+from core.core import Core
 import time
 
+# PATH = os.getenv("SERVER_PATH", "")
+PATH = "/ac_server"
+
 app = Flask(__name__, template_folder="vue")
+server_controller = Core(server_path=PATH)
+
 app.secret_key = os.getenv("SESSION_SECRET", "dev-insecure-secret")
 app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
@@ -119,16 +125,6 @@ tracks_list = [
 
 logs = []
 
-# ----------------------
-# Background uptime
-# ----------------------
-def uptime_worker():
-    while True:
-        if server_state["status"] == "ONLINE":
-            server_state["uptime"] += 1
-        time.sleep(1)
-
-threading.Thread(target=uptime_worker, daemon=True).start()
 
 # ----------------------
 # Server endpoints
@@ -139,15 +135,12 @@ def get_status():
 
 @app.route("/api/server/start", methods=["POST"])
 def start_server():
-    server_state["status"] = "ONLINE"
-    logs.append("Server started")
+    server_controller.start()
     return jsonify({"success": True})
 
 @app.route("/api/server/stop", methods=["POST"])
 def stop_server():
-    server_state["status"] = "OFFLINE"
-    server_state["uptime"] = 0
-    logs.append("Server stopped")
+    server_controller.shutdown()
     return jsonify({"success": True})
 
 # ----------------------
