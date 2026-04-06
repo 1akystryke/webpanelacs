@@ -144,12 +144,12 @@ def get_status():
 
 @app.route("/api/server/start", methods=["POST"])
 def start_server():
-    server_controller.supervisor_start()
+    res = server_controller.supervisor_start()
     return jsonify({"success": True})
 
 @app.route("/api/server/stop", methods=["POST"])
 def stop_server():
-    server_controller.supervisor_stop()
+    res = server_controller.supervisor_stop()
     return jsonify({"success": True})
 
 # ----------------------

@@ -15,7 +15,7 @@ class Core:
     def print_exe_path(self):
         print(self.server_exe)
 
-    def supervisor_stop():
+    def supervisor_stop(self):
         result = subprocess.run(
             ["supervisorctl", "stop", "acserver"],
             capture_output=True,
@@ -23,7 +23,7 @@ class Core:
         )
         return result.stdout.strip(), result.stderr.strip()
 
-    def supervisor_start():
+    def supervisor_start(self):
         result = subprocess.run(
             ["supervisorctl", "start", "acserver"],
             capture_output=True,
