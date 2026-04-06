@@ -1,0 +1,9 @@
+services:
+  ac_web:
+    build: .
+    container_name: ac_web
+    env_file: .env
+    ports:
+      - "${PORT:-5000}:5000"
+    volumes:
+      - "${SERVER_PATH}:/ac_server:rw"
