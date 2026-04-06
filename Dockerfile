@@ -11,6 +11,8 @@ RUN apt-get update && apt-get install -y supervisor && pip install --no-cache-di
 COPY app.py ./
 COPY vue  ./vue/
 COPY core ./core/
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
 
 EXPOSE 5000
 
