@@ -131,16 +131,25 @@ logs = []
 # ----------------------
 @app.route("/api/server/status")
 def get_status():
-    return jsonify(server_state)
+    server_state = server_controller.status()
+    if "RUNNING" in str(server_state):
+        return jsonify({"status": "ONLINE",
+        "uptime": 0,
+    "players": 0,
+    "maxPlayers": 16,
+    "track": "monza",
+    "sessionType": "RACE"
+})
+    return jsonify({"status":"offline"})
 
 @app.route("/api/server/start", methods=["POST"])
 def start_server():
-    server_controller.start()
+    server_controller.supervisor_start()
     return jsonify({"success": True})
 
 @app.route("/api/server/stop", methods=["POST"])
 def stop_server():
-    server_controller.shutdown()
+    server_controller.supervisor_stop()
     return jsonify({"success": True})
 
 # ----------------------

@@ -15,24 +15,30 @@ class Core:
     def print_exe_path(self):
         print(self.server_exe)
 
-    def start(self):
-        os.chdir(self.server_path)
-        cmd = [str(self.server_exe)]
+    def supervisor_stop():
+        result = subprocess.run(
+            ["supervisorctl", "stop", "acserver"],
+            capture_output=True,
+            text=True
+        )
+        return result.stdout.strip(), result.stderr.strip()
 
-        with subprocess.Popen(
-            cmd,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.STDOUT,
-            text=True,
-            bufsize=1,
-            start_new_session=True,
-        ) as self.process:
-            self.running = True
-
-        print(f"Server is running (PID: {self.process.pid})")
+    def supervisor_start():
+        result = subprocess.run(
+            ["supervisorctl", "start", "acserver"],
+            capture_output=True,
+            text=True
+        )
+        return result.stdout.strip(), result.stderr.strip()
 
     def status(self):
-        pass
+        
+        result = subprocess.run(
+            ["supervisorctl", "status", "acserver"],
+            capture_output=True,
+            text=True
+        )
+        return result.stdout.strip(), result.stderr.strip()
 
     def shutdown(self):
         self.running = False
