@@ -25,20 +25,37 @@ class Core:
             default_cars = cars
 
         mod_cars = set.difference(set(server_cars), (x["id"] for x in default_cars))
-        
+
         result_cars = default_cars
         for mod_car in list(mod_cars):
             ui_path = os.path.join(self.cars_path, mod_car, "ui", "ui_car.json")
-            with open(ui_path, "r", encoding="utf-8-sig") as f:
-                content = f.read()
-                content = content.replace("\t", "").replace("\n", "")
-                data = json.loads(content)
-                result_cars.append({"id": mod_car, "name": data["name"]})
-            
+            data = self._read_ui(ui_path)
+            result_cars.append({"id": mod_car, "name": data["name"]})
+
         return result_cars
 
     def list_tracks(self):
-        return os.listdir(self.tracks_path)
+        tracks = []
+        tracks_dir = os.listdir(self.tracks_path)
+
+        for track in tracks_dir:
+            track_obj = {}
+
+            root = os.path.join(self.tracks_path, track)
+            track_obj["id"] = track
+            layouts = os.listdir(root)
+            if layouts:
+                track_obj["layouts"] = layouts
+            tracks.append(track_obj)
+
+        return tracks
+
+    def _read_ui(self, ui_path):
+        with open(ui_path, "r", encoding="utf-8-sig") as ui:
+            content = ui.read()
+            content = content.replace("\t", "").replace("\n", "")
+            data = json.loads(content)
+            return data
 
     def start(self):
         os.chdir(self.server_path)

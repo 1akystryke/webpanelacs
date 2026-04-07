@@ -475,12 +475,12 @@ createApp({
                     this.api('/api/players')
                 ])
                 this.server = s
-                
+
                 // Заполняем сессию
                 this.session.cars = se.cars || []
                 this.session.track = se.track || ''
                 this.session.trackVariant = se.trackVariant || ''
-                this.session.trackVariants = se.trackVariants || []
+                this.session.trackVariants = se.layouts || []
                 this.session.tyreWear = se.tyreWear || 1
                 this.session.damage = se.damage || 1
                 this.session.fuelConsumption = se.fuelConsumption || 1

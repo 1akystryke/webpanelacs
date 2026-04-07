@@ -161,6 +161,7 @@ def get_cars():
 
 @app.route("/api/tracks")
 def get_tracks():
+    tracks_list = server_controller.list_tracks()
     return jsonify(tracks_list)
 
 # ----------------------
