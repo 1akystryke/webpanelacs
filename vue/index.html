@@ -263,7 +263,7 @@
                 {{ tab === 'dashboard' ? 'Обзор сервера' : tab === 'session' ? 'Настройка сессии' : 'Игроки онлайн' }}
             </div>
             
-            <span :class="['status', statusClass]">{{ server.status || 'Загрузка...' }}</span>
+            <span :class="['status', statusClass]">{{ statusClass }}</span>
             
             <div style="display:flex; align-items:center; gap:12px;">
                 <button class="logout-btn" @click="logout">Выйти</button>
@@ -283,7 +283,7 @@
                     <div class="card">
                         <h3 style="margin:0 0 16px; font-size:22px;">Состояние сервера</h3>
                         <div style="font-size:48px; font-weight:700; line-height:1;">
-                            {{ server.players || 0 }}<span style="font-size:28px; color:#64748b;">/{{ server.maxPlayers || 24 }}</span>
+                            {{ server.clients || 0 }}<span style="font-size:28px; color:#64748b;">/{{ server.maxclients }}</span>
                         </div>
                         <p style="margin:4px 0 24px; color:#64748b;">игроков онлайн</p>
 
@@ -434,9 +434,8 @@ createApp({
     },
     computed: {
         statusClass() {
-            if (this.server.status === 'ONLINE') return 'online'
-            if (this.server.status === 'OFFLINE') return 'offline'
-            return 'loading'
+            if (this.server) return 'online'
+            return 'offline'
         }
     },
     methods: {
@@ -468,7 +467,7 @@ createApp({
             try {
                 this.loading = true
                 const [s, se, c, t, p] = await Promise.all([
-                    this.api('/api/server/status'),
+                    this.api('/api/info'),
                     this.api('/api/session'),
                     this.api('/api/cars'),
                     this.api('/api/tracks'),

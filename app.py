@@ -4,6 +4,7 @@ import os
 import secrets
 from core.core import Core
 import time
+import requests
 
 # PATH = os.getenv("SERVER_PATH", "")
 PATH = "/ac_server"
@@ -12,6 +13,7 @@ app = Flask(__name__, template_folder="vue")
 server_controller = Core(server_path=PATH)
 
 app.secret_key = os.getenv("SESSION_SECRET", "dev-insecure-secret")
+hostname = os.getenv("HOSTNAME")
 app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 app.config["SESSION_COOKIE_SECURE"] = os.getenv("SESSION_COOKIE_SECURE", "0") == "1"
@@ -19,7 +21,7 @@ app.config["SESSION_COOKIE_SECURE"] = os.getenv("SESSION_COOKIE_SECURE", "0") ==
 def _get_env():
     return {
         "server_path": os.getenv("SERVER_PATH", ""),
-        "port": int(os.getenv("PORT", "5000")),
+        "port": int(os.getenv("PORT", "5000"))
     }
 
 def _get_auth_env():
@@ -198,9 +200,24 @@ def get_players():
         }
     ])
 
+@app.route("/api/info")
+def get_info():
+    url = "http://"+hostname+":8081/INFO"
+
+    payload = {}
+    headers = {
+      'Content-Type': 'application/json'
+    }
+
+    response = requests.request("GET", url, headers=headers, data=payload)
+
+    return response.json(),200
+
 # ----------------------
 # Logs
 # ----------------------
+
+
 @app.route("/api/logs")
 def get_logs():
     limit = int(request.args.get("limit", 100))
