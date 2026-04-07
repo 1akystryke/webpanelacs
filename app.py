@@ -155,7 +155,19 @@ def update_session():
     data = request.json
     print(data)
     server_controller.set_car_list(data["cars"])
-    session_state.update(data)
+
+
+    server_controller.set_server_parameter("DAMAGE_MULTIPLIER",data["damage"])
+    server_controller.set_server_parameter("FUEL_RATE",data["fuelConsumption"])
+    server_controller.set_server_parameter("CONFIG_TRACK",data["trackVariant"])
+    server_controller.set_server_parameter("TRACK",data["track"])
+    server_controller.set_server_parameter("TYRE_WEAR_RATE",data["tyreWear"])
+    
+    server_controller.set_qualify_duration(data["qualifyingDuration"])
+    server_controller.set_practice_duration(data["practiceDuration"])
+    server_controller.set_race_laps_amount(data["raceLaps"])
+
+
     logs.append("Session updated")
     return jsonify({"success": True})
 
@@ -236,3 +248,4 @@ def index():
 if __name__ == "__main__":
     env = _get_env()
     app.run(host="0.0.0.0")
+

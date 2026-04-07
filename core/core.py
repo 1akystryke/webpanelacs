@@ -115,6 +115,21 @@ class Core:
         server_data["SERVER"][key] = value
         cp.write_new_server_cfg(server_data, self.server_cfg_path)
 
+    def set_race_laps_amount(self,value):
+        server_data = cp.get_server_config(self.server_cfg_path)
+        server_data["RACE"]["LAPS"] = value
+        cp.write_new_server_cfg(server_data, self.server_cfg_path)
+
+    def set_practice_duration(self,value):
+        server_data = cp.get_server_config(self.server_cfg_path)
+        server_data["PRACTICE"]["TIME"] = value
+        cp.write_new_server_cfg(server_data, self.server_cfg_path)
+
+    def set_qualify_duration(self,value):
+        server_data = cp.get_server_config(self.server_cfg_path)
+        server_data["QUALIFY"]["TIME"] = value
+        cp.write_new_server_cfg(server_data, self.server_cfg_path)
+
     def get_session_state(self):
         car_data = cp.get_current_cars(self.entry_list_path)
         server_data = cp.get_server_config(self.server_cfg_path)
