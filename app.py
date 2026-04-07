@@ -2,7 +2,6 @@ from flask import Flask, jsonify, request, send_file, session, redirect, url_for
 
 import os
 import secrets
-import threading
 from core.core import Core
 import time
 
@@ -112,16 +111,7 @@ session_state = {
     }
 }
 
-cars_list = [
-    {"id": "ks_ferrari_488_gt3", "name": "Ferrari 488 GT3"},
-    {"id": "ks_bmw_m4_gt3", "name": "BMW M4 GT3"},
-    {"id": "chetyrka", "name": "лада ебать четырнадцать"}
-]
 
-tracks_list = [
-    {"id": "monza", "layouts": ["gp", "junior"]},
-    {"id": "spa", "layouts": ["default"]}
-]
 
 logs = []
 
@@ -172,10 +162,12 @@ def update_session():
 # ----------------------
 @app.route("/api/cars")
 def get_cars():
+    cars_list = server_controller.list_cars()
     return jsonify(cars_list)
 
 @app.route("/api/tracks")
 def get_tracks():
+    tracks_list = server_controller.list_tracks()
     return jsonify(tracks_list)
 
 # ----------------------

@@ -1,0 +1,718 @@
+[
+  {
+    "id": "abarth500",
+    "name": "Abarth 500 EsseEsse"
+  },
+  {
+    "id": "abarth500_s1",
+    "name": "Abarth 500 EsseEsse Step1"
+  },
+  {
+    "id": "alfa_romeo_giulietta_qv",
+    "name": "Giulietta QV"
+  },
+  {
+    "id": "alfa_romeo_giulietta_qv_le",
+    "name": "Giulietta QV Launch Edition 2014"
+  },
+  {
+    "id": "bmw_1m",
+    "name": "BMW 1M"
+  },
+  {
+    "id": "bmw_1m_s3",
+    "name": "BMW 1M Stage 3"
+  },
+  {
+    "id": "bmw_m3_e30",
+    "name": "BMW M3 E30"
+  },
+  {
+    "id": "bmw_m3_e30_drift",
+    "name": "BMW M3 E30 Drift"
+  },
+  {
+    "id": "bmw_m3_e30_dtm",
+    "name": "BMW M3 E30 Gr.A 92"
+  },
+  {
+    "id": "bmw_m3_e30_gra",
+    "name": "BMW M3 E30 Group A"
+  },
+  {
+    "id": "bmw_m3_e30_s1",
+    "name": "BMW M3 E30 Step1"
+  },
+  {
+    "id": "bmw_m3_e92",
+    "name": "BMW M3 E92"
+  },
+  {
+    "id": "bmw_m3_e92_drift",
+    "name": "BMW M3 E92 drift"
+  },
+  {
+    "id": "bmw_m3_e92_s1",
+    "name": "BMW M3 E92 Step1"
+  },
+  {
+    "id": "bmw_m3_gt2",
+    "name": "BMW M3 GT2"
+  },
+  {
+    "id": "bmw_z4",
+    "name": "BMW Z4 E89"
+  },
+  {
+    "id": "bmw_z4_drift",
+    "name": "BMW Z4 E89 Drift"
+  },
+  {
+    "id": "bmw_z4_gt3",
+    "name": "BMW Z4 GT3"
+  },
+  {
+    "id": "bmw_z4_s1",
+    "name": "BMW Z4 E89 Step1"
+  },
+  {
+    "id": "ferrari_312t",
+    "name": "Ferrari 312T"
+  },
+  {
+    "id": "ferrari_458",
+    "name": "Ferrari 458 Italia"
+  },
+  {
+    "id": "ferrari_458_gt2",
+    "name": "Ferrari 458 GT2"
+  },
+  {
+    "id": "ferrari_458_s3",
+    "name": "Ferrari 458 Italia Stage 3"
+  },
+  {
+    "id": "ferrari_599xxevo",
+    "name": "Ferrari 599XX EVO"
+  },
+  {
+    "id": "ferrari_f40",
+    "name": "Ferrari F40"
+  },
+  {
+    "id": "ferrari_f40_s3",
+    "name": "Ferrari F40 Stage 3"
+  },
+  {
+    "id": "ferrari_laferrari",
+    "name": "Ferrari LaFerrari"
+  },
+  {
+    "id": "ks_abarth500_assetto_corse",
+    "name": "Abarth 500 Assetto Corse"
+  },
+  {
+    "id": "ks_abarth_595ss",
+    "name": "Abarth 595 SS"
+  },
+  {
+    "id": "ks_abarth_595ss_s1",
+    "name": "Abarth 595 SS Step 1"
+  },
+  {
+    "id": "ks_abarth_595ss_s2",
+    "name": "Abarth 595 SS Step 2"
+  },
+  {
+    "id": "ks_alfa_33_stradale",
+    "name": "Alfa Romeo 33 Stradale"
+  },
+  {
+    "id": "ks_alfa_giulia_qv",
+    "name": "Alfa Romeo Giulia Quadrifoglio"
+  },
+  {
+    "id": "ks_alfa_mito_qv",
+    "name": "Alfa Romeo Mito QV"
+  },
+  {
+    "id": "ks_alfa_romeo_155_v6",
+    "name": "Alfa Romeo 155 TI V6"
+  },
+  {
+    "id": "ks_alfa_romeo_4c",
+    "name": "Alfa Romeo 4C"
+  },
+  {
+    "id": "ks_alfa_romeo_gta",
+    "name": "Alfa Romeo GTA"
+  },
+  {
+    "id": "ks_audi_a1s1",
+    "name": "Audi S1"
+  },
+  {
+    "id": "ks_audi_r18_etron_quattro",
+    "name": "Audi R18 e-tron quattro 2014"
+  },
+  {
+    "id": "ks_audi_r8_lms",
+    "name": "Audi R8 LMS Ultra"
+  },
+  {
+    "id": "ks_audi_r8_lms_2016",
+    "name": "Audi R8 LMS 2016"
+  },
+  {
+    "id": "ks_audi_r8_plus",
+    "name": "Audi R8 V10 Plus"
+  },
+  {
+    "id": "ks_audi_sport_quattro",
+    "name": "Audi Sport quattro"
+  },
+  {
+    "id": "ks_audi_sport_quattro_rally",
+    "name": "Audi Sport quattro S1 E2"
+  },
+  {
+    "id": "ks_audi_sport_quattro_s1",
+    "name": "Audi Sport quattro Step1"
+  },
+  {
+    "id": "ks_audi_tt_cup",
+    "name": "Audi TT Cup"
+  },
+  {
+    "id": "ks_audi_tt_vln",
+    "name": "Audi TT RS (VLN)"
+  },
+  {
+    "id": "ks_bmw_m235i_racing",
+    "name": "BMW M235i Racing"
+  },
+  {
+    "id": "ks_bmw_m4",
+    "name": "BMW M4"
+  },
+  {
+    "id": "ks_bmw_m4_akrapovic",
+    "name": "BMW M4 Akrapovic"
+  },
+  {
+    "id": "ks_corvette_c7r",
+    "name": "Chevrolet Corvette C7R"
+  },
+  {
+    "id": "ks_corvette_c7_stingray",
+    "name": "Chevrolet Corvette C7 Stingray"
+  },
+  {
+    "id": "ks_ferrari_250_gto",
+    "name": "Ferrari 250 GTO"
+  },
+  {
+    "id": "ks_ferrari_288_gto",
+    "name": "Ferrari GTO"
+  },
+  {
+    "id": "ks_ferrari_312_67",
+    "name": "Ferrari 312/67"
+  },
+  {
+    "id": "ks_ferrari_330_p4",
+    "name": "Ferrari 330 P4"
+  },
+  {
+    "id": "ks_ferrari_488_gt3",
+    "name": "Ferrari 488 GT3"
+  },
+  {
+    "id": "ks_ferrari_488_gtb",
+    "name": "Ferrari 488 GTB"
+  },
+  {
+    "id": "ks_ferrari_812_superfast",
+    "name": "Ferrari 812 Superfast"
+  },
+  {
+    "id": "ks_ferrari_f138",
+    "name": "Ferrari F138"
+  },
+  {
+    "id": "ks_ferrari_f2004",
+    "name": "Ferrari F2004"
+  },
+  {
+    "id": "ks_ferrari_fxx_k",
+    "name": "Ferrari FXX K"
+  },
+  {
+    "id": "ks_ferrari_sf15t",
+    "name": "Ferrari SF15-T"
+  },
+  {
+    "id": "ks_ferrari_sf70h",
+    "name": "Ferrari SF70H"
+  },
+  {
+    "id": "ks_ford_escort_mk1",
+    "name": "Ford Escort RS1600"
+  },
+  {
+    "id": "ks_ford_gt40",
+    "name": "Ford GT40"
+  },
+  {
+    "id": "ks_ford_mustang_2015",
+    "name": "Ford Mustang 2015"
+  },
+  {
+    "id": "ks_glickenhaus_scg003",
+    "name": "SCG 003C"
+  },
+  {
+    "id": "ks_lamborghini_aventador_sv",
+    "name": "Lamborghini Aventador SV"
+  },
+  {
+    "id": "ks_lamborghini_countach",
+    "name": "Lamborghini Countach"
+  },
+  {
+    "id": "ks_lamborghini_countach_s1",
+    "name": "Lamborghini Countach S1"
+  },
+  {
+    "id": "ks_lamborghini_gallardo_sl",
+    "name": "Lamborghini Gallardo SL"
+  },
+  {
+    "id": "ks_lamborghini_gallardo_sl_s3",
+    "name": "Lamborghini Gallardo SL Step3"
+  },
+  {
+    "id": "ks_lamborghini_huracan_gt3",
+    "name": "Lamborghini Huracan GT3"
+  },
+  {
+    "id": "ks_lamborghini_huracan_performante",
+    "name": "Lamborghini Huracan Performante"
+  },
+  {
+    "id": "ks_lamborghini_huracan_st",
+    "name": "Lamborghini Huracan ST"
+  },
+  {
+    "id": "ks_lamborghini_miura_sv",
+    "name": "Lamborghini Miura P400 SV"
+  },
+  {
+    "id": "ks_lamborghini_sesto_elemento",
+    "name": "Lamborghini Sesto Elemento"
+  },
+  {
+    "id": "ks_lotus_25",
+    "name": "Lotus Type 25"
+  },
+  {
+    "id": "ks_lotus_3_eleven",
+    "name": "Lotus 3-Eleven"
+  },
+  {
+    "id": "ks_lotus_72d",
+    "name": "Lotus 72D"
+  },
+  {
+    "id": "ks_maserati_250f_12cyl",
+    "name": "Maserati 250F 12 cylinder"
+  },
+  {
+    "id": "ks_maserati_250f_6cyl",
+    "name": "Maserati 250F 6 cylinder"
+  },
+  {
+    "id": "ks_maserati_alfieri",
+    "name": "Maserati Alfieri"
+  },
+  {
+    "id": "ks_maserati_gt_mc_gt4",
+    "name": "Maserati GranTurismo MC GT4"
+  },
+  {
+    "id": "ks_maserati_levante",
+    "name": "Maserati Levante S"
+  },
+  {
+    "id": "ks_maserati_mc12_gt1",
+    "name": "Maserati MC12 GT1"
+  },
+  {
+    "id": "ks_maserati_quattroporte",
+    "name": "Maserati Quattroporte GTS"
+  },
+  {
+    "id": "ks_mazda_787b",
+    "name": "Mazda 787B"
+  },
+  {
+    "id": "ks_mazda_miata",
+    "name": "Mazda Miata NA"
+  },
+  {
+    "id": "ks_mazda_mx5_cup",
+    "name": "Mazda MX5 Cup"
+  },
+  {
+    "id": "ks_mazda_mx5_nd",
+    "name": "Mazda MX5 ND"
+  },
+  {
+    "id": "ks_mazda_rx7_spirit_r",
+    "name": "Mazda RX-7 Spirit R"
+  },
+  {
+    "id": "ks_mazda_rx7_tuned",
+    "name": "Mazda RX-7 Tuned"
+  },
+  {
+    "id": "ks_mclaren_570s",
+    "name": "McLaren 570S"
+  },
+  {
+    "id": "ks_mclaren_650_gt3",
+    "name": "McLaren 650S GT3"
+  },
+  {
+    "id": "ks_mclaren_f1_gtr",
+    "name": "McLaren F1 GTR"
+  },
+  {
+    "id": "ks_mclaren_p1",
+    "name": "McLaren P1\u2122"
+  },
+  {
+    "id": "ks_mclaren_p1_gtr",
+    "name": "McLaren P1\u2122 GTR"
+  },
+  {
+    "id": "ks_mercedes_190_evo2",
+    "name": "Mercedes-Benz 190E EVO II"
+  },
+  {
+    "id": "ks_mercedes_amg_gt3",
+    "name": "Mercedes-Benz AMG GT3"
+  },
+  {
+    "id": "ks_mercedes_c9",
+    "name": "Mercedes-Benz C9 1989 LM"
+  },
+  {
+    "id": "ks_nissan_370z",
+    "name": "Nissan 370z Nismo"
+  },
+  {
+    "id": "ks_nissan_gtr",
+    "name": "Nissan GT-R NISMO"
+  },
+  {
+    "id": "ks_nissan_gtr_gt3",
+    "name": "Nissan GT-R GT3"
+  },
+  {
+    "id": "ks_nissan_skyline_r34",
+    "name": "Nissan Skyline GTR R34 V-Spec"
+  },
+  {
+    "id": "ks_pagani_huayra_bc",
+    "name": "Pagani Huayra BC"
+  },
+  {
+    "id": "ks_porsche_718_boxster_s",
+    "name": "Porsche 718 Boxster S"
+  },
+  {
+    "id": "ks_porsche_718_boxster_s_pdk",
+    "name": "Porsche 718 Boxster S PDK"
+  },
+  {
+    "id": "ks_porsche_718_cayman_s",
+    "name": "Porsche 718 Cayman S"
+  },
+  {
+    "id": "ks_porsche_718_spyder_rs",
+    "name": "Porsche 718 RS 60 Spyder"
+  },
+  {
+    "id": "ks_porsche_908_lh",
+    "name": "Porsche 908 LH"
+  },
+  {
+    "id": "ks_porsche_911_carrera_rsr",
+    "name": "Porsche 911 Carrera RSR 3.0"
+  },
+  {
+    "id": "ks_porsche_911_gt1",
+    "name": "Porsche 911 GT1-98"
+  },
+  {
+    "id": "ks_porsche_911_gt3_cup_2017",
+    "name": "Porsche 911 GT3 Cup 2017"
+  },
+  {
+    "id": "ks_porsche_911_gt3_rs",
+    "name": "Porsche 911 GT3 RS"
+  },
+  {
+    "id": "ks_porsche_911_gt3_r_2016",
+    "name": "Porsche 911 GT3 R 2016"
+  },
+  {
+    "id": "ks_porsche_911_r",
+    "name": "Porsche 911 R"
+  },
+  {
+    "id": "ks_porsche_911_rsr_2017",
+    "name": "Porsche 911 RSR 2017"
+  },
+  {
+    "id": "ks_porsche_917_30",
+    "name": "Porsche 917/30 Spyder"
+  },
+  {
+    "id": "ks_porsche_917_k",
+    "name": "Porsche 917 K"
+  },
+  {
+    "id": "ks_porsche_918_spyder",
+    "name": "Porsche 918 Spyder"
+  },
+  {
+    "id": "ks_porsche_919_hybrid_2015",
+    "name": "Porsche 919 Hybrid 2015"
+  },
+  {
+    "id": "ks_porsche_919_hybrid_2016",
+    "name": "Porsche 919 Hybrid 2016"
+  },
+  {
+    "id": "ks_porsche_935_78_moby_dick",
+    "name": "Porsche 935/78 'Moby Dick'"
+  },
+  {
+    "id": "ks_porsche_962c_longtail",
+    "name": "Porsche 962 C Long Tail"
+  },
+  {
+    "id": "ks_porsche_962c_shorttail",
+    "name": "Porsche 962 C Short Tail"
+  },
+  {
+    "id": "ks_porsche_991_carrera_s",
+    "name": "Porsche 911 Carrera S"
+  },
+  {
+    "id": "ks_porsche_991_turbo_s",
+    "name": "Porsche 911 Turbo S"
+  },
+  {
+    "id": "ks_porsche_cayenne",
+    "name": "Porsche Cayenne Turbo S"
+  },
+  {
+    "id": "ks_porsche_cayman_gt4_clubsport",
+    "name": "Porsche Cayman GT4 Clubsport"
+  },
+  {
+    "id": "ks_porsche_cayman_gt4_std",
+    "name": "Porsche Cayman GT4"
+  },
+  {
+    "id": "ks_porsche_macan",
+    "name": "Porsche Macan Turbo"
+  },
+  {
+    "id": "ks_porsche_panamera",
+    "name": "Porsche Panamera Turbo"
+  },
+  {
+    "id": "ks_praga_r1",
+    "name": "Praga R1"
+  },
+  {
+    "id": "ks_ruf_rt12r",
+    "name": "RUF RT12 R"
+  },
+  {
+    "id": "ks_ruf_rt12r_awd",
+    "name": "RUF RT12 R AWD"
+  },
+  {
+    "id": "ks_toyota_ae86",
+    "name": "Toyota AE86"
+  },
+  {
+    "id": "ks_toyota_ae86_drift",
+    "name": "Toyota AE86 Drift"
+  },
+  {
+    "id": "ks_toyota_ae86_tuned",
+    "name": "Toyota AE86 Tuned"
+  },
+  {
+    "id": "ks_toyota_celica_st185",
+    "name": "Toyota Celica ST185 4WD Turbo"
+  },
+  {
+    "id": "ks_toyota_gt86",
+    "name": "Toyota GT86"
+  },
+  {
+    "id": "ks_toyota_supra_mkiv",
+    "name": "Toyota Supra MKIV"
+  },
+  {
+    "id": "ks_toyota_supra_mkiv_drift",
+    "name": "Toyota Supra MKIV Drift"
+  },
+  {
+    "id": "ks_toyota_supra_mkiv_tuned",
+    "name": "Toyota Supra MKIV Time Attack"
+  },
+  {
+    "id": "ks_toyota_ts040",
+    "name": "Toyota TS040 Hybrid 2014"
+  },
+  {
+    "id": "ktm_xbow_r",
+    "name": "KTM X-Bow R"
+  },
+  {
+    "id": "lotus_2_eleven",
+    "name": "Lotus 2-Eleven"
+  },
+  {
+    "id": "lotus_2_eleven_gt4",
+    "name": "Lotus 2-Eleven GT4"
+  },
+  {
+    "id": "lotus_49",
+    "name": "Lotus Type 49"
+  },
+  {
+    "id": "lotus_98t",
+    "name": "Lotus 98T"
+  },
+  {
+    "id": "lotus_elise_sc",
+    "name": "Lotus Elise SC"
+  },
+  {
+    "id": "lotus_elise_sc_s1",
+    "name": "Lotus Elise SC Step1"
+  },
+  {
+    "id": "lotus_elise_sc_s2",
+    "name": "Lotus Elise SC Step2"
+  },
+  {
+    "id": "lotus_evora_gtc",
+    "name": "Lotus Evora GTC"
+  },
+  {
+    "id": "lotus_evora_gte",
+    "name": "Lotus Evora GTE"
+  },
+  {
+    "id": "lotus_evora_gte_carbon",
+    "name": "Lotus Evora GTE Carbon"
+  },
+  {
+    "id": "lotus_evora_gx",
+    "name": "Lotus Evora GX"
+  },
+  {
+    "id": "lotus_evora_s",
+    "name": "Lotus Evora S"
+  },
+  {
+    "id": "lotus_evora_s_s2",
+    "name": "Lotus Evora S Stage 2"
+  },
+  {
+    "id": "lotus_exige_240",
+    "name": "Lotus Exige 240R"
+  },
+  {
+    "id": "lotus_exige_240_s3",
+    "name": "Lotus Exige 240R Stage3"
+  },
+  {
+    "id": "lotus_exige_s",
+    "name": "Lotus Exige S"
+  },
+  {
+    "id": "lotus_exige_scura",
+    "name": "Lotus Exige Scura"
+  },
+  {
+    "id": "lotus_exige_s_roadster",
+    "name": "Lotus Exige S roadster"
+  },
+  {
+    "id": "lotus_exige_v6_cup",
+    "name": "Lotus Exige V6 CUP"
+  },
+  {
+    "id": "lotus_exos_125",
+    "name": "Lotus Exos 125"
+  },
+  {
+    "id": "lotus_exos_125_s1",
+    "name": "Lotus Exos 125 Stage 1"
+  },
+  {
+    "id": "mclaren_mp412c",
+    "name": "McLaren MP4-12C"
+  },
+  {
+    "id": "mclaren_mp412c_gt3",
+    "name": "McLaren MP4-12C GT3"
+  },
+  {
+    "id": "mercedes_sls",
+    "name": "Mercedes SLS AMG"
+  },
+  {
+    "id": "mercedes_sls_gt3",
+    "name": "Mercedes SLS AMG GT3"
+  },
+  {
+    "id": "nx_nissan_skyline_r31",
+    "name": "Nissan Skyline R31"
+  },
+  {
+    "id": "p4-5_2011",
+    "name": "P4/5 Competizione 2011"
+  },
+  {
+    "id": "pagani_huayra",
+    "name": "Pagani Huayra"
+  },
+  {
+    "id": "pagani_zonda_r",
+    "name": "Pagani Zonda R"
+  },
+  {
+    "id": "ruf_yellowbird",
+    "name": "RUF CTR Yellowbird"
+  },
+  {
+    "id": "shelby_cobra_427sc",
+    "name": "Shelby Cobra 427 S/C"
+  },
+  {
+    "id": "tatuusfa1",
+    "name": "Tatuus FA01"
+  }
+]
