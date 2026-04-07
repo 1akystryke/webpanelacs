@@ -475,7 +475,7 @@ createApp({
                     this.api('/api/players')
                 ])
                 this.server = s
-                
+                console.log(t)
                 // Заполняем сессию
                 this.session.cars = se.cars || []
                 this.session.track = se.track || ''
@@ -538,7 +538,7 @@ createApp({
     watch: {
         'session.track'(val) {
             const track = this.tracks.find(t => t.id === val)
-            this.session.trackVariants = track?.variants || []
+            this.session.trackVariants = track?.layouts || []
             if (!this.session.trackVariants.includes(this.session.trackVariant)) {
                 this.session.trackVariant = this.session.trackVariants[0] || ''
             }

@@ -153,6 +153,7 @@ def get_session():
 def update_session():
     data = request.json
     print(data)
+    server_controller.set_car_list(data["cars"])
     session_state.update(data)
     logs.append("Session updated")
     return jsonify({"success": True})

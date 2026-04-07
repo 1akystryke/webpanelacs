@@ -5,6 +5,8 @@ from typing import Optional
 import json
 
 
+from . import config_process as cp
+
 
 class Core:
     def __init__(self, server_path: str):
@@ -101,3 +103,15 @@ class Core:
             tracks.append(track_obj)
 
         return tracks
+
+    def set_car_list(self,car_list):
+        server_cfg_path = self.cfg_path+"/server_cfg.ini"
+        entry_list_path = self.cfg_path+"/entry_list.ini"
+        car_data = [{"MODEL":car} for car in car_list]
+        cp.generate_entry_list(car_data,entry_list_path)
+        cars_string = cp.generate_server_cfg_string_cars(car_data)
+        server_data = cp.get_server_config(server_cfg_path)
+        server_data["SERVER"]["CARS"]=cars_string
+        cp.write_new_server_cfg(server_data,server_cfg_path)
+
+        
