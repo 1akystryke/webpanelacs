@@ -23,26 +23,20 @@ class Core:
 
     def supervisor_stop(self):
         result = subprocess.run(
-            ["supervisorctl", "stop", "acserver"],
-            capture_output=True,
-            text=True
+            ["supervisorctl", "stop", "acserver"], capture_output=True, text=True
         )
         return result.stdout.strip(), result.stderr.strip()
 
     def supervisor_start(self):
         result = subprocess.run(
-            ["supervisorctl", "start", "acserver"],
-            capture_output=True,
-            text=True
+            ["supervisorctl", "start", "acserver"], capture_output=True, text=True
         )
         return result.stdout.strip(), result.stderr.strip()
 
     def status(self):
-        
+
         result = subprocess.run(
-            ["supervisorctl", "status", "acserver"],
-            capture_output=True,
-            text=True
+            ["supervisorctl", "status", "acserver"], capture_output=True, text=True
         )
         return result.stdout.strip(), result.stderr.strip()
 
@@ -65,7 +59,6 @@ class Core:
         if self.process:
             self.process.wait()
 
-
     def list_cars(self):
         default_cars: list = None
         server_cars = os.listdir(self.cars_path)
@@ -75,7 +68,7 @@ class Core:
             default_cars = cars
 
         mod_cars = set.difference(set(server_cars), (x["id"] for x in default_cars))
-        
+
         result_cars = default_cars
         for mod_car in list(mod_cars):
             ui_path = os.path.join(self.cars_path, mod_car, "ui", "ui_car.json")
@@ -84,11 +77,11 @@ class Core:
                 content = content.replace("\t", "").replace("\n", "")
                 data = json.loads(content)
                 result_cars.append({"id": mod_car, "name": data["name"]})
-            
+
         return result_cars
-    
+
     def list_tracks(self):
-        
+
         tracks = []
         tracks_dir = os.listdir(self.tracks_path)
 
@@ -104,14 +97,37 @@ class Core:
 
         return tracks
 
-    def set_car_list(self,car_list):
-        server_cfg_path = self.cfg_path+"/server_cfg.ini"
-        entry_list_path = self.cfg_path+"/entry_list.ini"
-        car_data = [{"MODEL":car} for car in car_list]
-        cp.generate_entry_list(car_data,entry_list_path)
+    def set_car_list(self, car_list):
+        server_cfg_path = self.cfg_path + "/server_cfg.ini"
+        entry_list_path = self.cfg_path + "/entry_list.ini"
+        car_data = [{"MODEL": car} for car in car_list]
+        cp.generate_entry_list(car_data, entry_list_path)
         cars_string = cp.generate_server_cfg_string_cars(car_data)
         server_data = cp.get_server_config(server_cfg_path)
-        server_data["SERVER"]["CARS"]=cars_string
-        cp.write_new_server_cfg(server_data,server_cfg_path)
+        server_data["SERVER"]["CARS"] = cars_string
+        cp.write_new_server_cfg(server_data, server_cfg_path)
 
-        
+    def list_tracks_v1(self):
+        tracks = []
+        tracks_dirs = os.listdir(self.tracks_path)
+
+        for track in tracks_dirs:
+            track_obj = {}
+
+            track_path = os.path.join(self.tracks_path, track)
+            folders = os.listdir(track_path)
+            folders = [
+                x
+                for x in os.listdir(track_path)
+                if os.path.isdir(os.path.join(track_path, x)) and x != "data"
+            ]
+
+            track_obj["id"] = track
+            track_obj["layouts"] = folders
+            tracks.append(track_obj)
+
+        return tracks
+
+
+c = Core(server_path="/home/canioves/acserver")
+print(c.list_tracks_v1())
