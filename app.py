@@ -147,6 +147,7 @@ def stop_server():
 # ----------------------
 @app.route("/api/session")
 def get_session():
+    session_state = server_controller.get_session_state()
     return jsonify(session_state)
 
 @app.route("/api/session", methods=["PUT"])
