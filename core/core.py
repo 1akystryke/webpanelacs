@@ -81,33 +81,6 @@ class Core:
         return result_cars
 
     def list_tracks(self):
-
-        tracks = []
-        tracks_dir = os.listdir(self.tracks_path)
-
-        for track in tracks_dir:
-            track_obj = {}
-
-            root = os.path.join(self.tracks_path, track)
-            track_obj["id"] = track
-            layouts = os.listdir(root)
-            if layouts:
-                track_obj["layouts"] = layouts
-            tracks.append(track_obj)
-
-        return tracks
-
-    def set_car_list(self, car_list):
-        server_cfg_path = self.cfg_path + "/server_cfg.ini"
-        entry_list_path = self.cfg_path + "/entry_list.ini"
-        car_data = [{"MODEL": car} for car in car_list]
-        cp.generate_entry_list(car_data, entry_list_path)
-        cars_string = cp.generate_server_cfg_string_cars(car_data)
-        server_data = cp.get_server_config(server_cfg_path)
-        server_data["SERVER"]["CARS"] = cars_string
-        cp.write_new_server_cfg(server_data, server_cfg_path)
-
-    def list_tracks_v1(self):
         tracks = []
         tracks_dirs = os.listdir(self.tracks_path)
 
@@ -128,6 +101,12 @@ class Core:
 
         return tracks
 
-
-c = Core(server_path="/home/canioves/acserver")
-print(c.list_tracks_v1())
+    def set_car_list(self, car_list):
+        server_cfg_path = self.cfg_path + "/server_cfg.ini"
+        entry_list_path = self.cfg_path + "/entry_list.ini"
+        car_data = [{"MODEL": car} for car in car_list]
+        cp.generate_entry_list(car_data, entry_list_path)
+        cars_string = cp.generate_server_cfg_string_cars(car_data)
+        server_data = cp.get_server_config(server_cfg_path)
+        server_data["SERVER"]["CARS"] = cars_string
+        cp.write_new_server_cfg(server_data, server_cfg_path)
