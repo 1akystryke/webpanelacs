@@ -13,7 +13,6 @@ app = Flask(__name__, template_folder="vue")
 server_controller = Core(server_path=PATH)
 
 app.secret_key = os.getenv("SESSION_SECRET", "dev-insecure-secret")
-hostname = os.getenv("HOSTNAME")
 app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 app.config["SESSION_COOKIE_SECURE"] = os.getenv("SESSION_COOKIE_SECURE", "0") == "1"
@@ -155,21 +154,8 @@ def get_session():
 @app.route("/api/session", methods=["PUT"])
 def update_session():
     data = request.json
-    print(data)
     server_controller.set_car_list(data["cars"])
-
-
-    server_controller.set_server_parameter("DAMAGE_MULTIPLIER",data["damage"])
-    server_controller.set_server_parameter("FUEL_RATE",data["fuelConsumption"])
-    server_controller.set_server_parameter("CONFIG_TRACK",data["trackVariant"])
-    server_controller.set_server_parameter("TRACK",data["track"])
-    server_controller.set_server_parameter("TYRE_WEAR_RATE",data["tyreWear"])
-    
-    server_controller.set_qualify_duration(data["qualifyingDuration"])
-    server_controller.set_practice_duration(data["practiceDuration"])
-    server_controller.set_race_laps_amount(data["raceLaps"])
-
-
+    server_controller.apply_session(data)
     logs.append("Session updated")
     return jsonify({"success": True})
 
@@ -202,7 +188,7 @@ def get_players():
 
 @app.route("/api/info")
 def get_info():
-    url = "http://"+hostname+":8081/INFO"
+    url = "http://localhost:8081/INFO"
 
     payload = {}
     headers = {

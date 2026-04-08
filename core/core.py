@@ -19,6 +19,18 @@ class Core:
         self.cfg_path = os.path.join(server_path, "cfg")
         self.server_cfg_path = self.cfg_path + "/server_cfg.ini"
         self.entry_list_path = self.cfg_path + "/entry_list.ini"
+        self.map_parameters_name = {
+    "damage":["SERVER","DAMAGE_MULTIPLIER"],
+    "fuelConsumption":["SERVER","FUEL_RATE"],
+    "layout":["SERVER","CONFIG_TRACK"],
+    "practiceDuration":["PRACTICE","TIME"],
+    "qualifyingDuration":["QUALIFY","TIME"],
+    "raceLaps":["RACE","LAPS"],
+    "track":["SERVER","TRACK"],
+    "trackVariant":["SERVER","CONFIG_TRACK"],
+    "tyreWear":["SERVER","TYRE_WEAR_RATE"]
+}
+        
     def print_exe_path(self):
         print(self.server_exe)
 
@@ -113,6 +125,15 @@ class Core:
     def set_server_parameter(self,key,value):
         server_data = cp.get_server_config(self.server_cfg_path)
         server_data["SERVER"][key] = value
+        cp.write_new_server_cfg(server_data, self.server_cfg_path)
+
+    def apply_session(self,data):
+        server_data = cp.get_server_config(self.server_cfg_path)
+        for param in data.keys():
+            if param not in self.map_parameters_name.keys():
+                continue
+            key1,key2 = self.map_parameters_name[param]
+            server_data[key1][key2] = data[param]
         cp.write_new_server_cfg(server_data, self.server_cfg_path)
 
     def set_race_laps_amount(self,value):
