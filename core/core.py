@@ -1,7 +1,6 @@
 import subprocess
 import os
 from pathlib import Path
-from typing import Optional
 import json
 
 
@@ -9,68 +8,55 @@ from . import config_process as cp
 
 
 class Core:
+    """Core class for managing AC server"""
+
     def __init__(self, server_path: str):
         self.server_path = Path(server_path)
-        self.server_exe = self.server_path / "acServer"
-        self.process: Optional[subprocess.Popen] = None
-        self.running = False
-        self.cars_path = os.path.join(server_path, "content", "cars")
-        self.tracks_path = os.path.join(server_path, "content", "tracks")
-        self.cfg_path = os.path.join(server_path, "cfg")
-        self.server_cfg_path = self.cfg_path + "/server_cfg.ini"
-        self.entry_list_path = self.cfg_path + "/entry_list.ini"
+        self.cars_path = self.server_path / "content" / "cars"
+        self.tracks_path = self.server_path / "content" / "tracks"
+        self.cfg_path = self.server_path / "cfg"
+        self.server_cfg_path = self.cfg_path / "server_cfg.ini"
+        self.entry_list_path = self.cfg_path / "entry_list.ini"
+
         self.map_parameters_name = {
-    "damage":["SERVER","DAMAGE_MULTIPLIER"],
-    "fuelConsumption":["SERVER","FUEL_RATE"],
-    "layout":["SERVER","CONFIG_TRACK"],
-    "practiceDuration":["PRACTICE","TIME"],
-    "qualifyingDuration":["QUALIFY","TIME"],
-    "raceLaps":["RACE","LAPS"],
-    "track":["SERVER","TRACK"],
-    "trackVariant":["SERVER","CONFIG_TRACK"],
-    "tyreWear":["SERVER","TYRE_WEAR_RATE"]
-}
-        
-    def print_exe_path(self):
-        print(self.server_exe)
+            "damage": ["SERVER", "DAMAGE_MULTIPLIER"],
+            "fuelConsumption": ["SERVER", "FUEL_RATE"],
+            "layout": ["SERVER", "CONFIG_TRACK"],
+            "practiceDuration": ["PRACTICE", "TIME"],
+            "qualifyingDuration": ["QUALIFY", "TIME"],
+            "raceLaps": ["RACE", "LAPS"],
+            "track": ["SERVER", "TRACK"],
+            "trackVariant": ["SERVER", "CONFIG_TRACK"],
+            "tyreWear": ["SERVER", "TYRE_WEAR_RATE"],
+        }
 
     def supervisor_stop(self):
         result = subprocess.run(
-            ["supervisorctl", "stop", "acserver"], capture_output=True, text=True
+            ["supervisorctl", "stop", "acserver"],
+            capture_output=True,
+            text=True,
+            check=True,
         )
         return result.stdout.strip(), result.stderr.strip()
 
     def supervisor_start(self):
         result = subprocess.run(
-            ["supervisorctl", "start", "acserver"], capture_output=True, text=True
+            ["supervisorctl", "start", "acserver"],
+            capture_output=True,
+            text=True,
+            check=True,
         )
         return result.stdout.strip(), result.stderr.strip()
 
-    def status(self):
+    def supervisor_status(self):
 
         result = subprocess.run(
-            ["supervisorctl", "status", "acserver"], capture_output=True, text=True
+            ["supervisorctl", "status", "acserver"],
+            capture_output=True,
+            text=True,
+            check=True,
         )
         return result.stdout.strip(), result.stderr.strip()
-
-    def shutdown(self):
-        self.running = False
-
-        if self.process:
-            self.process.terminate()
-            try:
-                self.process.wait(5)
-                print("Server treminated")
-            except subprocess.TimeoutExpired:
-                self.process.kill()
-                print("Timeout: server killed")
-
-    def restart(self):
-        pass
-
-    def wait(self):
-        if self.process:
-            self.process.wait()
 
     def list_cars(self):
         default_cars: list = None
@@ -121,57 +107,25 @@ class Core:
         server_data = cp.get_server_config(self.server_cfg_path)
         server_data["SERVER"]["CARS"] = cars_string
         cp.write_new_server_cfg(server_data, self.server_cfg_path)
+        
 
-    def set_server_parameter(self,key,value):
-        server_data = cp.get_server_config(self.server_cfg_path)
-        server_data["SERVER"][key] = value
-        cp.write_new_server_cfg(server_data, self.server_cfg_path)
-
-    def apply_session(self,data):
+    def apply_session(self, data):
         server_data = cp.get_server_config(self.server_cfg_path)
         for param in data.keys():
             if param not in self.map_parameters_name.keys():
                 continue
-            key1,key2 = self.map_parameters_name[param]
+            key1, key2 = self.map_parameters_name[param]
             server_data[key1][key2] = data[param]
-        cp.write_new_server_cfg(server_data, self.server_cfg_path)
-
-    def set_race_laps_amount(self,value):
-        server_data = cp.get_server_config(self.server_cfg_path)
-        server_data["RACE"]["LAPS"] = value
-        cp.write_new_server_cfg(server_data, self.server_cfg_path)
-
-    def set_practice_duration(self,value):
-        server_data = cp.get_server_config(self.server_cfg_path)
-        server_data["PRACTICE"]["TIME"] = value
-        cp.write_new_server_cfg(server_data, self.server_cfg_path)
-
-    def set_qualify_duration(self,value):
-        server_data = cp.get_server_config(self.server_cfg_path)
-        server_data["QUALIFY"]["TIME"] = value
         cp.write_new_server_cfg(server_data, self.server_cfg_path)
 
     def get_session_state(self):
         car_data = cp.get_current_cars(self.entry_list_path)
         server_data = cp.get_server_config(self.server_cfg_path)
-
-        output_object = {}
-        output_object["cars"]= [car["MODEL"] for car in car_data]
-        output_object["damage"]=server_data["SERVER"]["DAMAGE_MULTIPLIER"]
-        output_object["fuelConsumption"]=server_data["SERVER"]["FUEL_RATE"]
-        output_object["layout"]=server_data["SERVER"]["CONFIG_TRACK"]
-        output_object["practiceDuration"]=server_data["PRACTICE"]["TIME"]
-        output_object["qualifyingDuration"]=server_data["QUALIFY"]["TIME"]
-        output_object["raceLaps"]=server_data["RACE"]["LAPS"]
-        output_object["sessionType"]="RACE"
-        output_object["slots"]=len(car_data)
-        output_object["track"]=server_data["SERVER"]["TRACK"]
-        output_object["trackVariant"]=server_data["SERVER"]["CONFIG_TRACK"]
-        output_object["trackVariants"]=[]
-        output_object["tyreWear"]=server_data["SERVER"]["TYRE_WEAR_RATE"]
-        output_object["weather"]={
-                "ambientTemp": 26,
-                "roadTemp": 32
-            }
-        return output_object
         
+        output_object = {}
+        output_object["cars"] = [car["MODEL"] for car in car_data]
+        for parameter in self.map_parameters_name.keys():
+            key1, key2 = self.map_parameters_name[parameter]
+            output_object[parameter] = server_data[key1][key2]    
+        
+        return output_object

@@ -122,7 +122,7 @@ logs = []
 # ----------------------
 @app.route("/api/server/status")
 def get_status():
-    server_state = server_controller.status()
+    server_state = server_controller.supervisor_status()
     if "RUNNING" in str(server_state):
         return jsonify({"status": "ONLINE",
         "uptime": 0,
