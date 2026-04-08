@@ -194,10 +194,31 @@ def get_info():
     headers = {
       'Content-Type': 'application/json'
     }
+    try:
+        response = requests.request("GET", url, headers=headers, data=payload)
+        json_clone = response.json()
+        json_clone["status"]="online"
+        return json_clone,200
+    except:
+        return {"status":"offline"},200
 
+@app.route("/api/entry")
+def get_entry():
+
+
+    url = "http://localhost:8081/ENTRY"
+
+    payload = {}
+    headers = {
+      'Content-Type': 'application/json'
+    }
     response = requests.request("GET", url, headers=headers, data=payload)
-
-    return response.json(),200
+    html = response.text
+    with open("vue/framecss.html") as f:
+        css = f.read()
+    index = html.find("<head>")
+    html = html[:index+6]+css+html[index+6:]
+    return html,200
 
 # ----------------------
 # Logs
