@@ -216,6 +216,33 @@
       background: #e2e8f0;
     }
 
+    .btn-small {
+      padding: 8px 16px;
+      font-size: 13px;
+    }
+
+    .btn-icon {
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      border-radius: 12px;
+      background: #f1f5f9;
+      color: #ef4444;
+      font-size: 18px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-icon:hover {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
     /* FORMS */
     .input, select {
       width: 100%;
@@ -241,6 +268,26 @@
       margin-bottom: 6px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 0;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--primary);
+    }
+
+    .checkbox-group label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #334155;
+      cursor: pointer;
     }
 
     /* STATUS BADGE */
@@ -334,6 +381,39 @@
     .remove-btn:hover {
       background: #fee2e2;
       color: #b91c1c;
+    }
+
+    /* WEATHER CARD */
+    .weather-slots-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .weather-slot {
+      background: #f8fafc;
+      border-radius: 16px;
+      padding: 20px;
+      position: relative;
+    }
+
+    .weather-slot-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .weather-slot-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .weather-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
     }
 
     /* PLAYERS IFRAME */
@@ -468,7 +548,7 @@
           </div>
         </div>
 
-        <!-- SESSION TAB (ТРИ КАРТОЧКИ) -->
+        <!-- SESSION TAB -->
         <div v-if="tab==='session'" key="sess">
           <div style="margin-bottom: 24px;">
             <div class="section-title">{{ t.session.title }}</div>
@@ -476,7 +556,38 @@
           </div>
 
           <div class="session-cards-grid">
-            <!-- КАРТОЧКА 1: ТРАССА -->
+            <!-- КАРТОЧКА 1: СЕРВЕР -->
+            <div class="card">
+              <div class="card-title">
+                <span>🖥️</span> {{ t.session.serverCard }}
+              </div>
+              
+              <div class="label">{{ t.session.serverName }}</div>
+              <input type="text" v-model="serverConfig.name" class="input" style="margin-bottom: 16px;" :placeholder="t.session.serverNamePlaceholder">
+
+              <div class="label">{{ t.session.password }}</div>
+              <input type="text" v-model="serverConfig.password" class="input" style="margin-bottom: 16px;" :placeholder="t.session.passwordPlaceholder">
+
+              <div class="label">{{ t.session.adminPassword }}</div>
+              <input type="text" v-model="serverConfig.adminPassword" class="input" style="margin-bottom: 20px;" :placeholder="t.session.adminPasswordPlaceholder">
+
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                <div>
+                  <div class="label">UDP_PORT</div>
+                  <input type="number" v-model.number="serverConfig.udpPort" class="input" placeholder="9600">
+                </div>
+                <div>
+                  <div class="label">TCP_PORT</div>
+                  <input type="number" v-model.number="serverConfig.tcpPort" class="input" placeholder="9600">
+                </div>
+                <div>
+                  <div class="label">HTTP_PORT</div>
+                  <input type="number" v-model.number="serverConfig.httpPort" class="input" placeholder="8081">
+                </div>
+              </div>
+            </div>
+
+            <!-- КАРТОЧКА 2: ТРАССА -->
             <div class="card">
               <div class="card-title">
                 <span>🏁</span> {{ t.session.trackCard }}
@@ -497,7 +608,7 @@
               </p>
             </div>
 
-            <!-- КАРТОЧКА 2: АВТОМОБИЛИ -->
+            <!-- КАРТОЧКА 3: АВТОМОБИЛИ -->
             <div class="card" style="display: flex; flex-direction: column;">
               <div class="card-title">
                 <span>🏎️</span> {{ t.session.carsCard }}
@@ -505,7 +616,7 @@
 
               <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
                 <div class="label" style="margin-bottom: 0;">{{ t.session.carsLabel }} ({{ session.cars.length }})</div>
-                <button class="btn btn-secondary" style="padding: 8px 16px; font-size: 13px;" @click="addCar">
+                <button class="btn btn-secondary btn-small" @click="addCar">
                   + {{ t.session.addCar }}
                 </button>
               </div>
@@ -540,13 +651,13 @@
               </p>
             </div>
 
-            <!-- КАРТОЧКА 3: ПАРАМЕТРЫ СЕССИИ -->
-            <div class="card" style="grid-column: span 2;">
+            <!-- КАРТОЧКА 4: ПАРАМЕТРЫ СЕССИИ -->
+            <div class="card">
               <div class="card-title">
                 <span>⚙️</span> {{ t.session.sessionParams }}
               </div>
 
-              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+              <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;">
                 <div>
                   <div class="label">{{ t.session.tyreWear }}</div>
                   <input type="number" v-model.number="session.tyreWear" min="0" step="0.1" class="input">
@@ -559,11 +670,15 @@
                   <div class="label">{{ t.session.fuelConsumption }}</div>
                   <input type="number" v-model.number="session.fuelConsumption" min="0" step="0.1" class="input">
                 </div>
+                <div>
+                  <div class="label">SUN_ANGLE</div>
+                  <input type="number" v-model.number="session.sunAngle" min="-180" max="180" class="input" placeholder="48">
+                </div>
               </div>
 
-              <div style="margin-top: 28px;">
+              <div style="margin-bottom: 24px;">
                 <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 16px; color: #64748b;">{{ t.session.duration }}</h4>
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
                   <div>
                     <div class="label">{{ t.session.practice }}</div>
                     <input type="number" v-model.number="session.practiceDuration" min="0" class="input">
@@ -575,6 +690,128 @@
                   <div>
                     <div class="label">{{ t.session.race }}</div>
                     <input type="number" v-model.number="session.raceLaps" min="0" class="input">
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+                <div>
+                  <div class="label">PICKUP_MODE</div>
+                  <select v-model.number="session.pickupMode" class="input">
+                    <option :value="0">{{ t.session.disabled }}</option>
+                    <option :value="1">{{ t.session.enabled }}</option>
+                  </select>
+                </div>
+                <div>
+                  <div class="label">LOOP_MODE</div>
+                  <select v-model.number="session.loopMode" class="input">
+                    <option :value="0">{{ t.session.disabled }}</option>
+                    <option :value="1">{{ t.session.enabled }}</option>
+                  </select>
+                </div>
+                <div>
+                  <div class="label">ALLOWED_TYRES_OUT</div>
+                  <input type="number" v-model.number="session.allowedTyresOut" min="0" max="4" class="input" placeholder="2">
+                </div>
+                <div>
+                  <div class="label">LEGAL_TYRES</div>
+                  <input type="text" v-model="session.legalTyres" class="input" placeholder="V70;">
+                </div>
+              </div>
+
+              <div style="margin-top: 24px;">
+                <h4 style="font-size: 14px; font-weight: 600; margin-bottom: 12px; color: #64748b;">{{ t.session.assists }}</h4>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+                  <div class="checkbox-group">
+                    <input type="checkbox" v-model="session.absAllowed" id="abs">
+                    <label for="abs">ABS_ALLOWED</label>
+                  </div>
+                  <div class="checkbox-group">
+                    <input type="checkbox" v-model="session.tcAllowed" id="tc">
+                    <label for="tc">TC_ALLOWED</label>
+                  </div>
+                  <div class="checkbox-group">
+                    <input type="checkbox" v-model="session.stabilityAllowed" id="stability">
+                    <label for="stability">STABILITY_ALLOWED</label>
+                  </div>
+                  <div class="checkbox-group">
+                    <input type="checkbox" v-model="session.autoclutchAllowed" id="autoclutch">
+                    <label for="autoclutch">AUTOCLUTCH_ALLOWED</label>
+                  </div>
+                  <div class="checkbox-group">
+                    <input type="checkbox" v-model="session.tyreBlanketsAllowed" id="blankets">
+                    <label for="blankets">TYRE_BLANKETS_ALLOWED</label>
+                  </div>
+                  <div class="checkbox-group">
+                    <input type="checkbox" v-model="session.forceVirtualMirror" id="mirror">
+                    <label for="mirror">FORCE_VIRTUAL_MIRROR</label>
+                  </div>
+                  <div class="checkbox-group">
+                    <input type="checkbox" v-model="session.registerToLobby" id="lobby">
+                    <label for="lobby">REGISTER_TO_LOBBY</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- КАРТОЧКА 5: ПОГОДА (ДИНАМИЧЕСКАЯ) -->
+            <div class="card" style="grid-column: span 2;">
+              <div class="card-title">
+                <span>🌤️</span> {{ t.session.weatherCard }}
+              </div>
+
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+                <p style="color: #64748b; font-size: 14px;">{{ t.session.weatherHint }}</p>
+                <button class="btn btn-secondary btn-small" @click="addWeatherSlot">
+                  + {{ t.session.addWeatherSlot }}
+                </button>
+              </div>
+
+              <div class="weather-slots-container">
+                <div v-for="(w, index) in weather" :key="index" class="weather-slot">
+                  <div class="weather-slot-header">
+                    <div class="weather-slot-title">
+                      {{ t.session.weatherSlot }} {{ index }}
+                    </div>
+                    <button 
+                      v-if="weather.length > 1"
+                      class="btn-icon" 
+                      @click="removeWeatherSlot(index)"
+                      :title="t.session.removeWeatherSlot"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                  <div class="weather-grid">
+                    <div>
+                      <div class="label">{{ t.session.graphics }}</div>
+                      <select v-model="w.graphics" class="input">
+                        <option>3_clear</option>
+                        <option>4_few_clouds</option>
+                        <option>5_scattered_clouds</option>
+                        <option>6_broken_clouds</option>
+                        <option>7_heavy_clouds</option>
+                        <option>2_light_fog</option>
+                        <option>1_heavy_fog</option>
+                      </select>
+                    </div>
+                    <div></div>
+                    <div>
+                      <div class="label">{{ t.session.baseTempAmbient }}</div>
+                      <input type="number" v-model.number="w.baseTemperatureAmbient" class="input" :placeholder="index === 0 ? '18' : '15'">
+                    </div>
+                    <div>
+                      <div class="label">{{ t.session.baseTempRoad }}</div>
+                      <input type="number" v-model.number="w.baseTemperatureRoad" class="input" :placeholder="index === 0 ? '6' : '-1'">
+                    </div>
+                    <div>
+                      <div class="label">{{ t.session.variationAmbient }}</div>
+                      <input type="number" v-model.number="w.variationAmbient" class="input" placeholder="1">
+                    </div>
+                    <div>
+                      <div class="label">{{ t.session.variationRoad }}</div>
+                      <input type="number" v-model.number="w.variationRoad" class="input" placeholder="1">
+                    </div>
                   </div>
                 </div>
               </div>
@@ -620,7 +857,7 @@
 <script>
   const { createApp } = Vue
 
-  // Переводы
+  // Полные переводы (RU + EN)
   const messages = {
     ru: {
       common: {
@@ -647,8 +884,20 @@
       session: {
         title: 'Настройка сессии',
         changesHint: 'Все изменения применяются после нажатия «Сохранить»',
+        serverCard: 'Сервер',
+        serverName: 'Имя сервера',
+        serverNamePlaceholder: 'AC Server',
+        password: 'Пароль',
+        passwordPlaceholder: 'Оставьте пустым, если без пароля',
+        adminPassword: 'Админ-пароль',
+        adminPasswordPlaceholder: 'Пароль администратора',
         trackCard: 'Трасса',
         carsCard: 'Автомобили',
+        weatherCard: 'Погода',
+        weatherHint: 'Настройте погодные слоты. Минимум один слот обязателен.',
+        addWeatherSlot: 'Добавить слот погоды',
+        removeWeatherSlot: 'Удалить слот',
+        weatherSlot: 'Слот погоды',
         track: 'Трасса',
         trackVariant: 'Вариант трассы',
         trackHint: 'Выберите трассу и её конфигурацию',
@@ -666,7 +915,15 @@
         practice: 'Практика (мин)',
         qualifying: 'Квалификация (мин)',
         race: 'Гонка (кругов)',
-        saveSession: '💾 Сохранить сессию'
+        saveSession: '💾 Сохранить сессию',
+        enabled: 'Включено',
+        disabled: 'Отключено',
+        assists: 'Помощники',
+        graphics: 'Графика',
+        baseTempAmbient: 'Темп. воздуха',
+        baseTempRoad: 'Темп. трассы',
+        variationAmbient: 'Вариация воздуха',
+        variationRoad: 'Вариация трассы'
       },
       players: {
         title: 'Игроки на сервере',
@@ -701,8 +958,20 @@
       session: {
         title: 'Session Configuration',
         changesHint: 'Changes are applied after clicking "Save"',
+        serverCard: 'Server',
+        serverName: 'Server Name',
+        serverNamePlaceholder: 'AC Server',
+        password: 'Password',
+        passwordPlaceholder: 'Leave empty for no password',
+        adminPassword: 'Admin Password',
+        adminPasswordPlaceholder: 'Administrator password',
         trackCard: 'Track',
         carsCard: 'Cars',
+        weatherCard: 'Weather',
+        weatherHint: 'Configure weather slots. At least one slot is required.',
+        addWeatherSlot: 'Add Weather Slot',
+        removeWeatherSlot: 'Remove Slot',
+        weatherSlot: 'Weather Slot',
         track: 'Track',
         trackVariant: 'Track Variant',
         trackHint: 'Select track and its layout',
@@ -720,7 +989,15 @@
         practice: 'Practice (min)',
         qualifying: 'Qualifying (min)',
         race: 'Race (laps)',
-        saveSession: '💾 Save Session'
+        saveSession: '💾 Save Session',
+        enabled: 'Enabled',
+        disabled: 'Disabled',
+        assists: 'Assists',
+        graphics: 'Graphics',
+        baseTempAmbient: 'Ambient Temp',
+        baseTempRoad: 'Road Temp',
+        variationAmbient: 'Ambient Variation',
+        variationRoad: 'Road Variation'
       },
       players: {
         title: 'Players on Server',
@@ -738,6 +1015,14 @@
         locale: 'ru',
         tab: 'dashboard',
         server: { status: 'offline', clients: 0, maxclients: 0, track: '' },
+        serverConfig: {
+          name: '',
+          password: '',
+          adminPassword: '',
+          udpPort: 9600,
+          tcpPort: 9600,
+          httpPort: 8081
+        },
         session: {
           cars: [],
           track: '',
@@ -746,10 +1031,31 @@
           tyreWear: 1,
           damage: 1,
           fuelConsumption: 1,
+          sunAngle: 48,
           practiceDuration: 0,
           qualifyingDuration: 0,
-          raceLaps: 0
+          raceLaps: 0,
+          pickupMode: 1,
+          loopMode: 1,
+          allowedTyresOut: 2,
+          legalTyres: 'V70;',
+          absAllowed: true,
+          tcAllowed: true,
+          stabilityAllowed: false,
+          autoclutchAllowed: true,
+          tyreBlanketsAllowed: true,
+          forceVirtualMirror: false,
+          registerToLobby: true
         },
+        weather: [
+          {
+            graphics: '3_clear',
+            baseTemperatureAmbient: 18,
+            baseTemperatureRoad: 6,
+            variationAmbient: 1,
+            variationRoad: 1
+          }
+        ],
         cars: [],
         tracks: [],
         players: [],
@@ -765,6 +1071,20 @@
     methods: {
       toggleLanguage() {
         this.locale = this.locale === 'ru' ? 'en' : 'ru'
+      },
+      addWeatherSlot() {
+        this.weather.push({
+          graphics: '3_clear',
+          baseTemperatureAmbient: 18,
+          baseTemperatureRoad: 6,
+          variationAmbient: 1,
+          variationRoad: 1
+        })
+      },
+      removeWeatherSlot(index) {
+        if (this.weather.length > 1) {
+          this.weather.splice(index, 1)
+        }
       },
       async api(url, options = {}) {
         const opts = { ...options }
@@ -829,9 +1149,28 @@
             this.session.tyreWear = se.tyreWear ?? 1
             this.session.damage = se.damage ?? 1
             this.session.fuelConsumption = se.fuelConsumption ?? 1
+            this.session.sunAngle = se.sunAngle ?? 48
             this.session.practiceDuration = se.practiceDuration ?? 0
             this.session.qualifyingDuration = se.qualifyingDuration ?? 0
             this.session.raceLaps = se.raceLaps ?? 0
+            this.session.pickupMode = se.pickupMode ?? 1
+            this.session.loopMode = se.loopMode ?? 1
+            this.session.allowedTyresOut = se.allowedTyresOut ?? 2
+            this.session.legalTyres = se.legalTyres ?? 'V70;'
+            this.session.absAllowed = se.absAllowed ?? true
+            this.session.tcAllowed = se.tcAllowed ?? true
+            this.session.stabilityAllowed = se.stabilityAllowed ?? false
+            this.session.autoclutchAllowed = se.autoclutchAllowed ?? true
+            this.session.tyreBlanketsAllowed = se.tyreBlanketsAllowed ?? true
+            this.session.forceVirtualMirror = se.forceVirtualMirror ?? false
+            this.session.registerToLobby = se.registerToLobby ?? true
+            
+            if (se.serverConfig) {
+              Object.assign(this.serverConfig, se.serverConfig)
+            }
+            if (se.weather && Array.isArray(se.weather) && se.weather.length > 0) {
+              this.weather = se.weather
+            }
           }
           
           this.cars = c || []
@@ -871,7 +1210,11 @@
         this.session.cars.splice(i, 1)
       },
       async saveSession() {
-        const payload = { ...this.session }
+        const payload = {
+          ...this.session,
+          serverConfig: this.serverConfig,
+          weather: this.weather
+        }
         await this.api('/api/session', {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },

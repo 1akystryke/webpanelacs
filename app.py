@@ -117,7 +117,7 @@ def get_session():
 @app.route("/api/session", methods=["PUT"])
 def update_session():
     data = request.json
-    
+    print(data)
     server_controller.set_car_list(data["cars"])
     server_controller.apply_session(data)
     logs.append("Session updated")
