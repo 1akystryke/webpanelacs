@@ -626,7 +626,7 @@
                   {{ t.session.noCars }}
                 </div>
                 <div v-for="(car, i) in session.cars" :key="i" class="car-item">
-                  <select v-model="car.id" class="input" style="flex: 3;">
+                  <select v-model="car.model" class="input" style="flex: 3;">
                     <option v-for="carOption in cars" :key="carOption.id" :value="carOption.id">{{ carOption.name }}</option>
                   </select>
                   
@@ -1014,7 +1014,7 @@
             this.session.udpPort = se.udpPort ?? 9600
             this.session.tcpPort = se.tcpPort ?? 9600
             this.session.httpPort = se.httpPort ?? 8081
-            this.session.cars = this.normalizeSessionCars(se.cars)
+            this.session.cars = se.cars ?? this.normalizeSessionCars(se.cars)
             this.session.track = se.track || ''
             this.session.trackVariant = se.trackVariant || ''
             this.session.trackVariants = se.trackVariants || []
