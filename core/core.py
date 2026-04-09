@@ -156,7 +156,7 @@ class Core:
         server_data = cp.get_server_config(self.server_cfg_path)
         
         output_object = {}
-        output_object["cars"] = [car["MODEL"] for car in car_data]
+        output_object["cars"] = [{"MODEL": car["id"],"RESTRICTOR": car["restrictor"],"BALLAST": car["ballast"]} for car in car_data]
         for parameter in self.map_parameters_name.keys():
             key1, key2 = self.map_parameters_name[parameter]
             output_object[parameter] = server_data[key1][key2]    
