@@ -1,550 +1,1132 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>AC Control • Production</title>
-<script src="https://unpkg.com/vue@3"></script>
-<style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AC Control • Production</title>
+  <script src="https://unpkg.com/vue@3"></script>
+  <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
 
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; margin: 0; }
     :root {
-        --primary: #ff2a2a;
-        --primary-light: #ff6a6a;
+      --primary: #ff2a2a;
+      --primary-light: #ff6a6a;
     }
 
     body {
-        margin: 0;
-        font-family: 'Inter', system-ui, sans-serif;
-        background: #f8f9fc;
-        color: #111827;
+      margin: 0;
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #f8f9fc;
+      color: #111827;
     }
 
     .app { display: flex; height: 100vh; overflow: hidden; }
 
+    /* SIDEBAR */
     .sidebar {
-        width: 260px;
-        background: #0f172a;
-        color: #f1f5f9;
-        padding: 28px 20px;
-        display: flex;
-        flex-direction: column;
-        box-shadow: 4px 0 20px rgba(0,0,0,0.12);
+      width: 260px;
+      background: #0f172a;
+      color: #f1f5f9;
+      padding: 28px 20px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 4px 0 20px rgba(0,0,0,0.12);
     }
 
     .logo {
-        font-family: 'Space Grotesk', sans-serif;
-        font-size: 26px;
-        font-weight: 600;
-        letter-spacing: -1px;
-        background: linear-gradient(90deg, #ff2a2a, #ff6a6a);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        margin-bottom: 40px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: -1px;
+      background: linear-gradient(90deg, #ff2a2a, #ff6a6a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 40px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .logo::before {
-        content: '🏎️';
-        font-size: 26px;
+      content: '🏎️';
+      font-size: 26px;
     }
 
     .nav-item {
-        padding: 14px 20px;
-        border-radius: 14px;
-        color: #cbd5e1;
-        text-decoration: none;
-        font-weight: 500;
-        margin-bottom: 6px;
-        cursor: pointer;
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        display: flex;
-        align-items: center;
-        gap: 12px;
+      padding: 14px 20px;
+      border-radius: 14px;
+      color: #cbd5e1;
+      text-decoration: none;
+      font-weight: 500;
+      margin-bottom: 6px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
     .nav-item:hover {
-        background: rgba(255,42,42,0.15);
-        color: white;
+      background: rgba(255,42,42,0.15);
+      color: white;
     }
 
     .nav-item.active {
-        background: #ff2a2a;
-        color: white;
-        box-shadow: 0 4px 15px rgba(255,42,42,0.35);
+      background: #ff2a2a;
+      color: white;
+      box-shadow: 0 4px 15px rgba(255,42,42,0.35);
     }
 
+    /* MAIN LAYOUT */
     .main { flex: 1; display: flex; flex-direction: column; }
 
     .header {
-        height: 76px;
-        background: white;
-        border-bottom: 1px solid #e5e7eb;
-        padding: 0 32px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+      height: 76px;
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
     }
 
     .header-title {
-        font-size: 24px;
-        font-weight: 600;
-        color: #111827;
+      font-size: 24px;
+      font-weight: 600;
+      color: #111827;
     }
+
+    .lang-btn {
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      background: #ffffff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-right: 8px;
+    }
+
+    .lang-btn:hover {
+      border-color: #ff2a2a;
+      color: #ff2a2a;
+      box-shadow: 0 6px 16px rgba(255,42,42,0.15);
+    }
+
     .logout-btn {
-        padding: 10px 14px;
-        border-radius: 12px;
-        border: 1px solid #e2e8f0;
-        background: #ffffff;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s ease;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      background: #ffffff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
+
     .logout-btn:hover {
-        border-color: #ff2a2a;
-        color: #ff2a2a;
-        box-shadow: 0 6px 16px rgba(255,42,42,0.15);
+      border-color: #ff2a2a;
+      color: #ff2a2a;
+      box-shadow: 0 6px 16px rgba(255,42,42,0.15);
     }
 
     .content {
-        flex: 1;
-        padding: 32px;
-        overflow-y: auto;
-        background: #f8f9fc;
+      flex: 1;
+      padding: 32px;
+      overflow-y: auto;
+      background: #f8f9fc;
     }
 
+    /* CARDS & GRID */
     .card {
-        background: white;
-        border-radius: 24px;
-        padding: 32px;
-        box-shadow: 0 12px 40px -8px rgba(0,0,0,0.08);
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      background: white;
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 12px 40px -8px rgba(0,0,0,0.08);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .card:hover { transform: translateY(-4px); }
 
+    .flex {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
     .section-title {
-        font-size: 28px;
-        font-weight: 600;
-        margin-bottom: 8px;
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px; }
 
+    /* Session cards grid */
+    .session-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    /* BUTTONS */
     .btn {
-        padding: 12px 24px;
-        border: none;
-        border-radius: 14px;
-        cursor: pointer;
-        font-weight: 600;
-        font-size: 15px;
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 12px 24px;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 15px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
 
     .btn-primary {
-        background: linear-gradient(90deg, #ff2a2a, #ff6a6a);
-        color: white;
-        box-shadow: 0 6px 20px rgba(255,42,42,0.4);
+      background: linear-gradient(90deg, #ff2a2a, #ff6a6a);
+      color: white;
+      box-shadow: 0 6px 20px rgba(255,42,42,0.4);
     }
 
     .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 25px rgba(255,42,42,0.5);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(255,42,42,0.5);
     }
 
     .btn-secondary {
-        background: #f1f5f9;
-        color: #475569;
+      background: #f1f5f9;
+      color: #475569;
     }
 
+    .btn-secondary:hover {
+      background: #e2e8f0;
+    }
+
+    .btn-small {
+      padding: 8px 16px;
+      font-size: 13px;
+    }
+
+    .btn-icon {
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      border-radius: 12px;
+      background: #f1f5f9;
+      color: #ef4444;
+      font-size: 18px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-icon:hover {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    /* FORMS */
     .input, select {
-        width: 100%;
-        padding: 14px 18px;
-        border-radius: 14px;
-        border: 1px solid #e2e8f0;
-        font-size: 15px;
-        transition: all 0.2s;
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      font-size: 15px;
+      transition: all 0.2s;
+      background: white;
     }
 
     .input:focus, select:focus {
-        outline: none;
-        border-color: #ff2a2a;
-        box-shadow: 0 0 0 4px rgba(255,42,42,0.15);
+      outline: none;
+      border-color: #ff2a2a;
+      box-shadow: 0 0 0 4px rgba(255,42,42,0.15);
     }
 
     .label {
-        display: block;
-        font-size: 13px;
-        font-weight: 600;
-        color: #64748b;
-        margin-bottom: 6px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #64748b;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 0;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--primary);
+    }
+
+    .checkbox-group label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #334155;
+      cursor: pointer;
+    }
+
+    /* STATUS BADGE */
     .status {
-        padding: 8px 20px;
-        border-radius: 9999px;
-        font-size: 14px;
-        font-weight: 600;
-        letter-spacing: 0.5px;
+      padding: 8px 20px;
+      border-radius: 9999px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: capitalize;
     }
 
     .online { background: #ecfdf5; color: #10b981; }
     .offline { background: #fef2f2; color: #ef4444; }
     .loading { background: #fefce8; color: #ca8a04; }
 
-    /* SESSION TAB – СДЕЛАЛИ КРАСИВО */
-    .session-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 40px;
-    }
-
-    .session-left h4,
-    .session-right h4 {
-        font-size: 18px;
-        font-weight: 600;
-        margin-bottom: 16px;
-        color: #111827;
-    }
-
+    /* CARS LIST */
     .car-list {
-        max-height: 320px;
-        overflow-y: auto;
-        padding-right: 8px;
+      max-height: 400px;
+      overflow-y: auto;
+      padding-right: 8px;
     }
 
     .car-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 12px 16px;
-        background: #f8fafc;
-        border-radius: 14px;
-        margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 18px;
+      background: #f8fafc;
+      border-radius: 14px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
     }
 
+    .car-item select {
+      flex: 2 1 180px;
+      margin: 0;
+    }
+
+    .car-item .restrictor-group,
+    .car-item .ballast-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: white;
+      padding: 4px 12px;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .car-item .restrictor-group input,
+    .car-item .ballast-group input {
+      width: 70px;
+      padding: 8px 4px;
+      border: none;
+      background: transparent;
+      font-weight: 500;
+      text-align: right;
+    }
+
+    .car-item .restrictor-group input:focus,
+    .car-item .ballast-group input:focus {
+      outline: none;
+      box-shadow: none;
+    }
+
+    .car-item .restrictor-group span,
+    .car-item .ballast-group span {
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .remove-btn {
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      border-radius: 14px;
+      background: #f1f5f9;
+      color: #ef4444;
+      font-size: 20px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: auto;
+    }
+
+    .remove-btn:hover {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    /* WEATHER CARD */
+    .weather-slots-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .weather-slot {
+      background: #f8fafc;
+      border-radius: 16px;
+      padding: 20px;
+      position: relative;
+    }
+
+    .weather-slot-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .weather-slot-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .weather-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    /* PLAYERS IFRAME */
+    .iframe-container {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 16px;
+      margin-top: 24px;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+    }
+
+    .iframe-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .empty-state {
+      padding: 48px 24px;
+      text-align: center;
+      color: #64748b;
+      background: #f8fafc;
+      border-radius: 24px;
+      margin-top: 24px;
+    }
+
+    /* TRANSITIONS */
     .fade-enter-active, .fade-leave-active { transition: opacity 0.25s; }
     .fade-enter-from, .fade-leave-to { opacity: 0; }
-</style>
+
+    /* RESPONSIVE FIXES */
+    @media (max-width: 1100px) {
+      .session-cards-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 900px) {
+      .header { padding: 0 20px; }
+      .car-item { flex-direction: column; align-items: stretch; }
+      .remove-btn { margin-left: 0; align-self: flex-end; }
+    }
+  </style>
 </head>
 <body>
 <div id="app" class="app">
-    <!-- SIDEBAR -->
-    <div class="sidebar">
-        <div class="logo">AC Control</div>
-        
-        <div class="nav-item" :class="{active: tab==='dashboard'}" @click="tab='dashboard'">
-            📊 Dashboard
-        </div>
-        <div class="nav-item" :class="{active: tab==='session'}" @click="tab='session'">
-            🎮 Session
-        </div>
-        <div class="nav-item" :class="{active: tab==='players'}" @click="tab='players'">
-            👥 Players
-        </div>
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="logo">AC Control</div>
 
-        <div style="margin-top: auto; padding-top: 40px; border-top: 1px solid #334155; font-size: 13px; color: #64748b;">
-            Assetto Corsa Dedicated<br>
-            <span style="color:#94a3b8">v1.92 • Production Build</span>
-        </div>
+    <div class="nav-item" :class="{active: tab==='dashboard'}" @click="tab='dashboard'">
+      {{ t.nav.dashboard }}
+    </div>
+    <div class="nav-item" :class="{active: tab==='session'}" @click="tab='session'">
+      {{ t.nav.session }}
+    </div>
+    <div class="nav-item" :class="{active: tab==='players'}" @click="tab='players'">
+      {{ t.nav.players }}
     </div>
 
-    <!-- MAIN -->
-    <div class="main">
-        <div class="header">
-            <div class="header-title">
-                {{ tab === 'dashboard' ? 'Обзор сервера' : tab === 'session' ? 'Настройка сессии' : 'Игроки онлайн' }}
-            </div>
-            
-            <span :class="['status', statusClass]">{{ server.status || 'Загрузка...' }}</span>
-            
-            <div style="display:flex; align-items:center; gap:12px;">
-                <button class="logout-btn" @click="logout">Выйти</button>
-                <div class="text-right">
-                    <div style="font-weight:600; font-size:15px;">Администратор</div>
-                    <div style="font-size:13px; color:#64748b;">admin@acserver.pro</div>
-                </div>
-                <div style="width:42px; height:42px; background:linear-gradient(135deg,#ff2a2a,#ff6a6a); border-radius:50%; color:white; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:20px;">A</div>
-            </div>
-        </div>
-
-        <div class="content">
-            <transition name="fade" mode="out-in">
-
-                <!-- DASHBOARD -->
-                <div v-if="tab==='dashboard'" key="dash" class="grid">
-                    <div class="card">
-                        <h3 style="margin:0 0 16px; font-size:22px;">Состояние сервера</h3>
-                        <div style="font-size:48px; font-weight:700; line-height:1;">
-                            {{ server.players || 0 }}<span style="font-size:28px; color:#64748b;">/{{ server.maxPlayers || 24 }}</span>
-                        </div>
-                        <p style="margin:4px 0 24px; color:#64748b;">игроков онлайн</p>
-
-                        <div style="display:flex; gap:12px;">
-                            <button class="btn btn-primary" style="flex:1; padding:18px;" @click="start">▶ Запустить</button>
-                            <button class="btn btn-secondary" style="flex:1; padding:18px;" @click="stop">⏹ Остановить</button>
-                        </div>
-
-                        <div style="margin-top:32px; padding-top:24px; border-top:1px solid #f1f5f9; display:flex; justify-content:space-between; font-size:15px;">
-                            <div>Аптайм <span style="font-family:monospace; font-weight:600;">{{ server.uptime || '—' }}s</span></div>
-                            <div>Ping <span style="font-family:monospace; font-weight:600;">{{ server.avgPing || '—' }} ms</span></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- SESSION – ТЕПЕРЬ КРАСИВО -->
-                <div v-if="tab==='session'" key="sess" class="card">
-                    <div class="section-title">Настройка сессии</div>
-                    <p style="color:#64748b; margin-bottom:28px;">Все изменения применяются после нажатия «Сохранить»</p>
-
-                    <div class="session-grid">
-                        <!-- LEFT COLUMN -->
-                        <div class="session-left">
-                            <h4>Трасса и автомобили</h4>
-                            
-                            <div class="label">Трасса</div>
-                            <select v-model="session.track" class="input" style="margin-bottom:20px;">
-                                <option v-for="t in tracks" :key="t.id" :value="t.id">{{ t.name || t.id }}</option>
-                            </select>
-
-                            <div class="label">Вариант трассы</div>
-                            <select v-model="session.trackVariant" class="input" style="margin-bottom:28px;">
-                                <option v-for="v in session.trackVariants" :key="v" :value="v">{{ v }}</option>
-                            </select>
-
-                            <div class="label">Автомобили ({{ session.cars.length }})</div>
-                            <div class="car-list">
-                                <div v-for="(c,i) in session.cars" :key="i" class="car-item">
-                                    <select v-model="session.cars[i]" class="input" style="flex:1; margin:0;">
-                                        <option v-for="car in cars" :key="car.id" :value="car.id">{{ car.name }}</option>
-                                    </select>
-                                    <button class="btn btn-secondary" style="width:48px; height:48px; padding:0; font-size:18px;" @click="removeCar(i)">✕</button>
-                                </div>
-                            </div>
-                            
-                            <button class="btn btn-primary" style="margin-top:12px; width:100%;" @click="addCar">
-                                + Добавить автомобиль
-                            </button>
-                        </div>
-
-                        <!-- RIGHT COLUMN -->
-                        <div class="session-right">
-                            <h4>Параметры сессии</h4>
-
-                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
-                                <div>
-                                    <div class="label">Износ шин</div>
-                                    <input type="number" v-model.number="session.tyreWear" min="0" step="0.1" class="input">
-                                </div>
-                                <div>
-                                    <div class="label">Повреждения</div>
-                                    <input type="number" v-model.number="session.damage" min="0" step="0.1" class="input">
-                                </div>
-                                <div>
-                                    <div class="label">Расход топлива</div>
-                                    <input type="number" v-model.number="session.fuelConsumption" min="0" step="0.1" class="input">
-                                </div>
-                            </div>
-
-                            <div style="margin-top:28px;">
-                                <h4 style="font-size:18px; margin-bottom:16px;">Длительность</h4>
-                                <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
-                                    <div>
-                                        <div class="label">Практика (мин)</div>
-                                        <input type="number" v-model.number="session.practiceDuration" min="0" class="input">
-                                    </div>
-                                    <div>
-                                        <div class="label">Квалификация (мин)</div>
-                                        <input type="number" v-model.number="session.qualifyingDuration" min="0" class="input">
-                                    </div>
-                                    <div style="grid-column: span 2;">
-                                        <div class="label">Гонка (кругов)</div>
-                                        <input type="number" v-model.number="session.raceLaps" min="0" class="input">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div style="margin-top:40px; text-align:right;">
-                        <button class="btn btn-primary" style="padding:16px 40px; font-size:17px;" @click="saveSession">
-                            💾 Сохранить сессию
-                        </button>
-                    </div>
-                </div>
-
-                <!-- PLAYERS -->
-                <div v-if="tab==='players'" key="pl" class="card">
-                    <div class="section-title">Игроки онлайн • {{ players.length }} чел.</div>
-                    <div v-if="!players.length" style="padding:60px 0; text-align:center; color:#94a3b8; font-size:18px;">
-                        Никто ещё не подключился
-                    </div>
-                    <div v-else v-for="p in players" :key="p.name" 
-                         style="padding:18px 24px; background:#f8fafc; border-radius:16px; margin-bottom:12px; display:flex; align-items:center; justify-content:space-between;">
-                        <div>
-                            <b style="font-size:17px;">{{ p.name }}</b>
-                        </div>
-                        <div style="display:flex; align-items:center; gap:24px;">
-                            <div style="font-family:monospace; background:#e2e8f0; padding:4px 14px; border-radius:9999px;">
-                                {{ p.ping }} ms
-                            </div>
-                            <button class="btn btn-secondary" @click="kickPlayer(p)">Кикнуть</button>
-                        </div>
-                    </div>
-                </div>
-
-            </transition>
-        </div>
+    <div style="margin-top: auto; padding-top: 40px; border-top: 1px solid #334155; font-size: 13px; color: #64748b;">
+      Assetto Corsa Dedicated<br>
+      <span style="color:#94a3b8">v1.92 • Production Build</span>
     </div>
+  </div>
+
+  <!-- MAIN PANEL -->
+  <div class="main">
+    <div class="header">
+      <div class="header-title">
+        {{ tab === 'dashboard' ? t.dashboard.title : tab === 'session' ? t.session.title : t.players.title }}
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <span :class="['status', server.status]">{{ server.status === 'online' ? t.common.online : t.common.offline }}</span>
+
+        <button class="lang-btn" @click="toggleLanguage">
+          {{ locale === 'ru' ? '🇬🇧 EN' : '🇷🇺 RU' }}
+        </button>
+        <button class="logout-btn" @click="logout">{{ t.common.logout }}</button>
+
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="text-align: right;">
+            <div style="font-weight:600; font-size:15px;">{{ t.common.admin }}</div>
+            <div style="font-size:13px; color:#64748b;">admin@acserver.pro</div>
+          </div>
+          <div style="width:42px; height:42px; background:linear-gradient(135deg,#ff2a2a,#ff6a6a); border-radius:50%; color:white; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:20px;">A</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <transition name="fade" mode="out-in">
+
+        <!-- DASHBOARD -->
+        <div v-if="tab==='dashboard'" key="dash" class="flex">
+          <div v-if="server.status === 'online'" class="card" style="flex: 2; min-width: 280px;">
+            <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+              <span style="font-size: 32px;">🏁</span>
+              <div>
+                <div style="font-size: 20px; font-weight: 600; color: #64748b;">{{ t.dashboard.currentTrack }}</div>
+                <div style="font-size: 32px; font-weight: 700; line-height: 1.2;">{{ server.track || '—' }}</div>
+              </div>
+            </div>
+            <div style="display: flex; align-items: baseline; gap: 8px;">
+              <span style="font-size: 56px; font-weight: 700;">{{ server.clients || 0 }}</span>
+              <span style="font-size: 28px; color: #64748b;">/{{ server.maxclients || 0 }}</span>
+            </div>
+            <p style="margin-top: 8px; color: #64748b; font-size: 16px;">{{ t.dashboard.playersOnline }}</p>
+          </div>
+          <div v-else class="card" style="flex: 2; min-width: 280px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px;">
+            <span style="font-size: 48px;">🔴</span>
+            <div style="font-size: 24px; font-weight: 600;">{{ t.dashboard.serverOffline }}</div>
+            <p style="color: #64748b;">{{ t.dashboard.startToSee }}</p>
+          </div>
+
+          <div class="card" style="flex: 1; min-width: 240px; display: flex; flex-direction: column; justify-content: center;">
+            <div style="display: flex; gap: 12px; flex-direction: column;">
+              <button class="btn btn-primary" style="padding: 18px;" @click="start">
+                {{ t.dashboard.startServer }}
+              </button>
+              <button class="btn btn-secondary" style="padding: 18px;" @click="stop">
+                {{ t.dashboard.stopServer }}
+              </button>
+            </div>
+            <p style="margin-top: 20px; font-size: 13px; color: #94a3b8; text-align: center;">
+              {{ t.dashboard.manageHint }}
+            </p>
+          </div>
+        </div>
+
+        <!-- SESSION TAB -->
+        <div v-if="tab==='session'" key="sess">
+          <div style="margin-bottom: 24px;">
+            <div class="section-title">{{ t.session.title }}</div>
+            <p style="color:#64748b;">{{ t.session.changesHint }}</p>
+          </div>
+
+          <div class="session-cards-grid">
+            <!-- КАРТОЧКА 1: СЕРВЕР -->
+            <div class="card">
+              <div class="card-title">
+                <span>🖥️</span> {{ t.session.serverCard }}
+              </div>
+              
+              <div class="label">{{ t.session.serverName }}</div>
+              <input type="text" v-model="session.name" class="input" style="margin-bottom: 16px;" :placeholder="t.session.serverNamePlaceholder">
+
+              <div class="label">{{ t.session.password }}</div>
+              <input type="text" v-model="session.password" class="input" style="margin-bottom: 16px;" :placeholder="t.session.passwordPlaceholder">
+
+              <div class="label">{{ t.session.adminPassword }}</div>
+              <input type="text" v-model="session.adminPassword" class="input" style="margin-bottom: 20px;" :placeholder="t.session.adminPasswordPlaceholder">
+
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                <div>
+                  <div class="label">UDP_PORT</div>
+                  <input type="number" v-model.number="session.udpPort" class="input" placeholder="9600">
+                </div>
+                <div>
+                  <div class="label">TCP_PORT</div>
+                  <input type="number" v-model.number="session.tcpPort" class="input" placeholder="9600">
+                </div>
+                <div>
+                  <div class="label">HTTP_PORT</div>
+                  <input type="number" v-model.number="session.httpPort" class="input" placeholder="8081">
+                </div>
+              </div>
+            </div>
+
+            <!-- КАРТОЧКА 2: ТРАССА -->
+            <div class="card">
+              <div class="card-title">
+                <span>🏁</span> {{ t.session.trackCard }}
+              </div>
+              
+              <div class="label">{{ t.session.track }}</div>
+              <select v-model="session.track" class="input" style="margin-bottom:20px;">
+                <option v-for="t in tracks" :key="t.id" :value="t.id">{{ t.name || t.id }}</option>
+              </select>
+
+              <div class="label">{{ t.session.trackVariant }}</div>
+              <select v-model="session.trackVariant" class="input">
+                <option v-for="v in session.trackVariants" :key="v" :value="v">{{ v }}</option>
+              </select>
+
+              <p style="margin-top: 20px; font-size: 13px; color: #94a3b8;">
+                {{ t.session.trackHint }}
+              </p>
+            </div>
+
+            <!-- КАРТОЧКА 3: АВТОМОБИЛИ -->
+            <div class="card" style="display: flex; flex-direction: column;">
+              <div class="card-title">
+                <span>🏎️</span> {{ t.session.carsCard }}
+              </div>
+
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                <div class="label" style="margin-bottom: 0;">{{ t.session.carsLabel }} ({{ session.cars.length }})</div>
+                <button class="btn btn-secondary btn-small" @click="addCar">
+                  + {{ t.session.addCar }}
+                </button>
+              </div>
+
+              <div class="car-list" style="flex: 1;">
+                <div v-if="session.cars.length === 0" style="padding: 20px; text-align: center; color: #94a3b8; background: #f8fafc; border-radius: 14px;">
+                  {{ t.session.noCars }}
+                </div>
+                <div v-for="(car, i) in session.cars" :key="i" class="car-item">
+                  <select v-model="car.id" class="input" style="flex: 3;">
+                    <option v-for="carOption in cars" :key="carOption.id" :value="carOption.id">{{ carOption.name }}</option>
+                  </select>
+                  
+                  <div class="restrictor-group">
+                    <span>🔧</span>
+                    <input type="number" v-model.number="car.restrictor" min="0" max="100" step="1" placeholder="0" />
+                    <span>%</span>
+                  </div>
+                  
+                  <div class="ballast-group">
+                    <span>⚖️</span>
+                    <input type="number" v-model.number="car.ballast" min="0" step="1" placeholder="0" />
+                    <span>{{ t.session.kg }}</span>
+                  </div>
+                  
+                  <button class="remove-btn" @click="removeCar(i)" :title="t.session.remove">✕</button>
+                </div>
+              </div>
+              
+              <p style="margin-top: 16px; font-size: 13px; color: #94a3b8;">
+                {{ t.session.restrictorHint }}
+              </p>
+            </div>
+
+            <!-- КАРТОЧКА 4: ПАРАМЕТРЫ СЕССИИ -->
+            <div class="card">
+              <div class="card-title">
+                <span>⚙️</span> {{ t.session.sessionParams }}
+              </div>
+
+              <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;">
+                <div>
+                  <div class="label">{{ t.session.tyreWear }}</div>
+                  <input type="number" v-model.number="session.tyreWear" min="0" step="0.1" class="input">
+                </div>
+                <div>
+                  <div class="label">{{ t.session.damage }}</div>
+                  <input type="number" v-model.number="session.damage" min="0" step="0.1" class="input">
+                </div>
+                <div>
+                  <div class="label">{{ t.session.fuelConsumption }}</div>
+                  <input type="number" v-model.number="session.fuelConsumption" min="0" step="0.1" class="input">
+                </div>
+                <div>
+                  <div class="label">SUN_ANGLE</div>
+                  <input type="number" v-model.number="session.sunAngle" min="-180" max="180" class="input" placeholder="48">
+                </div>
+              </div>
+
+              <div style="margin-bottom: 24px;">
+                <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 16px; color: #64748b;">{{ t.session.duration }}</h4>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                  <div>
+                    <div class="label">{{ t.session.practice }}</div>
+                    <input type="number" v-model.number="session.practiceDuration" min="0" class="input">
+                  </div>
+                  <div>
+                    <div class="label">{{ t.session.qualifying }}</div>
+                    <input type="number" v-model.number="session.qualifyingDuration" min="0" class="input">
+                  </div>
+                  <div>
+                    <div class="label">{{ t.session.race }}</div>
+                    <input type="number" v-model.number="session.raceLaps" min="0" class="input">
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+                <div>
+                  <div class="label">PICKUP_MODE</div>
+                  <select v-model.number="session.pickupMode" class="input">
+                    <option :value="0">{{ t.session.disabled }}</option>
+                    <option :value="1">{{ t.session.enabled }}</option>
+                  </select>
+                </div>
+                <div>
+                  <div class="label">LOOP_MODE</div>
+                  <select v-model.number="session.loopMode" class="input">
+                    <option :value="0">{{ t.session.disabled }}</option>
+                    <option :value="1">{{ t.session.enabled }}</option>
+                  </select>
+                </div>
+                <div>
+                  <div class="label">ALLOWED_TYRES_OUT</div>
+                  <input type="number" v-model.number="session.allowedTyresOut" min="0" max="4" class="input" placeholder="2">
+                </div>
+                <div>
+                  <div class="label">LEGAL_TYRES</div>
+                  <input type="text" v-model="session.legalTyres" class="input" placeholder="V70;">
+                </div>
+              </div>
+
+              <div style="margin-top: 24px;">
+                <h4 style="font-size: 14px; font-weight: 600; margin-bottom: 12px; color: #64748b;">{{ t.session.assists }}</h4>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+                  <div class="checkbox-group">
+                    <input type="checkbox" v-model="session.absAllowed" id="abs">
+                    <label for="abs">ABS_ALLOWED</label>
+                  </div>
+                  <div class="checkbox-group">
+                    <input type="checkbox" v-model="session.tcAllowed" id="tc">
+                    <label for="tc">TC_ALLOWED</label>
+                  </div>
+                  <div class="checkbox-group">
+                    <input type="checkbox" v-model="session.stabilityAllowed" id="stability">
+                    <label for="stability">STABILITY_ALLOWED</label>
+                  </div>
+                  <div class="checkbox-group">
+                    <input type="checkbox" v-model="session.autoclutchAllowed" id="autoclutch">
+                    <label for="autoclutch">AUTOCLUTCH_ALLOWED</label>
+                  </div>
+                  <div class="checkbox-group">
+                    <input type="checkbox" v-model="session.tyreBlanketsAllowed" id="blankets">
+                    <label for="blankets">TYRE_BLANKETS_ALLOWED</label>
+                  </div>
+                  <div class="checkbox-group">
+                    <input type="checkbox" v-model="session.forceVirtualMirror" id="mirror">
+                    <label for="mirror">FORCE_VIRTUAL_MIRROR</label>
+                  </div>
+                  <div class="checkbox-group">
+                    <input type="checkbox" v-model="session.registerToLobby" id="lobby">
+                    <label for="lobby">REGISTER_TO_LOBBY</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- КАРТОЧКА 5: ПОГОДА -->
+            <div class="card" style="grid-column: span 2;">
+              <div class="card-title">
+                <span>🌤️</span> {{ t.session.weatherCard }}
+              </div>
+
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+                <p style="color: #64748b; font-size: 14px;">{{ t.session.weatherHint }}</p>
+                <button class="btn btn-secondary btn-small" @click="addWeatherSlot">
+                  + {{ t.session.addWeatherSlot }}
+                </button>
+              </div>
+
+              <div class="weather-slots-container">
+                <div v-for="(w, index) in weather" :key="index" class="weather-slot">
+                  <div class="weather-slot-header">
+                    <div class="weather-slot-title">
+                      {{ t.session.weatherSlot }} {{ index }}
+                    </div>
+                    <button 
+                      v-if="weather.length > 1"
+                      class="btn-icon" 
+                      @click="removeWeatherSlot(index)"
+                      :title="t.session.removeWeatherSlot"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                  <div class="weather-grid">
+                    <div>
+                      <div class="label">{{ t.session.graphics }}</div>
+                      <select v-model="w.graphics" class="input">
+                        <option>3_clear</option>
+                        <option>4_few_clouds</option>
+                        <option>5_scattered_clouds</option>
+                        <option>6_broken_clouds</option>
+                        <option>7_heavy_clouds</option>
+                        <option>2_light_fog</option>
+                        <option>1_heavy_fog</option>
+                      </select>
+                    </div>
+                    <div></div>
+                    <div>
+                      <div class="label">{{ t.session.baseTempAmbient }}</div>
+                      <input type="number" v-model.number="w.baseTemperatureAmbient" class="input" :placeholder="index === 0 ? '18' : '15'">
+                    </div>
+                    <div>
+                      <div class="label">{{ t.session.baseTempRoad }}</div>
+                      <input type="number" v-model.number="w.baseTemperatureRoad" class="input" :placeholder="index === 0 ? '6' : '-1'">
+                    </div>
+                    <div>
+                      <div class="label">{{ t.session.variationAmbient }}</div>
+                      <input type="number" v-model.number="w.variationAmbient" class="input" placeholder="1">
+                    </div>
+                    <div>
+                      <div class="label">{{ t.session.variationRoad }}</div>
+                      <input type="number" v-model.number="w.variationRoad" class="input" placeholder="1">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 32px; text-align: right;">
+            <button class="btn btn-primary" style="padding: 16px 40px; font-size: 17px;" @click="saveSession">
+              {{ t.session.saveSession }}
+            </button>
+          </div>
+        </div>
+
+        <!-- PLAYERS TAB -->
+        <div v-if="tab==='players'" key="pl" class="card">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+            <div class="section-title">{{ t.players.title }}</div>
+            <button class="btn btn-secondary" @click="refreshIFrame" :disabled="server.status !== 'online'">
+              {{ t.players.refresh }}
+            </button>
+          </div>
+
+          <div v-if="server.status === 'online'">
+            <div class="iframe-container">
+              <iframe id="players-entry-iframe" src="http://localhost:5002/api/entry" title="Entry list"></iframe>
+            </div>
+            <p style="margin-top: 12px; font-size: 13px; color: #64748b; text-align: center;">
+              {{ t.players.realtimeHint }}
+            </p>
+          </div>
+          <div v-else class="empty-state">
+            <span style="font-size: 40px; display: block; margin-bottom: 16px;">🔌</span>
+            <h3 style="margin-bottom: 8px;">{{ t.players.serverOffline }}</h3>
+            <p>{{ t.players.goToDashboard }}</p>
+          </div>
+        </div>
+
+      </transition>
+    </div>
+  </div>
 </div>
 
 <script>
-const { createApp, watch } = Vue
+  const { createApp } = Vue
 
-createApp({
+  // Переводы
+  const messages = {
+    ru: {
+      common: { online: 'онлайн', offline: 'офлайн', logout: 'Выйти', admin: 'Администратор' },
+      nav: { dashboard: '📊 Обзор', session: '🎮 Сессия', players: '👥 Игроки' },
+      dashboard: {
+        title: 'Обзор сервера', currentTrack: 'Текущий трек', playersOnline: 'игроков онлайн',
+        serverOffline: 'Сервер офлайн', startToSee: 'Запустите сервер для отображения информации',
+        startServer: '▶ Запустить сервер', stopServer: '⏹ Остановить сервер', manageHint: 'Управление состоянием выделенного сервера'
+      },
+      session: {
+        title: 'Настройка сессии', changesHint: 'Все изменения применяются после нажатия «Сохранить»',
+        serverCard: 'Сервер', serverName: 'Имя сервера', serverNamePlaceholder: 'AC Server',
+        password: 'Пароль', passwordPlaceholder: 'Оставьте пустым, если без пароля',
+        adminPassword: 'Админ-пароль', adminPasswordPlaceholder: 'Пароль администратора',
+        trackCard: 'Трасса', carsCard: 'Автомобили', weatherCard: 'Погода',
+        weatherHint: 'Настройте погодные слоты. Минимум один слот обязателен.',
+        addWeatherSlot: 'Добавить слот погоды', removeWeatherSlot: 'Удалить слот', weatherSlot: 'Слот погоды',
+        track: 'Трасса', trackVariant: 'Вариант трассы', trackHint: 'Выберите трассу и её конфигурацию',
+        carsLabel: 'Автомобили', addCar: 'Добавить', noCars: 'Нет добавленных автомобилей',
+        kg: 'кг', remove: 'Удалить', restrictorHint: 'Рестриктор ограничивает мощность (%), балласт добавляет массу (кг).',
+        sessionParams: 'Параметры сессии', tyreWear: 'Износ шин', damage: 'Повреждения', fuelConsumption: 'Расход топлива',
+        duration: 'Длительность', practice: 'Практика (мин)', qualifying: 'Квалификация (мин)', race: 'Гонка (кругов)',
+        saveSession: '💾 Сохранить сессию', enabled: 'Включено', disabled: 'Отключено', assists: 'Помощники',
+        graphics: 'Графика', baseTempAmbient: 'Темп. воздуха', baseTempRoad: 'Темп. трассы',
+        variationAmbient: 'Вариация воздуха', variationRoad: 'Вариация трассы'
+      },
+      players: {
+        title: 'Игроки на сервере', refresh: '🔄 Обновить', realtimeHint: 'Список игроков обновляется в реальном времени',
+        serverOffline: 'Сервер не запущен', goToDashboard: 'Запустите сервер на вкладке Dashboard, чтобы увидеть список игроков.'
+      }
+    },
+    en: {
+      common: { online: 'online', offline: 'offline', logout: 'Logout', admin: 'Administrator' },
+      nav: { dashboard: '📊 Dashboard', session: '🎮 Session', players: '👥 Players' },
+      dashboard: {
+        title: 'Server Overview', currentTrack: 'Current Track', playersOnline: 'players online',
+        serverOffline: 'Server offline', startToSee: 'Start the server to see information',
+        startServer: '▶ Start Server', stopServer: '⏹ Stop Server', manageHint: 'Dedicated server state management'
+      },
+      session: {
+        title: 'Session Configuration', changesHint: 'Changes are applied after clicking "Save"',
+        serverCard: 'Server', serverName: 'Server Name', serverNamePlaceholder: 'AC Server',
+        password: 'Password', passwordPlaceholder: 'Leave empty for no password',
+        adminPassword: 'Admin Password', adminPasswordPlaceholder: 'Administrator password',
+        trackCard: 'Track', carsCard: 'Cars', weatherCard: 'Weather',
+        weatherHint: 'Configure weather slots. At least one slot is required.',
+        addWeatherSlot: 'Add Weather Slot', removeWeatherSlot: 'Remove Slot', weatherSlot: 'Weather Slot',
+        track: 'Track', trackVariant: 'Track Variant', trackHint: 'Select track and its layout',
+        carsLabel: 'Cars', addCar: 'Add', noCars: 'No cars added', kg: 'kg', remove: 'Remove',
+        restrictorHint: 'Restrictor limits power (%), ballast adds weight (kg).',
+        sessionParams: 'Session Parameters', tyreWear: 'Tyre Wear', damage: 'Damage', fuelConsumption: 'Fuel Consumption',
+        duration: 'Duration', practice: 'Practice (min)', qualifying: 'Qualifying (min)', race: 'Race (laps)',
+        saveSession: '💾 Save Session', enabled: 'Enabled', disabled: 'Disabled', assists: 'Assists',
+        graphics: 'Graphics', baseTempAmbient: 'Ambient Temp', baseTempRoad: 'Road Temp',
+        variationAmbient: 'Ambient Variation', variationRoad: 'Road Variation'
+      },
+      players: {
+        title: 'Players on Server', refresh: '🔄 Refresh', realtimeHint: 'Player list updates in real time',
+        serverOffline: 'Server is offline', goToDashboard: 'Start the server on the Dashboard tab to see the player list.'
+      }
+    }
+  }
+
+  createApp({
     data() {
-        return {
-            tab: 'dashboard',
-            server: {},
-            session: {
-                cars: [],
-                track: '',
-                trackVariant: '',
-                trackVariants: [],
-                tyreWear: 1,
-                damage: 1,
-                fuelConsumption: 1,
-                practiceDuration: 0,
-                qualifyingDuration: 0,
-                raceLaps: 0
-            },
-            cars: [],
-            tracks: [],
-            players: [],
-            loading: false,
-            csrfToken: ''
-        }
+      return {
+        locale: 'ru',
+        tab: 'dashboard',
+        server: { status: 'offline', clients: 0, maxclients: 0, track: '' },
+        session: {
+          name: '', password: '', adminPassword: '',
+          udpPort: 9600, tcpPort: 9600, httpPort: 8081,
+          cars: [],
+          track: '', trackVariant: '', trackVariants: [],
+          tyreWear: 1, damage: 1, fuelConsumption: 1, sunAngle: 48,
+          practiceDuration: 0, qualifyingDuration: 0, raceLaps: 0,
+          pickupMode: 1, loopMode: 1, allowedTyresOut: 2, legalTyres: 'V70;',
+          absAllowed: true, tcAllowed: true, stabilityAllowed: false,
+          autoclutchAllowed: true, tyreBlanketsAllowed: true,
+          forceVirtualMirror: false, registerToLobby: true
+        },
+        weather: [
+          { graphics: '3_clear', baseTemperatureAmbient: 18, baseTemperatureRoad: 6, variationAmbient: 1, variationRoad: 1 }
+        ],
+        cars: [], tracks: [], players: [], loading: false, csrfToken: ''
+      }
     },
     computed: {
-        statusClass() {
-            if (this.server.status === 'ONLINE') return 'online'
-            if (this.server.status === 'OFFLINE') return 'offline'
-            return 'loading'
-        }
+      t() { return messages[this.locale] || messages.ru }
     },
     methods: {
-        async api(url, options = {}) {
-            const opts = { ...options }
-            opts.headers = { ...(options.headers || {}) }
-            if (opts.method && opts.method !== 'GET' && this.csrfToken) {
-                opts.headers['X-CSRF-Token'] = this.csrfToken
-            }
-            const res = await fetch(url, opts)
-            if (res.status === 401) {
-                const nextUrl = encodeURIComponent(window.location.pathname || '/')
-                window.location.href = `/login?next=${nextUrl}`
-                return {}
-            }
-            if (!res.ok) {
-                return {}
-            }
-            return res.json()
-        },
-        async fetchCsrf() {
-            const res = await fetch('/api/csrf')
-            if (res.ok) {
-                const data = await res.json()
-                this.csrfToken = data.token || ''
-            }
-        },
-        async fetchAll() {
-            try {
-                this.loading = true
-                const [s, se, c, t, p] = await Promise.all([
-                    this.api('/api/server/status'),
-                    this.api('/api/session'),
-                    this.api('/api/cars'),
-                    this.api('/api/tracks'),
-                    this.api('/api/players')
-                ])
-                this.server = s
-
-                // Заполняем сессию
-                this.session.cars = se.cars || []
-                this.session.track = se.track || ''
-                this.session.trackVariant = se.trackVariant || ''
-                this.session.trackVariants = se.layouts || []
-                this.session.tyreWear = se.tyreWear || 1
-                this.session.damage = se.damage || 1
-                this.session.fuelConsumption = se.fuelConsumption || 1
-                this.session.practiceDuration = se.practiceDuration || 0
-                this.session.qualifyingDuration = se.qualifyingDuration || 0
-                this.session.raceLaps = se.raceLaps || 0
-
-                this.cars = c
-                this.tracks = t
-                this.players = p
-            } finally {
-                this.loading = false
-            }
-        },
-        async start() {
-            await this.api('/api/server/start', { method: 'POST' })
-            this.fetchAll()
-        },
-        async stop() {
-            await this.api('/api/server/stop', { method: 'POST' })
-            this.fetchAll()
-        },
-        addCar() {
-            if (this.cars.length) this.session.cars.push(this.cars[0].id)
-        },
-        removeCar(i) {
-            this.session.cars.splice(i, 1)
-        },
-        async saveSession() {
-            await this.api('/api/session', {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(this.session)
-            })
-            alert('✅ Сессия успешно сохранена!')
-        },
-        async logout() {
-            await fetch('/logout', {
-                method: 'POST',
-                headers: this.csrfToken ? { 'X-CSRF-Token': this.csrfToken } : {}
-            })
-            window.location.href = '/login'
-        },
-        kickPlayer(player) {
-            if (confirm(`Кикнуть ${player.name}?`)) {
-                // Здесь можно добавить реальный вызов API
-                this.players = this.players.filter(p => p.name !== player.name)
-            }
+      toggleLanguage() { this.locale = this.locale === 'ru' ? 'en' : 'ru' },
+      addWeatherSlot() {
+        this.weather.push({ graphics: '3_clear', baseTemperatureAmbient: 18, baseTemperatureRoad: 6, variationAmbient: 1, variationRoad: 1 })
+      },
+      removeWeatherSlot(index) { if (this.weather.length > 1) this.weather.splice(index, 1) },
+      
+      // Преобразование 1/0 в true/false при загрузке
+      boolFromApi(value) {
+        if (typeof value === 'boolean') return value
+        return value === 1 || value === '1'
+      },
+      
+      // Преобразование true/false в 1/0 при сохранении
+      boolToApi(value) {
+        return value ? 1 : 0
+      },
+      
+      async api(url, options = {}) {
+        const opts = { ...options }
+        opts.headers = { ...(options.headers || {}) }
+        if (opts.method && opts.method !== 'GET' && this.csrfToken) {
+          opts.headers['X-CSRF-Token'] = this.csrfToken
         }
-    },
-    mounted() {
-        this.fetchAll()
-        this.fetchCsrf()
-    },
-    watch: {
-        'session.track'(val) {
-            const track = this.tracks.find(t => t.id === val)
-            this.session.trackVariants = track?.variants || []
-            if (!this.session.trackVariants.includes(this.session.trackVariant)) {
+        try {
+          const res = await fetch(url, opts)
+          if (res.status === 401) {
+            const nextUrl = encodeURIComponent(window.location.pathname || '/')
+            window.location.href = `/login?next=${nextUrl}`
+            return {}
+          }
+          if (!res.ok) return {}
+          return await res.json()
+        } catch (e) { console.warn('API error:', e); return {} }
+      },
+      async fetchCsrf() {
+        try {
+          const res = await fetch('/api/csrf')
+          if (res.ok) { const data = await res.json(); this.csrfToken = data.token || '' }
+        } catch (e) {}
+      },
+      normalizeSessionCars(carsData) {
+        if (!Array.isArray(carsData)) return []
+        return carsData.map(item => {
+          if (typeof item === 'string') return { id: item, restrictor: 0, ballast: 0 }
+          if (item && typeof item === 'object') {
+            return { id: item.id || '', restrictor: item.restrictor ?? 0, ballast: item.ballast ?? 0 }
+          }
+          return { id: '', restrictor: 0, ballast: 0 }
+        }).filter(c => c.id)
+      },
+      async fetchAll() {
+        this.loading = true
+        try {
+          const [s, se, c, t] = await Promise.all([
+            this.api('/api/info'), this.api('/api/session'), this.api('/api/cars'), this.api('/api/tracks')
+          ])
+          this.server = s || { status: 'offline', clients: 0, maxclients: 0, track: '' }
+          
+          if (se) {
+            this.session.name = se.name || ''
+            this.session.password = se.password || ''
+            this.session.adminPassword = se.adminPassword || ''
+            this.session.udpPort = se.udpPort ?? 9600
+            this.session.tcpPort = se.tcpPort ?? 9600
+            this.session.httpPort = se.httpPort ?? 8081
+            this.session.cars = this.normalizeSessionCars(se.cars)
+            this.session.track = se.track || ''
+            this.session.trackVariant = se.trackVariant || ''
+            this.session.trackVariants = se.trackVariants || []
+            this.session.tyreWear = se.tyreWear ?? 1
+            this.session.damage = se.damage ?? 1
+            this.session.fuelConsumption = se.fuelConsumption ?? 1
+            this.session.sunAngle = se.sunAngle ?? 48
+            this.session.practiceDuration = se.practiceDuration ?? 0
+            this.session.qualifyingDuration = se.qualifyingDuration ?? 0
+            this.session.raceLaps = se.raceLaps ?? 0
+            this.session.pickupMode = se.pickupMode ?? 1
+            this.session.loopMode = se.loopMode ?? 1
+            this.session.allowedTyresOut = se.allowedTyresOut ?? 2
+            this.session.legalTyres = se.legalTyres ?? 'V70;'
+            
+            // Преобразование 1/0 → true/false
+            this.session.absAllowed = this.boolFromApi(se.absAllowed)
+            this.session.tcAllowed = this.boolFromApi(se.tcAllowed)
+            this.session.stabilityAllowed = this.boolFromApi(se.stabilityAllowed)
+            this.session.autoclutchAllowed = this.boolFromApi(se.autoclutchAllowed)
+            this.session.tyreBlanketsAllowed = this.boolFromApi(se.tyreBlanketsAllowed)
+            this.session.forceVirtualMirror = this.boolFromApi(se.forceVirtualMirror)
+            this.session.registerToLobby = this.boolFromApi(se.registerToLobby)
+            
+            if (se.weather && Array.isArray(se.weather) && se.weather.length > 0) {
+              this.weather = se.weather
+            }
+          }
+          
+          this.cars = c || []
+          this.tracks = t || []
+          
+          this.$nextTick(() => {
+            const track = this.tracks.find(tr => tr.id === this.session.track)
+            if (track) {
+              this.session.trackVariants = track.layouts || []
+              if (!this.session.trackVariants.includes(this.session.trackVariant)) {
                 this.session.trackVariant = this.session.trackVariants[0] || ''
+              }
             }
+          })
+        } finally { this.loading = false }
+      },
+      async start() { await this.api('/api/server/start', { method: 'POST' }); await this.fetchAll() },
+      async stop() { await this.api('/api/server/stop', { method: 'POST' }); await this.fetchAll() },
+      addCar() {
+        if (this.cars.length) {
+          this.session.cars.push({ id: this.cars[0].id, restrictor: 0, ballast: 0 })
         }
+      },
+      removeCar(i) { this.session.cars.splice(i, 1) },
+      async saveSession() {
+        const payload = {
+          name: this.session.name,
+          password: this.session.password,
+          adminPassword: this.session.adminPassword,
+          udpPort: this.session.udpPort,
+          tcpPort: this.session.tcpPort,
+          httpPort: this.session.httpPort,
+          cars: this.session.cars,
+          track: this.session.track,
+          trackVariant: this.session.trackVariant,
+          trackVariants: this.session.trackVariants,
+          tyreWear: this.session.tyreWear,
+          damage: this.session.damage,
+          fuelConsumption: this.session.fuelConsumption,
+          sunAngle: this.session.sunAngle,
+          practiceDuration: this.session.practiceDuration,
+          qualifyingDuration: this.session.qualifyingDuration,
+          raceLaps: this.session.raceLaps,
+          pickupMode: this.session.pickupMode,
+          loopMode: this.session.loopMode,
+          allowedTyresOut: this.session.allowedTyresOut,
+          legalTyres: this.session.legalTyres,
+          // Преобразование true/false → 1/0
+          absAllowed: this.boolToApi(this.session.absAllowed),
+          tcAllowed: this.boolToApi(this.session.tcAllowed),
+          stabilityAllowed: this.boolToApi(this.session.stabilityAllowed),
+          autoclutchAllowed: this.boolToApi(this.session.autoclutchAllowed),
+          tyreBlanketsAllowed: this.boolToApi(this.session.tyreBlanketsAllowed),
+          forceVirtualMirror: this.boolToApi(this.session.forceVirtualMirror),
+          registerToLobby: this.boolToApi(this.session.registerToLobby),
+          weather: this.weather
+        }
+        await this.api('/api/session', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+        alert(this.locale === 'ru' ? '✅ Сессия успешно сохранена!' : '✅ Session saved successfully!')
+        await this.fetchAll()
+      },
+      async logout() {
+        await fetch('/logout', { method: 'POST', headers: this.csrfToken ? { 'X-CSRF-Token': this.csrfToken } : {} })
+        window.location.href = '/login'
+      },
+      refreshIFrame() {
+        const iframe = document.getElementById('players-entry-iframe')
+        if (iframe) iframe.src = iframe.src
+      }
+    },
+    mounted() { this.fetchCsrf(); this.fetchAll() },
+    watch: {
+      'session.track'(val) {
+        const track = this.tracks.find(t => t.id === val)
+        this.session.trackVariants = track?.layouts || []
+        if (!this.session.trackVariants.includes(this.session.trackVariant)) {
+          this.session.trackVariant = this.session.trackVariants[0] || ''
+        }
+      }
     }
-}).mount('#app')
+  }).mount('#app')
 </script>
 </body>
 </html>

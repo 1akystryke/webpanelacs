@@ -1,0 +1,127 @@
+<style>
+    /* Импорт спортивного шрифта */
+    @import url('https://googleapis.com');
+
+    body {
+        background-color: #0a0a0c;
+        background-image: 
+            linear-gradient(rgba(18, 18, 20, 0.9), rgba(18, 18, 20, 0.9)),
+            url('https://transparenttextures.com');
+        color: #e0e0e0;
+        font-family: 'Roboto Mono', monospace;
+        margin: 0;
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Заголовок сессии */
+    p:first-of-type {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 1.5rem;
+        text-transform: uppercase;
+        color: #00ff9d; /* Неоновый зеленый */
+        text-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
+        border-left: 5px solid #ff3c00;
+        padding-left: 15px;
+        margin-bottom: 30px;
+        width: 100%;
+        max-width: 1000px;
+    }
+
+    /* Заголовок "Entry List" */
+    p:nth-of-type(2) {
+        font-family: 'Orbitron', sans-serif;
+        font-weight: bold;
+        letter-spacing: 2px;
+        color: #ffffff;
+        margin-top: 20px;
+        align-self: flex-start;
+        max-width: 1000px;
+        width: 100%;
+    }
+
+    /* Таблицы */
+    table {
+        width: 100%;
+        max-width: 1000px;
+        border-collapse: separate;
+        border-spacing: 0 8px;
+        margin-bottom: 40px;
+    }
+
+    /* Шапка таблицы */
+    tr:first-child td {
+        background-color: rgba(255, 60, 0, 0.9); /* Гоночный красный */
+        color: white;
+        font-family: 'Orbitron', sans-serif;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        padding: 12px 15px;
+        border: none;
+    }
+
+    /* Строки таблицы */
+    tr:not(:first-child) td {
+        background-color: rgba(30, 30, 35, 0.8);
+        padding: 12px 15px;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        transition: all 0.2s ease;
+    }
+
+    /* Эффект при наведении на строку */
+    tr:not(:first-child):hover td {
+        background-color: #2a2a30;
+        color: #00ff9d;
+        transform: scale(1.01);
+    }
+
+    /* Особый стиль для ID и Позиции */
+    td:first-child {
+        border-radius: 4px 0 0 4px;
+        font-weight: bold;
+        color: #ff3c00;
+    }
+
+    td:last-child {
+        border-radius: 0 4px 4px 0;
+    }
+
+    /* Индикатор Ping "DC" */
+    td:contains("DC") {
+        color: #666;
+        font-style: italic;
+    }
+
+    /* Подвал (Throughput) */
+    p:last-of-type {
+        font-size: 0.8rem;
+        color: #444;
+        text-align: right;
+        width: 100%;
+        max-width: 1000px;
+        margin-top: -20px;
+    }
+
+    /* Стилизация для пустых ячеек водителей */
+    td:empty::after {
+        content: "VACANT";
+        color: #333;
+        font-size: 0.7rem;
+    }
+
+    /* Анимация мигания для "LIVE" ощущения */
+    @keyframes pulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.7; }
+        100% { opacity: 1; }
+    }
+
+    p:first-of-type::before {
+        content: "● ";
+        color: #ff3c00;
+        animation: pulse 1.5s infinite;
+    }
+</style>

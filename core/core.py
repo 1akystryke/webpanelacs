@@ -2,19 +2,87 @@ import subprocess
 import os
 import json
 from pathlib import Path
-from typing import Optional
+import json
+
+
+from . import config_process as cp
 
 
 class Core:
+    """Core class for managing AC server"""
+
     def __init__(self, server_path: str):
         self.server_path = Path(server_path)
-        self.server_exe = self.server_path / "acServer"
-        self.process: Optional[subprocess.Popen] = None
-        self.running = False
+        self.cars_path = self.server_path / "content" / "cars"
+        self.tracks_path = self.server_path / "content" / "tracks"
+        self.cfg_path = self.server_path / "cfg"
+        self.server_cfg_path = self.cfg_path / "server_cfg.ini"
+        self.entry_list_path = self.cfg_path / "entry_list.ini"
 
-        self.cars_path = os.path.join(server_path, "content", "cars")
-        self.tracks_path = os.path.join(server_path, "content", "tracks")
-        self.cfg_path = os.path.join(server_path, "cfg")
+        self.map_parameters_name = {
+            "name":["SERVER","NAME"],
+            "password":["SERVER","PASSWORD"],
+            "adminPassword":["SERVER","ADMIN_PASSWORD"],
+            "udpPort":["SERVER","UDP_PORT"],
+            "tcpPort":["SERVER","TCP_PORT"],
+            "httpPort":["SERVER","HTTP_PORT"],
+            "damage": ["SERVER", "DAMAGE_MULTIPLIER"],
+            "fuelConsumption": ["SERVER", "FUEL_RATE"],
+            "layout": ["SERVER", "CONFIG_TRACK"],
+            "practiceDuration": ["PRACTICE", "TIME"],
+            "qualifyingDuration": ["QUALIFY", "TIME"],
+            "raceLaps": ["RACE", "LAPS"],
+            "track": ["SERVER", "TRACK"],
+            "trackVariant": ["SERVER", "CONFIG_TRACK"],
+            "tyreWear": ["SERVER", "TYRE_WEAR_RATE"],
+            "sunAngle":["SERVER","SUN_ANGLE"],
+            "pickupMode":["SERVER","PICKUP_MODE_ENABLED"],
+            "loopMode":["SERVER","LOOP_MODE"],
+            "allowedTyresOut":["SERVER","ALLOWED_TYRES_OUT"],
+            "legalTyres":["SERVER","LEGAL_TYRES"],
+            "absAllowed":["SERVER","ABS_ALLOWED"],
+            "tcAllowed":["SERVER","TC_ALLOWED"],
+            "stabilityAllowed":["SERVER","STABILITY_ALLOWED"],
+            "autoclutchAllowed":["SERVER","AUTOCLUTCH_ALLOWED"],
+            "tyreBlanketsAllowed":["SERVER","TYRE_BLANKETS_ALLOWED"],
+            "forceVirtualMirror":["SERVER","FORCE_VIRTUAL_MIRROR"],
+            "registerToLobby":["SERVER","REGISTER_TO_LOBBY"]
+        }
+        self.map_weather_param_names = {
+            "graphics":"GRAPHICS",
+            "baseTemperatureAmbient":"BASE_TEMPERATURE_AMBIENT",
+            "baseTemperatureRoad":"BASE_TEMPERATURE_ROAD",
+            "variationAmbient":"VARIATION_AMBIENT",
+            "variationRoad":"VARIATION_ROAD"
+        }
+
+    def supervisor_stop(self):
+        result = subprocess.run(
+            ["supervisorctl", "stop", "acserver"],
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+        return result.stdout.strip(), result.stderr.strip()
+
+    def supervisor_start(self):
+        result = subprocess.run(
+            ["supervisorctl", "start", "acserver"],
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+        return result.stdout.strip(), result.stderr.strip()
+
+    def supervisor_status(self):
+
+        result = subprocess.run(
+            ["supervisorctl", "status", "acserver"],
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+        return result.stdout.strip(), result.stderr.strip()
 
     def list_cars(self):
         default_cars: list = None
@@ -29,68 +97,75 @@ class Core:
         result_cars = default_cars
         for mod_car in list(mod_cars):
             ui_path = os.path.join(self.cars_path, mod_car, "ui", "ui_car.json")
-            data = self._read_ui(ui_path)
-            result_cars.append({"id": mod_car, "name": data["name"]})
+            with open(ui_path, "r", encoding="utf-8-sig") as f:
+                content = f.read()
+                content = content.replace("\t", "").replace("\n", "")
+                data = json.loads(content)
+                result_cars.append({"id": mod_car, "name": data["name"]})
 
         return result_cars
 
     def list_tracks(self):
         tracks = []
-        tracks_dir = os.listdir(self.tracks_path)
+        tracks_dirs = os.listdir(self.tracks_path)
 
-        for track in tracks_dir:
+        for track in tracks_dirs:
             track_obj = {}
 
-            root = os.path.join(self.tracks_path, track)
+            track_path = os.path.join(self.tracks_path, track)
+            folders = os.listdir(track_path)
+            folders = [
+                x
+                for x in os.listdir(track_path)
+                if os.path.isdir(os.path.join(track_path, x)) and x != "data"
+            ]
+
             track_obj["id"] = track
-            layouts = os.listdir(root)
-            if layouts:
-                track_obj["layouts"] = layouts
+            track_obj["layouts"] = folders
             tracks.append(track_obj)
 
         return tracks
 
-    def _read_ui(self, ui_path):
-        with open(ui_path, "r", encoding="utf-8-sig") as ui:
-            content = ui.read()
-            content = content.replace("\t", "").replace("\n", "")
-            data = json.loads(content)
-            return data
+    def set_car_list(self, car_list):
+        car_data = [{"MODEL": car["id"],"RESTRICTOR": car["restrictor"],"BALLAST": car["ballast"]} for car in car_list]
+        cp.generate_entry_list(car_data, self.entry_list_path)
+        cars_string = cp.generate_server_cfg_string_cars(car_data)
+        server_data = cp.get_server_config(self.server_cfg_path)
+        server_data["SERVER"]["CARS"] = cars_string
+        cp.write_new_server_cfg(server_data, self.server_cfg_path)
+        
 
-    def start(self):
-        os.chdir(self.server_path)
-        cmd = [str(self.server_exe)]
+    def apply_session(self, data):
+        server_data = cp.get_server_config(self.server_cfg_path)
+        for param in data.keys():
+            if param not in self.map_parameters_name.keys():
+                continue
+            key1, key2 = self.map_parameters_name[param]
+            server_data[key1][key2] = data[param]
+        
+        for index,weather in enumerate(data["weather"]):
+            server_data[f"WEATHER_{index}"] = {}
+            for key in weather.keys():
+                server_data[f"WEATHER_{index}"][self.map_weather_param_names[key]]=weather[key]
+        cp.write_new_server_cfg(server_data, self.server_cfg_path)
 
-        with subprocess.Popen(
-            cmd,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.STDOUT,
-            text=True,
-            bufsize=1,
-            start_new_session=True,
-        ) as self.process:
-            self.running = True
 
-        print(f"Server is running (PID: {self.process.pid})")
 
-    def status(self):
-        pass
-
-    def shutdown(self):
-        self.running = False
-
-        if self.process:
-            self.process.terminate()
-            try:
-                self.process.wait(5)
-                print("Server treminated")
-            except subprocess.TimeoutExpired:
-                self.process.kill()
-                print("Timeout: server killed")
-
-    def restart(self):
-        pass
-
-    def wait(self):
-        if self.process:
-            self.process.wait()
+    def get_session_state(self):
+        car_data = cp.get_current_cars(self.entry_list_path)
+        server_data = cp.get_server_config(self.server_cfg_path)
+        
+        output_object = {}
+        output_object["cars"] = [car["MODEL"] for car in car_data]
+        for parameter in self.map_parameters_name.keys():
+            key1, key2 = self.map_parameters_name[parameter]
+            output_object[parameter] = server_data[key1][key2]    
+        output_object["weather"]=[]
+        for key in server_data.keys():
+            if "WEATHER_" in key:
+                tmp_obj = {}
+                for sub_key in self.map_weather_param_names.keys():
+                    tmp_obj[sub_key]=server_data[key][self.map_weather_param_names[sub_key]]
+                output_object["weather"].append(tmp_obj)
+        
+        return output_object

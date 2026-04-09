@@ -4,6 +4,7 @@ import os
 import secrets
 from core.core import Core
 import time
+import requests
 
 # PATH = os.getenv("SERVER_PATH", "")
 PATH = "/ac_server"
@@ -19,7 +20,7 @@ app.config["SESSION_COOKIE_SECURE"] = os.getenv("SESSION_COOKIE_SECURE", "0") ==
 def _get_env():
     return {
         "server_path": os.getenv("SERVER_PATH", ""),
-        "port": int(os.getenv("PORT", "5000")),
+        "port": int(os.getenv("PORT", "5000"))
     }
 
 def _get_auth_env():
@@ -87,34 +88,6 @@ def require_login():
                     return jsonify({"error": "csrf"}), 400
                 return redirect(url_for("login", error="3"))
 
-# ----------------------
-# Mock server state
-# ----------------------
-server_state = {
-    "status": "OFFLINE",
-    "uptime": 0,
-    "players": 0,
-    "maxPlayers": 16,
-    "track": "monza",
-    "sessionType": "RACE"
-}
-
-session_state = {
-    "track": "monza",
-    "layout": "gp",
-    "cars": ["ks_ferrari_488_gt3"],
-    "slots": 16,
-    "sessionType": "RACE",
-    "weather": {
-        "ambientTemp": 26,
-        "roadTemp": 32
-    }
-}
-
-tracks_list = [
-    {"id": "monza", "layouts": ["gp", "junior"]},
-    {"id": "spa", "layouts": ["default"]}
-]
 
 logs = []
 
@@ -122,18 +95,15 @@ logs = []
 # ----------------------
 # Server endpoints
 # ----------------------
-@app.route("/api/server/status")
-def get_status():
-    return jsonify(server_state)
 
 @app.route("/api/server/start", methods=["POST"])
 def start_server():
-    server_controller.start()
+    res = server_controller.supervisor_start()
     return jsonify({"success": True})
 
 @app.route("/api/server/stop", methods=["POST"])
 def stop_server():
-    server_controller.shutdown()
+    res = server_controller.supervisor_stop()
     return jsonify({"success": True})
 
 # ----------------------
@@ -141,13 +111,15 @@ def stop_server():
 # ----------------------
 @app.route("/api/session")
 def get_session():
+    session_state = server_controller.get_session_state()
     return jsonify(session_state)
 
 @app.route("/api/session", methods=["PUT"])
 def update_session():
     data = request.json
     print(data)
-    session_state.update(data)
+    server_controller.set_car_list(data["cars"])
+    server_controller.apply_session(data)
     logs.append("Session updated")
     return jsonify({"success": True})
 
@@ -164,23 +136,50 @@ def get_tracks():
     tracks_list = server_controller.list_tracks()
     return jsonify(tracks_list)
 
-# ----------------------
-# Players (mock)
-# ----------------------
-@app.route("/api/players")
-def get_players():
-    return jsonify([
-        {
-            "name": "Player1",
-            "car": "ks_ferrari_488_gt3",
-            "lapTime": 123.45,
-            "ping": 42
-        }
-    ])
+
+# ---------------------
+# INFO
+# ---------------------
+
+@app.route("/api/info")
+def get_info():
+    url = "http://localhost:8081/INFO"
+
+    payload = {}
+    headers = {
+      'Content-Type': 'application/json'
+    }
+    try:
+        response = requests.request("GET", url, headers=headers, data=payload)
+        json_clone = response.json()
+        json_clone["status"]="online"
+        return json_clone,200
+    except:
+        return {"status":"offline"},200
+
+@app.route("/api/entry")
+def get_entry():
+
+
+    url = "http://localhost:8081/ENTRY"
+
+    payload = {}
+    headers = {
+      'Content-Type': 'application/json'
+    }
+    response = requests.request("GET", url, headers=headers, data=payload)
+    html = response.text
+    with open("vue/framecss.html") as f:
+        css = f.read()
+    index = html.find("<head>")
+    html = html[:index+6]+css+html[index+6:]
+    return html,200
 
 # ----------------------
 # Logs
 # ----------------------
+
+
 @app.route("/api/logs")
 def get_logs():
     limit = int(request.args.get("limit", 100))
@@ -228,3 +227,4 @@ def index():
 if __name__ == "__main__":
     env = _get_env()
     app.run(host="0.0.0.0")
+
