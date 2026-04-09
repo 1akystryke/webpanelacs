@@ -563,26 +563,26 @@
               </div>
               
               <div class="label">{{ t.session.serverName }}</div>
-              <input type="text" v-model="serverConfig.name" class="input" style="margin-bottom: 16px;" :placeholder="t.session.serverNamePlaceholder">
+              <input type="text" v-model="session.name" class="input" style="margin-bottom: 16px;" :placeholder="t.session.serverNamePlaceholder">
 
               <div class="label">{{ t.session.password }}</div>
-              <input type="text" v-model="serverConfig.password" class="input" style="margin-bottom: 16px;" :placeholder="t.session.passwordPlaceholder">
+              <input type="text" v-model="session.password" class="input" style="margin-bottom: 16px;" :placeholder="t.session.passwordPlaceholder">
 
               <div class="label">{{ t.session.adminPassword }}</div>
-              <input type="text" v-model="serverConfig.adminPassword" class="input" style="margin-bottom: 20px;" :placeholder="t.session.adminPasswordPlaceholder">
+              <input type="text" v-model="session.adminPassword" class="input" style="margin-bottom: 20px;" :placeholder="t.session.adminPasswordPlaceholder">
 
               <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
                 <div>
                   <div class="label">UDP_PORT</div>
-                  <input type="number" v-model.number="serverConfig.udpPort" class="input" placeholder="9600">
+                  <input type="number" v-model.number="session.udpPort" class="input" placeholder="9600">
                 </div>
                 <div>
                   <div class="label">TCP_PORT</div>
-                  <input type="number" v-model.number="serverConfig.tcpPort" class="input" placeholder="9600">
+                  <input type="number" v-model.number="session.tcpPort" class="input" placeholder="9600">
                 </div>
                 <div>
                   <div class="label">HTTP_PORT</div>
-                  <input type="number" v-model.number="serverConfig.httpPort" class="input" placeholder="8081">
+                  <input type="number" v-model.number="session.httpPort" class="input" placeholder="8081">
                 </div>
               </div>
             </div>
@@ -754,7 +754,7 @@
               </div>
             </div>
 
-            <!-- КАРТОЧКА 5: ПОГОДА (ДИНАМИЧЕСКАЯ) -->
+            <!-- КАРТОЧКА 5: ПОГОДА -->
             <div class="card" style="grid-column: span 2;">
               <div class="card-title">
                 <span>🌤️</span> {{ t.session.weatherCard }}
@@ -857,154 +857,66 @@
 <script>
   const { createApp } = Vue
 
-  // Полные переводы (RU + EN)
+  // Переводы
   const messages = {
     ru: {
-      common: {
-        online: 'онлайн',
-        offline: 'офлайн',
-        logout: 'Выйти',
-        admin: 'Администратор'
-      },
-      nav: {
-        dashboard: '📊 Обзор',
-        session: '🎮 Сессия',
-        players: '👥 Игроки'
-      },
+      common: { online: 'онлайн', offline: 'офлайн', logout: 'Выйти', admin: 'Администратор' },
+      nav: { dashboard: '📊 Обзор', session: '🎮 Сессия', players: '👥 Игроки' },
       dashboard: {
-        title: 'Обзор сервера',
-        currentTrack: 'Текущий трек',
-        playersOnline: 'игроков онлайн',
-        serverOffline: 'Сервер офлайн',
-        startToSee: 'Запустите сервер для отображения информации',
-        startServer: '▶ Запустить сервер',
-        stopServer: '⏹ Остановить сервер',
-        manageHint: 'Управление состоянием выделенного сервера'
+        title: 'Обзор сервера', currentTrack: 'Текущий трек', playersOnline: 'игроков онлайн',
+        serverOffline: 'Сервер офлайн', startToSee: 'Запустите сервер для отображения информации',
+        startServer: '▶ Запустить сервер', stopServer: '⏹ Остановить сервер', manageHint: 'Управление состоянием выделенного сервера'
       },
       session: {
-        title: 'Настройка сессии',
-        changesHint: 'Все изменения применяются после нажатия «Сохранить»',
-        serverCard: 'Сервер',
-        serverName: 'Имя сервера',
-        serverNamePlaceholder: 'AC Server',
-        password: 'Пароль',
-        passwordPlaceholder: 'Оставьте пустым, если без пароля',
-        adminPassword: 'Админ-пароль',
-        adminPasswordPlaceholder: 'Пароль администратора',
-        trackCard: 'Трасса',
-        carsCard: 'Автомобили',
-        weatherCard: 'Погода',
+        title: 'Настройка сессии', changesHint: 'Все изменения применяются после нажатия «Сохранить»',
+        serverCard: 'Сервер', serverName: 'Имя сервера', serverNamePlaceholder: 'AC Server',
+        password: 'Пароль', passwordPlaceholder: 'Оставьте пустым, если без пароля',
+        adminPassword: 'Админ-пароль', adminPasswordPlaceholder: 'Пароль администратора',
+        trackCard: 'Трасса', carsCard: 'Автомобили', weatherCard: 'Погода',
         weatherHint: 'Настройте погодные слоты. Минимум один слот обязателен.',
-        addWeatherSlot: 'Добавить слот погоды',
-        removeWeatherSlot: 'Удалить слот',
-        weatherSlot: 'Слот погоды',
-        track: 'Трасса',
-        trackVariant: 'Вариант трассы',
-        trackHint: 'Выберите трассу и её конфигурацию',
-        carsLabel: 'Автомобили',
-        addCar: 'Добавить',
-        noCars: 'Нет добавленных автомобилей',
-        kg: 'кг',
-        remove: 'Удалить',
-        restrictorHint: 'Рестриктор ограничивает мощность (%), балласт добавляет массу (кг).',
-        sessionParams: 'Параметры сессии',
-        tyreWear: 'Износ шин',
-        damage: 'Повреждения',
-        fuelConsumption: 'Расход топлива',
-        duration: 'Длительность',
-        practice: 'Практика (мин)',
-        qualifying: 'Квалификация (мин)',
-        race: 'Гонка (кругов)',
-        saveSession: '💾 Сохранить сессию',
-        enabled: 'Включено',
-        disabled: 'Отключено',
-        assists: 'Помощники',
-        graphics: 'Графика',
-        baseTempAmbient: 'Темп. воздуха',
-        baseTempRoad: 'Темп. трассы',
-        variationAmbient: 'Вариация воздуха',
-        variationRoad: 'Вариация трассы'
+        addWeatherSlot: 'Добавить слот погоды', removeWeatherSlot: 'Удалить слот', weatherSlot: 'Слот погоды',
+        track: 'Трасса', trackVariant: 'Вариант трассы', trackHint: 'Выберите трассу и её конфигурацию',
+        carsLabel: 'Автомобили', addCar: 'Добавить', noCars: 'Нет добавленных автомобилей',
+        kg: 'кг', remove: 'Удалить', restrictorHint: 'Рестриктор ограничивает мощность (%), балласт добавляет массу (кг).',
+        sessionParams: 'Параметры сессии', tyreWear: 'Износ шин', damage: 'Повреждения', fuelConsumption: 'Расход топлива',
+        duration: 'Длительность', practice: 'Практика (мин)', qualifying: 'Квалификация (мин)', race: 'Гонка (кругов)',
+        saveSession: '💾 Сохранить сессию', enabled: 'Включено', disabled: 'Отключено', assists: 'Помощники',
+        graphics: 'Графика', baseTempAmbient: 'Темп. воздуха', baseTempRoad: 'Темп. трассы',
+        variationAmbient: 'Вариация воздуха', variationRoad: 'Вариация трассы'
       },
       players: {
-        title: 'Игроки на сервере',
-        refresh: '🔄 Обновить',
-        realtimeHint: 'Список игроков обновляется в реальном времени',
-        serverOffline: 'Сервер не запущен',
-        goToDashboard: 'Запустите сервер на вкладке Dashboard, чтобы увидеть список игроков.'
+        title: 'Игроки на сервере', refresh: '🔄 Обновить', realtimeHint: 'Список игроков обновляется в реальном времени',
+        serverOffline: 'Сервер не запущен', goToDashboard: 'Запустите сервер на вкладке Dashboard, чтобы увидеть список игроков.'
       }
     },
     en: {
-      common: {
-        online: 'online',
-        offline: 'offline',
-        logout: 'Logout',
-        admin: 'Administrator'
-      },
-      nav: {
-        dashboard: '📊 Dashboard',
-        session: '🎮 Session',
-        players: '👥 Players'
-      },
+      common: { online: 'online', offline: 'offline', logout: 'Logout', admin: 'Administrator' },
+      nav: { dashboard: '📊 Dashboard', session: '🎮 Session', players: '👥 Players' },
       dashboard: {
-        title: 'Server Overview',
-        currentTrack: 'Current Track',
-        playersOnline: 'players online',
-        serverOffline: 'Server offline',
-        startToSee: 'Start the server to see information',
-        startServer: '▶ Start Server',
-        stopServer: '⏹ Stop Server',
-        manageHint: 'Dedicated server state management'
+        title: 'Server Overview', currentTrack: 'Current Track', playersOnline: 'players online',
+        serverOffline: 'Server offline', startToSee: 'Start the server to see information',
+        startServer: '▶ Start Server', stopServer: '⏹ Stop Server', manageHint: 'Dedicated server state management'
       },
       session: {
-        title: 'Session Configuration',
-        changesHint: 'Changes are applied after clicking "Save"',
-        serverCard: 'Server',
-        serverName: 'Server Name',
-        serverNamePlaceholder: 'AC Server',
-        password: 'Password',
-        passwordPlaceholder: 'Leave empty for no password',
-        adminPassword: 'Admin Password',
-        adminPasswordPlaceholder: 'Administrator password',
-        trackCard: 'Track',
-        carsCard: 'Cars',
-        weatherCard: 'Weather',
+        title: 'Session Configuration', changesHint: 'Changes are applied after clicking "Save"',
+        serverCard: 'Server', serverName: 'Server Name', serverNamePlaceholder: 'AC Server',
+        password: 'Password', passwordPlaceholder: 'Leave empty for no password',
+        adminPassword: 'Admin Password', adminPasswordPlaceholder: 'Administrator password',
+        trackCard: 'Track', carsCard: 'Cars', weatherCard: 'Weather',
         weatherHint: 'Configure weather slots. At least one slot is required.',
-        addWeatherSlot: 'Add Weather Slot',
-        removeWeatherSlot: 'Remove Slot',
-        weatherSlot: 'Weather Slot',
-        track: 'Track',
-        trackVariant: 'Track Variant',
-        trackHint: 'Select track and its layout',
-        carsLabel: 'Cars',
-        addCar: 'Add',
-        noCars: 'No cars added',
-        kg: 'kg',
-        remove: 'Remove',
+        addWeatherSlot: 'Add Weather Slot', removeWeatherSlot: 'Remove Slot', weatherSlot: 'Weather Slot',
+        track: 'Track', trackVariant: 'Track Variant', trackHint: 'Select track and its layout',
+        carsLabel: 'Cars', addCar: 'Add', noCars: 'No cars added', kg: 'kg', remove: 'Remove',
         restrictorHint: 'Restrictor limits power (%), ballast adds weight (kg).',
-        sessionParams: 'Session Parameters',
-        tyreWear: 'Tyre Wear',
-        damage: 'Damage',
-        fuelConsumption: 'Fuel Consumption',
-        duration: 'Duration',
-        practice: 'Practice (min)',
-        qualifying: 'Qualifying (min)',
-        race: 'Race (laps)',
-        saveSession: '💾 Save Session',
-        enabled: 'Enabled',
-        disabled: 'Disabled',
-        assists: 'Assists',
-        graphics: 'Graphics',
-        baseTempAmbient: 'Ambient Temp',
-        baseTempRoad: 'Road Temp',
-        variationAmbient: 'Ambient Variation',
-        variationRoad: 'Road Variation'
+        sessionParams: 'Session Parameters', tyreWear: 'Tyre Wear', damage: 'Damage', fuelConsumption: 'Fuel Consumption',
+        duration: 'Duration', practice: 'Practice (min)', qualifying: 'Qualifying (min)', race: 'Race (laps)',
+        saveSession: '💾 Save Session', enabled: 'Enabled', disabled: 'Disabled', assists: 'Assists',
+        graphics: 'Graphics', baseTempAmbient: 'Ambient Temp', baseTempRoad: 'Road Temp',
+        variationAmbient: 'Ambient Variation', variationRoad: 'Road Variation'
       },
       players: {
-        title: 'Players on Server',
-        refresh: '🔄 Refresh',
-        realtimeHint: 'Player list updates in real time',
-        serverOffline: 'Server is offline',
-        goToDashboard: 'Start the server on the Dashboard tab to see the player list.'
+        title: 'Players on Server', refresh: '🔄 Refresh', realtimeHint: 'Player list updates in real time',
+        serverOffline: 'Server is offline', goToDashboard: 'Start the server on the Dashboard tab to see the player list.'
       }
     }
   }
@@ -1015,77 +927,45 @@
         locale: 'ru',
         tab: 'dashboard',
         server: { status: 'offline', clients: 0, maxclients: 0, track: '' },
-        serverConfig: {
-          name: '',
-          password: '',
-          adminPassword: '',
-          udpPort: 9600,
-          tcpPort: 9600,
-          httpPort: 8081
-        },
         session: {
+          name: '', password: '', adminPassword: '',
+          udpPort: 9600, tcpPort: 9600, httpPort: 8081,
           cars: [],
-          track: '',
-          trackVariant: '',
-          trackVariants: [],
-          tyreWear: 1,
-          damage: 1,
-          fuelConsumption: 1,
-          sunAngle: 48,
-          practiceDuration: 0,
-          qualifyingDuration: 0,
-          raceLaps: 0,
-          pickupMode: 1,
-          loopMode: 1,
-          allowedTyresOut: 2,
-          legalTyres: 'V70;',
-          absAllowed: true,
-          tcAllowed: true,
-          stabilityAllowed: false,
-          autoclutchAllowed: true,
-          tyreBlanketsAllowed: true,
-          forceVirtualMirror: false,
-          registerToLobby: true
+          track: '', trackVariant: '', trackVariants: [],
+          tyreWear: 1, damage: 1, fuelConsumption: 1, sunAngle: 48,
+          practiceDuration: 0, qualifyingDuration: 0, raceLaps: 0,
+          pickupMode: 1, loopMode: 1, allowedTyresOut: 2, legalTyres: 'V70;',
+          absAllowed: true, tcAllowed: true, stabilityAllowed: false,
+          autoclutchAllowed: true, tyreBlanketsAllowed: true,
+          forceVirtualMirror: false, registerToLobby: true
         },
         weather: [
-          {
-            graphics: '3_clear',
-            baseTemperatureAmbient: 18,
-            baseTemperatureRoad: 6,
-            variationAmbient: 1,
-            variationRoad: 1
-          }
+          { graphics: '3_clear', baseTemperatureAmbient: 18, baseTemperatureRoad: 6, variationAmbient: 1, variationRoad: 1 }
         ],
-        cars: [],
-        tracks: [],
-        players: [],
-        loading: false,
-        csrfToken: ''
+        cars: [], tracks: [], players: [], loading: false, csrfToken: ''
       }
     },
     computed: {
-      t() {
-        return messages[this.locale] || messages.ru
-      }
+      t() { return messages[this.locale] || messages.ru }
     },
     methods: {
-      toggleLanguage() {
-        this.locale = this.locale === 'ru' ? 'en' : 'ru'
-      },
+      toggleLanguage() { this.locale = this.locale === 'ru' ? 'en' : 'ru' },
       addWeatherSlot() {
-        this.weather.push({
-          graphics: '3_clear',
-          baseTemperatureAmbient: 18,
-          baseTemperatureRoad: 6,
-          variationAmbient: 1,
-          variationRoad: 1
-        })
+        this.weather.push({ graphics: '3_clear', baseTemperatureAmbient: 18, baseTemperatureRoad: 6, variationAmbient: 1, variationRoad: 1 })
       },
-      removeWeatherSlot(index) {
-        if (this.weather.length > 1) {
-          this.weather.splice(index, 1)
-        }
+      removeWeatherSlot(index) { if (this.weather.length > 1) this.weather.splice(index, 1) },
+      
+      // Преобразование 1/0 в true/false при загрузке
+      boolFromApi(value) {
+        if (typeof value === 'boolean') return value
+        return value === 1 || value === '1'
       },
+      
+      // Преобразование true/false в 1/0 при сохранении
+      boolToApi(value) {
+        return value ? 1 : 0
+      },
+      
       async api(url, options = {}) {
         const opts = { ...options }
         opts.headers = { ...(options.headers || {}) }
@@ -1101,31 +981,20 @@
           }
           if (!res.ok) return {}
           return await res.json()
-        } catch (e) {
-          console.warn('API error:', e)
-          return {}
-        }
+        } catch (e) { console.warn('API error:', e); return {} }
       },
       async fetchCsrf() {
         try {
           const res = await fetch('/api/csrf')
-          if (res.ok) {
-            const data = await res.json()
-            this.csrfToken = data.token || ''
-          }
+          if (res.ok) { const data = await res.json(); this.csrfToken = data.token || '' }
         } catch (e) {}
       },
       normalizeSessionCars(carsData) {
         if (!Array.isArray(carsData)) return []
         return carsData.map(item => {
-          if (typeof item === 'string') {
-            return { id: item, restrictor: 0, ballast: 0 }
-          } else if (item && typeof item === 'object') {
-            return {
-              id: item.id || '',
-              restrictor: item.restrictor ?? 0,
-              ballast: item.ballast ?? 0
-            }
+          if (typeof item === 'string') return { id: item, restrictor: 0, ballast: 0 }
+          if (item && typeof item === 'object') {
+            return { id: item.id || '', restrictor: item.restrictor ?? 0, ballast: item.ballast ?? 0 }
           }
           return { id: '', restrictor: 0, ballast: 0 }
         }).filter(c => c.id)
@@ -1134,14 +1003,17 @@
         this.loading = true
         try {
           const [s, se, c, t] = await Promise.all([
-            this.api('/api/info'),
-            this.api('/api/session'),
-            this.api('/api/cars'),
-            this.api('/api/tracks')
+            this.api('/api/info'), this.api('/api/session'), this.api('/api/cars'), this.api('/api/tracks')
           ])
           this.server = s || { status: 'offline', clients: 0, maxclients: 0, track: '' }
           
           if (se) {
+            this.session.name = se.name || ''
+            this.session.password = se.password || ''
+            this.session.adminPassword = se.adminPassword || ''
+            this.session.udpPort = se.udpPort ?? 9600
+            this.session.tcpPort = se.tcpPort ?? 9600
+            this.session.httpPort = se.httpPort ?? 8081
             this.session.cars = this.normalizeSessionCars(se.cars)
             this.session.track = se.track || ''
             this.session.trackVariant = se.trackVariant || ''
@@ -1157,17 +1029,16 @@
             this.session.loopMode = se.loopMode ?? 1
             this.session.allowedTyresOut = se.allowedTyresOut ?? 2
             this.session.legalTyres = se.legalTyres ?? 'V70;'
-            this.session.absAllowed = se.absAllowed ?? true
-            this.session.tcAllowed = se.tcAllowed ?? true
-            this.session.stabilityAllowed = se.stabilityAllowed ?? false
-            this.session.autoclutchAllowed = se.autoclutchAllowed ?? true
-            this.session.tyreBlanketsAllowed = se.tyreBlanketsAllowed ?? true
-            this.session.forceVirtualMirror = se.forceVirtualMirror ?? false
-            this.session.registerToLobby = se.registerToLobby ?? true
             
-            if (se.serverConfig) {
-              Object.assign(this.serverConfig, se.serverConfig)
-            }
+            // Преобразование 1/0 → true/false
+            this.session.absAllowed = this.boolFromApi(se.absAllowed)
+            this.session.tcAllowed = this.boolFromApi(se.tcAllowed)
+            this.session.stabilityAllowed = this.boolFromApi(se.stabilityAllowed)
+            this.session.autoclutchAllowed = this.boolFromApi(se.autoclutchAllowed)
+            this.session.tyreBlanketsAllowed = this.boolFromApi(se.tyreBlanketsAllowed)
+            this.session.forceVirtualMirror = this.boolFromApi(se.forceVirtualMirror)
+            this.session.registerToLobby = this.boolFromApi(se.registerToLobby)
+            
             if (se.weather && Array.isArray(se.weather) && se.weather.length > 0) {
               this.weather = se.weather
             }
@@ -1185,34 +1056,47 @@
               }
             }
           })
-        } finally {
-          this.loading = false
-        }
+        } finally { this.loading = false }
       },
-      async start() {
-        await this.api('/api/server/start', { method: 'POST' })
-        await this.fetchAll()
-      },
-      async stop() {
-        await this.api('/api/server/stop', { method: 'POST' })
-        await this.fetchAll()
-      },
+      async start() { await this.api('/api/server/start', { method: 'POST' }); await this.fetchAll() },
+      async stop() { await this.api('/api/server/stop', { method: 'POST' }); await this.fetchAll() },
       addCar() {
         if (this.cars.length) {
-          this.session.cars.push({
-            id: this.cars[0].id,
-            restrictor: 0,
-            ballast: 0
-          })
+          this.session.cars.push({ id: this.cars[0].id, restrictor: 0, ballast: 0 })
         }
       },
-      removeCar(i) {
-        this.session.cars.splice(i, 1)
-      },
+      removeCar(i) { this.session.cars.splice(i, 1) },
       async saveSession() {
         const payload = {
-          ...this.session,
-          serverConfig: this.serverConfig,
+          name: this.session.name,
+          password: this.session.password,
+          adminPassword: this.session.adminPassword,
+          udpPort: this.session.udpPort,
+          tcpPort: this.session.tcpPort,
+          httpPort: this.session.httpPort,
+          cars: this.session.cars,
+          track: this.session.track,
+          trackVariant: this.session.trackVariant,
+          trackVariants: this.session.trackVariants,
+          tyreWear: this.session.tyreWear,
+          damage: this.session.damage,
+          fuelConsumption: this.session.fuelConsumption,
+          sunAngle: this.session.sunAngle,
+          practiceDuration: this.session.practiceDuration,
+          qualifyingDuration: this.session.qualifyingDuration,
+          raceLaps: this.session.raceLaps,
+          pickupMode: this.session.pickupMode,
+          loopMode: this.session.loopMode,
+          allowedTyresOut: this.session.allowedTyresOut,
+          legalTyres: this.session.legalTyres,
+          // Преобразование true/false → 1/0
+          absAllowed: this.boolToApi(this.session.absAllowed),
+          tcAllowed: this.boolToApi(this.session.tcAllowed),
+          stabilityAllowed: this.boolToApi(this.session.stabilityAllowed),
+          autoclutchAllowed: this.boolToApi(this.session.autoclutchAllowed),
+          tyreBlanketsAllowed: this.boolToApi(this.session.tyreBlanketsAllowed),
+          forceVirtualMirror: this.boolToApi(this.session.forceVirtualMirror),
+          registerToLobby: this.boolToApi(this.session.registerToLobby),
           weather: this.weather
         }
         await this.api('/api/session', {
@@ -1224,10 +1108,7 @@
         await this.fetchAll()
       },
       async logout() {
-        await fetch('/logout', {
-          method: 'POST',
-          headers: this.csrfToken ? { 'X-CSRF-Token': this.csrfToken } : {}
-        })
+        await fetch('/logout', { method: 'POST', headers: this.csrfToken ? { 'X-CSRF-Token': this.csrfToken } : {} })
         window.location.href = '/login'
       },
       refreshIFrame() {
@@ -1235,10 +1116,7 @@
         if (iframe) iframe.src = iframe.src
       }
     },
-    mounted() {
-      this.fetchCsrf()
-      this.fetchAll()
-    },
+    mounted() { this.fetchCsrf(); this.fetchAll() },
     watch: {
       'session.track'(val) {
         const track = this.tracks.find(t => t.id === val)
