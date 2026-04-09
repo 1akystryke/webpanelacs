@@ -101,7 +101,7 @@ class Core:
         return tracks
 
     def set_car_list(self, car_list):
-        car_data = [{"MODEL": car} for car in car_list]
+        car_data = [{"MODEL": car["id"],"RESTRICTOR": car["restrictor"],"BALLAST": car["ballast"]} for car in car_list]
         cp.generate_entry_list(car_data, self.entry_list_path)
         cars_string = cp.generate_server_cfg_string_cars(car_data)
         server_data = cp.get_server_config(self.server_cfg_path)

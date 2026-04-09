@@ -88,31 +88,6 @@ def require_login():
                     return jsonify({"error": "csrf"}), 400
                 return redirect(url_for("login", error="3"))
 
-# ----------------------
-# Mock server state
-# ----------------------
-server_state = {
-    "status": "OFFLINE",
-    "uptime": 0,
-    "players": 0,
-    "maxPlayers": 16,
-    "track": "monza",
-    "sessionType": "RACE"
-}
-
-session_state = {
-    "track": "monza",
-    "layout": "gp",
-    "cars": ["ks_ferrari_488_gt3"],
-    "slots": 16,
-    "sessionType": "RACE",
-    "weather": {
-        "ambientTemp": 26,
-        "roadTemp": 32
-    }
-}
-
-
 
 logs = []
 
@@ -120,18 +95,6 @@ logs = []
 # ----------------------
 # Server endpoints
 # ----------------------
-@app.route("/api/server/status")
-def get_status():
-    server_state = server_controller.supervisor_status()
-    if "RUNNING" in str(server_state):
-        return jsonify({"status": "ONLINE",
-        "uptime": 0,
-    "players": 0,
-    "maxPlayers": 16,
-    "track": "monza",
-    "sessionType": "RACE"
-})
-    return jsonify({"status":"offline"})
 
 @app.route("/api/server/start", methods=["POST"])
 def start_server():
@@ -154,6 +117,7 @@ def get_session():
 @app.route("/api/session", methods=["PUT"])
 def update_session():
     data = request.json
+    
     server_controller.set_car_list(data["cars"])
     server_controller.apply_session(data)
     logs.append("Session updated")
@@ -172,19 +136,10 @@ def get_tracks():
     tracks_list = server_controller.list_tracks()
     return jsonify(tracks_list)
 
-# ----------------------
-# Players (mock)
-# ----------------------
-@app.route("/api/players")
-def get_players():
-    return jsonify([
-        {
-            "name": "Player1",
-            "car": "ks_ferrari_488_gt3",
-            "lapTime": 123.45,
-            "ping": 42
-        }
-    ])
+
+# ---------------------
+# INFO
+# ---------------------
 
 @app.route("/api/info")
 def get_info():
