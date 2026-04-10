@@ -5,14 +5,10 @@ import io
 def get_current_cars(path):
 
     config = configparser.ConfigParser()
-    config.optionxform = str  # сохраняем регистр ключей
+    config.optionxform = str
 
     config.read(path)
 
-    # cars_dict = {
-    #     section: config[section].get("MODEL")
-    #     for section in config.sections()
-    # }
     list_cars = []
     for section in config.sections():
         car = {}
@@ -25,7 +21,7 @@ def get_current_cars(path):
 def generate_entry_list(data, out_path):
 
     config = configparser.ConfigParser()
-    config.optionxform = str  # сохранить регистр ключей
+    config.optionxform = str
 
     for i, car in enumerate(data):
         section_name = f"CAR_{i}"
@@ -47,7 +43,7 @@ def generate_server_cfg_string_cars(data):
 def get_server_config(path):
 
     config = configparser.ConfigParser()
-    config.optionxform = str  # сохраняем регистр ключей
+    config.optionxform = str
 
     config.read(path)
     result = {section: dict(config[section]) for section in config.sections()}
@@ -57,7 +53,7 @@ def get_server_config(path):
 def write_new_server_cfg(data, path):
 
     config = configparser.ConfigParser()
-    config.optionxform = str  # сохранить регистр ключей
+    config.optionxform = str
 
     for section, params in data.items():
         config[section] = {k: str(v) for k, v in params.items()}

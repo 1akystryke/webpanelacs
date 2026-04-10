@@ -1621,7 +1621,8 @@
             this.session.pickupMode = se.pickupMode ?? 1
             this.session.loopMode = se.loopMode ?? 1
             this.session.allowedTyresOut = se.allowedTyresOut ?? 2
-            this.session.legalTyres = se.legalTyres ?? 'V70;'
+            this.session.legalTyres = se.legalTyres ?? 'SV'
+            this.session.maxClients = se.maxClients || 0
             
             this.session.absAllowed = this.boolFromApi(se.absAllowed)
             this.session.tcAllowed = this.boolFromApi(se.tcAllowed)
@@ -1748,7 +1749,7 @@
       refreshIFrame() {
         const iframe = document.getElementById('players-entry-iframe')
         if (iframe) iframe.src = iframe.src
-      }
+      },
     },
     
     mounted() { 

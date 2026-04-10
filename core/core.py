@@ -20,12 +20,12 @@ class Core:
         self.entry_list_path = self.cfg_path / "entry_list.ini"
         self.log_path = "/var/log/"
         self.map_parameters_name = {
-            "name":["SERVER","NAME"],
-            "password":["SERVER","PASSWORD"],
-            "adminPassword":["SERVER","ADMIN_PASSWORD"],
-            "udpPort":["SERVER","UDP_PORT"],
-            "tcpPort":["SERVER","TCP_PORT"],
-            "httpPort":["SERVER","HTTP_PORT"],
+            "name": ["SERVER", "NAME"],
+            "password": ["SERVER", "PASSWORD"],
+            "adminPassword": ["SERVER", "ADMIN_PASSWORD"],
+            "udpPort": ["SERVER", "UDP_PORT"],
+            "tcpPort": ["SERVER", "TCP_PORT"],
+            "httpPort": ["SERVER", "HTTP_PORT"],
             "damage": ["SERVER", "DAMAGE_MULTIPLIER"],
             "fuelConsumption": ["SERVER", "FUEL_RATE"],
             "layout": ["SERVER", "CONFIG_TRACK"],
@@ -35,25 +35,26 @@ class Core:
             "track": ["SERVER", "TRACK"],
             "trackVariant": ["SERVER", "CONFIG_TRACK"],
             "tyreWear": ["SERVER", "TYRE_WEAR_RATE"],
-            "sunAngle":["SERVER","SUN_ANGLE"],
-            "pickupMode":["SERVER","PICKUP_MODE_ENABLED"],
-            "loopMode":["SERVER","LOOP_MODE"],
-            "allowedTyresOut":["SERVER","ALLOWED_TYRES_OUT"],
-            "legalTyres":["SERVER","LEGAL_TYRES"],
-            "absAllowed":["SERVER","ABS_ALLOWED"],
-            "tcAllowed":["SERVER","TC_ALLOWED"],
-            "stabilityAllowed":["SERVER","STABILITY_ALLOWED"],
-            "autoclutchAllowed":["SERVER","AUTOCLUTCH_ALLOWED"],
-            "tyreBlanketsAllowed":["SERVER","TYRE_BLANKETS_ALLOWED"],
-            "forceVirtualMirror":["SERVER","FORCE_VIRTUAL_MIRROR"],
-            "registerToLobby":["SERVER","REGISTER_TO_LOBBY"]
+            "sunAngle": ["SERVER", "SUN_ANGLE"],
+            "pickupMode": ["SERVER", "PICKUP_MODE_ENABLED"],
+            "loopMode": ["SERVER", "LOOP_MODE"],
+            "allowedTyresOut": ["SERVER", "ALLOWED_TYRES_OUT"],
+            "legalTyres": ["SERVER", "LEGAL_TYRES"],
+            "absAllowed": ["SERVER", "ABS_ALLOWED"],
+            "tcAllowed": ["SERVER", "TC_ALLOWED"],
+            "stabilityAllowed": ["SERVER", "STABILITY_ALLOWED"],
+            "autoclutchAllowed": ["SERVER", "AUTOCLUTCH_ALLOWED"],
+            "tyreBlanketsAllowed": ["SERVER", "TYRE_BLANKETS_ALLOWED"],
+            "forceVirtualMirror": ["SERVER", "FORCE_VIRTUAL_MIRROR"],
+            "registerToLobby": ["SERVER", "REGISTER_TO_LOBBY"],
+            "maxClients": ["SERVER", "MAX_CLIENTS"],
         }
         self.map_weather_param_names = {
-            "graphics":"GRAPHICS",
-            "baseTemperatureAmbient":"BASE_TEMPERATURE_AMBIENT",
-            "baseTemperatureRoad":"BASE_TEMPERATURE_ROAD",
-            "variationAmbient":"VARIATION_AMBIENT",
-            "variationRoad":"VARIATION_ROAD"
+            "graphics": "GRAPHICS",
+            "baseTemperatureAmbient": "BASE_TEMPERATURE_AMBIENT",
+            "baseTemperatureRoad": "BASE_TEMPERATURE_ROAD",
+            "variationAmbient": "VARIATION_AMBIENT",
+            "variationRoad": "VARIATION_ROAD",
         }
 
     def supervisor_stop(self):
@@ -146,13 +147,19 @@ class Core:
         return tracks
 
     def set_car_list(self, car_list):
-        car_data = [{"MODEL": car["model"],"RESTRICTOR": car["restrictor"],"BALLAST": car["ballast"]} for car in car_list]
+        car_data = [
+            {
+                "MODEL": car["model"],
+                "RESTRICTOR": car["restrictor"],
+                "BALLAST": car["ballast"],
+            }
+            for car in car_list
+        ]
         cp.generate_entry_list(car_data, self.entry_list_path)
         cars_string = cp.generate_server_cfg_string_cars(car_data)
         server_data = cp.get_server_config(self.server_cfg_path)
         server_data["SERVER"]["CARS"] = cars_string
         cp.write_new_server_cfg(server_data, self.server_cfg_path)
-        
 
     def apply_session(self, data):
         server_data = cp.get_server_config(self.server_cfg_path)
@@ -160,33 +167,49 @@ class Core:
             if param not in self.map_parameters_name.keys():
                 continue
             key1, key2 = self.map_parameters_name[param]
-            server_data[key1][key2] = data[param]
-        
-        for index,weather in enumerate(data["weather"]):
+            if param == "maxClients":
+                server_data[key1][key2] = len(data["cars"])
+            else:
+                server_data[key1][key2] = data[param]
+
+        for index, weather in enumerate(data["weather"]):
             server_data[f"WEATHER_{index}"] = {}
             for key in weather.keys():
-                server_data[f"WEATHER_{index}"][self.map_weather_param_names[key]]=weather[key]
+                server_data[f"WEATHER_{index}"][self.map_weather_param_names[key]] = (
+                    weather[key]
+                )
+        print(data)
+        print("\n")
+        print(server_data)
         cp.write_new_server_cfg(server_data, self.server_cfg_path)
-
-
 
     def get_session_state(self):
         car_data = cp.get_current_cars(self.entry_list_path)
         server_data = cp.get_server_config(self.server_cfg_path)
-        
+
         output_object = {}
-        output_object["cars"] = [{"model": car["MODEL"],"restrictor": car["RESTRICTOR"],"ballast": car["BALLAST"]} for car in car_data]
+        output_object["cars"] = [
+            {
+                "model": car["MODEL"],
+                "restrictor": car["RESTRICTOR"],
+                "ballast": car["BALLAST"],
+            }
+            for car in car_data
+        ]
         for parameter in self.map_parameters_name.keys():
             key1, key2 = self.map_parameters_name[parameter]
-            output_object[parameter] = server_data[key1][key2]    
-        output_object["weather"]=[]
+            output_object[parameter] = server_data[key1][key2]
+
+        output_object["weather"] = []
         for key in server_data.keys():
             if "WEATHER_" in key:
                 tmp_obj = {}
                 for sub_key in self.map_weather_param_names.keys():
-                    tmp_obj[sub_key]=server_data[key][self.map_weather_param_names[sub_key]]
+                    tmp_obj[sub_key] = server_data[key][
+                        self.map_weather_param_names[sub_key]
+                    ]
                 output_object["weather"].append(tmp_obj)
-        
+
         return output_object
 
     def get_ac_server_logs(self):
