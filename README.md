@@ -4,7 +4,7 @@ A web-based control panel for remotely managing Assetto Corsa racing simulator s
 
 ## Features
 
-<img width="2537" height="1186" alt="image" src="https://github.com/user-attachments/assets/bccf440d-9d7b-4758-82ba-5abd703518e1" />
+<img width="2537" height="1185" alt="image" src="https://github.com/user-attachments/assets/1913f759-9afa-407b-88ab-0138067df5c9" />
 
 ## Installation Guide
 
