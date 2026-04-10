@@ -18,7 +18,7 @@ class Core:
         self.cfg_path = self.server_path / "cfg"
         self.server_cfg_path = self.cfg_path / "server_cfg.ini"
         self.entry_list_path = self.cfg_path / "entry_list.ini"
-
+        self.log_path = "/var/log/"
         self.map_parameters_name = {
             "name":["SERVER","NAME"],
             "password":["SERVER","PASSWORD"],
@@ -57,22 +57,41 @@ class Core:
         }
 
     def supervisor_stop(self):
-        result = subprocess.run(
-            ["supervisorctl", "stop", "acserver"],
-            capture_output=True,
-            text=True,
-            check=True,
-        )
+        try:
+            result = subprocess.run(
+                ["supervisorctl", "stop", "acserver"],
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+        except subprocess.CalledProcessError as e:
+            return ("error",e.stderr)
         return result.stdout.strip(), result.stderr.strip()
 
     def supervisor_start(self):
-        result = subprocess.run(
-            ["supervisorctl", "start", "acserver"],
-            capture_output=True,
-            text=True,
-            check=True,
-        )
+        try:
+            result = subprocess.run(
+                ["supervisorctl", "start", "acserver"],
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+        except subprocess.CalledProcessError as e:
+            return ("error",e.stderr)
         return result.stdout.strip(), result.stderr.strip()
+
+    def supervisor_restart(self):
+        try:
+            result = subprocess.run(
+                ["supervisorctl", "restart", "acserver"],
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+        except subprocess.CalledProcessError as e:
+            return ("error",e.stderr)
+        return result.stdout.strip(), result.stderr.strip()
+
 
     def supervisor_status(self):
 
@@ -169,3 +188,12 @@ class Core:
                 output_object["weather"].append(tmp_obj)
         
         return output_object
+
+    def get_ac_server_logs(self):
+        ac_log_path = self.log_path+"acserver.log"
+        ac_err_path = self.log_path+"acserver.err"
+        flask_log_path = self.log_path+"servicepy.log"
+        flask_err_path = self.log_path+"servicepy.err"
+        with open(ac_log_path) as f:
+            log_file_content = f.read()
+        return log_file_content.split("\n")

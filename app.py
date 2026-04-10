@@ -98,12 +98,16 @@ logs = []
 
 @app.route("/api/server/start", methods=["POST"])
 def start_server():
-    res = server_controller.supervisor_start()
+    res,err = server_controller.supervisor_start()
+    if res!="acserver: started":
+        return jsonify({"success": False,"error":err})
     return jsonify({"success": True})
 
 @app.route("/api/server/stop", methods=["POST"])
 def stop_server():
-    res = server_controller.supervisor_stop()
+    res,err = server_controller.supervisor_stop()
+    if res!="acserver: stopped":
+        return jsonify({"success": False,"error":err})
     return jsonify({"success": True})
 
 # ----------------------
@@ -117,10 +121,14 @@ def get_session():
 @app.route("/api/session", methods=["PUT"])
 def update_session():
     data = request.json
-    print(data)
+
     server_controller.set_car_list(data["cars"])
     server_controller.apply_session(data)
-    logs.append("Session updated")
+    res,err = server_controller.supervisor_restart()
+    if res!="acserver: stopped\nacserver: started" and res!="acserver: ERROR (not running)\nacserver: started":
+        return jsonify({"success": False,"error":err})
+    # if res!="acserver: stopped":
+    #     
     return jsonify({"success": True})
 
 # ----------------------
@@ -183,7 +191,8 @@ def get_entry():
 @app.route("/api/logs")
 def get_logs():
     limit = int(request.args.get("limit", 100))
-    return jsonify(logs[-limit:])
+    logs = server_controller.get_ac_server_logs()
+    return jsonify({"logs":logs[-limit:]})
 
 @app.route("/api/csrf")
 def get_csrf():

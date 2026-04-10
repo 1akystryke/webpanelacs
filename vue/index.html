@@ -12,6 +12,9 @@
     :root {
       --primary: #ff2a2a;
       --primary-light: #ff6a6a;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --error: #ef4444;
     }
 
     body {
@@ -22,6 +25,114 @@
     }
 
     .app { display: flex; height: 100vh; overflow: hidden; }
+
+    /* TOAST NOTIFICATIONS */
+    .toast-container {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      pointer-events: none;
+    }
+
+    .toast {
+      pointer-events: auto;
+      min-width: 320px;
+      max-width: 420px;
+      background: white;
+      border-radius: 16px;
+      padding: 16px 20px;
+      box-shadow: 0 20px 40px -8px rgba(0,0,0,0.15), 0 4px 12px rgba(0,0,0,0.05);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid #f1f5f9;
+      backdrop-filter: blur(8px);
+    }
+
+    .toast.success {
+      border-left: 4px solid var(--success);
+    }
+
+    .toast.error {
+      border-left: 4px solid var(--error);
+    }
+
+    .toast.warning {
+      border-left: 4px solid var(--warning);
+    }
+
+    .toast.info {
+      border-left: 4px solid #3b82f6;
+    }
+
+    .toast-icon {
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .toast-content {
+      flex: 1;
+    }
+
+    .toast-title {
+      font-weight: 600;
+      font-size: 15px;
+      margin-bottom: 4px;
+      color: #111827;
+    }
+
+    .toast-message {
+      font-size: 13px;
+      color: #64748b;
+      line-height: 1.4;
+    }
+
+    .toast-close {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 0 4px;
+      transition: color 0.2s;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    .toast-close:hover {
+      color: #475569;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    .toast-exit {
+      animation: slideOut 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    @keyframes slideOut {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+    }
 
     /* SIDEBAR */
     .sidebar {
@@ -194,6 +305,8 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
+      position: relative;
+      overflow: hidden;
     }
 
     .btn-primary {
@@ -205,6 +318,12 @@
     .btn-primary:hover {
       transform: translateY(-2px);
       box-shadow: 0 10px 25px rgba(255,42,42,0.5);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
     }
 
     .btn-secondary {
@@ -241,6 +360,21 @@
     .btn-icon:hover {
       background: #fee2e2;
       color: #b91c1c;
+    }
+
+    /* Loading spinner */
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
 
     /* FORMS */
@@ -446,6 +580,138 @@
       margin-top: 24px;
     }
 
+    /* LOGS STYLES */
+    .logs-container {
+      background: #0d1117;
+      border-radius: 16px;
+      padding: 20px;
+      font-family: 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      max-height: 600px;
+      overflow-y: auto;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+      border: 1px solid #30363d;
+    }
+
+    .log-line {
+      padding: 4px 8px;
+      border-bottom: 1px solid #21262d;
+      color: #c9d1d9;
+      white-space: pre-wrap;
+      word-break: break-all;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .log-line.error {
+      color: #f85149;
+      background: rgba(248, 81, 73, 0.08);
+    }
+
+    .log-line.warning {
+      color: #d29922;
+      background: rgba(210, 153, 34, 0.08);
+    }
+
+    .log-line.info {
+      color: #7ee83b;
+    }
+
+    .log-line.debug {
+      color: #8b949e;
+    }
+
+    .log-timestamp {
+      color: #58a6ff;
+      min-width: 85px;
+      user-select: none;
+      flex-shrink: 0;
+    }
+
+    .log-level {
+      display: inline-block;
+      min-width: 70px;
+      font-weight: 600;
+      user-select: none;
+      flex-shrink: 0;
+    }
+
+    .log-message {
+      color: inherit;
+      flex: 1;
+    }
+
+    .logs-toolbar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: #f1f5f9;
+      color: #475569;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+
+    .filter-badge:hover {
+      background: #e2e8f0;
+    }
+
+    .filter-badge.active {
+      background: #ff2a2a;
+      color: white;
+    }
+
+    .auto-refresh-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: #f1f5f9;
+      color: #64748b;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .auto-refresh-indicator.active {
+      background: #ecfdf5;
+      color: #10b981;
+    }
+
+    .pause-btn {
+      background: #f1f5f9;
+      border: none;
+      color: #475569;
+      padding: 8px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .pause-btn:hover {
+      background: #e2e8f0;
+    }
+
+    .logs-stats {
+      color: #64748b;
+      font-size: 13px;
+      margin-bottom: 12px;
+      padding: 0 4px;
+    }
+
     /* TRANSITIONS */
     .fade-enter-active, .fade-leave-active { transition: opacity 0.25s; }
     .fade-enter-from, .fade-leave-to { opacity: 0; }
@@ -455,14 +721,29 @@
       .session-cards-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 900px) {
-      .header { padding: 0 20px; }
+      .header { padding: 0 20px; flex-wrap: wrap; height: auto; min-height: 76px; }
       .car-item { flex-direction: column; align-items: stretch; }
       .remove-btn { margin-left: 0; align-self: flex-end; }
+      .logs-toolbar { justify-content: flex-start; }
+      .log-line { flex-wrap: wrap; }
+      .toast { min-width: 280px; max-width: 360px; }
     }
   </style>
 </head>
 <body>
 <div id="app" class="app">
+  <!-- TOAST CONTAINER -->
+  <div class="toast-container">
+    <div v-for="toast in toasts" :key="toast.id" :class="['toast', toast.type]" @click="removeToast(toast.id)">
+      <div class="toast-icon">{{ toast.icon }}</div>
+      <div class="toast-content">
+        <div class="toast-title">{{ toast.title }}</div>
+        <div class="toast-message">{{ toast.message }}</div>
+      </div>
+      <button class="toast-close" @click.stop="removeToast(toast.id)">×</button>
+    </div>
+  </div>
+
   <!-- SIDEBAR -->
   <div class="sidebar">
     <div class="logo">AC Control</div>
@@ -476,6 +757,9 @@
     <div class="nav-item" :class="{active: tab==='players'}" @click="tab='players'">
       {{ t.nav.players }}
     </div>
+    <div class="nav-item" :class="{active: tab==='logs'}" @click="openLogsTab">
+      {{ t.nav.logs }}
+    </div>
 
     <div style="margin-top: auto; padding-top: 40px; border-top: 1px solid #334155; font-size: 13px; color: #64748b;">
       Assetto Corsa Dedicated<br>
@@ -487,7 +771,7 @@
   <div class="main">
     <div class="header">
       <div class="header-title">
-        {{ tab === 'dashboard' ? t.dashboard.title : tab === 'session' ? t.session.title : t.players.title }}
+        {{ tab === 'dashboard' ? t.dashboard.title : tab === 'session' ? t.session.title : tab === 'players' ? t.players.title : t.logs.title }}
       </div>
 
       <div style="display: flex; align-items: center; gap: 16px;">
@@ -819,8 +1103,12 @@
           </div>
 
           <div style="margin-top: 32px; text-align: right;">
-            <button class="btn btn-primary" style="padding: 16px 40px; font-size: 17px;" @click="saveSession">
-              {{ t.session.saveSession }}
+            <button class="btn btn-primary" style="padding: 16px 40px; font-size: 17px;" @click="saveSession" :disabled="saving">
+              <span v-if="saving">
+                <span class="spinner"></span>
+                {{ t.session.saving }}
+              </span>
+              <span v-else>{{ t.session.saveSession }}</span>
             </button>
           </div>
         </div>
@@ -848,6 +1136,76 @@
             <p>{{ t.players.goToDashboard }}</p>
           </div>
         </div>
+        
+        <!-- LOGS TAB -->
+        <div v-if="tab==='logs'" key="logs" class="card">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 16px;">
+            <div>
+              <div class="section-title">{{ t.logs.title }}</div>
+              <p style="color:#64748b; margin-top: 4px;">{{ t.logs.hint }}</p>
+            </div>
+            
+            <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+              <div class="auto-refresh-indicator" :class="{ active: logsAutoRefresh }">
+                <span v-if="logsAutoRefresh">🔄</span>
+                <span v-else>⏸️</span>
+                <span>{{ logsAutoRefresh ? t.logs.autoRefreshOn : t.logs.autoRefreshOff }}</span>
+                <span v-if="logsAutoRefresh">({{ logsRefreshCountdown }}s)</span>
+              </div>
+              
+              <button class="pause-btn" @click="toggleAutoRefresh" :title="logsAutoRefresh ? t.logs.pause : t.logs.resume">
+                {{ logsAutoRefresh ? '⏸️' : '▶️' }}
+              </button>
+            </div>
+          </div>
+
+          <div class="logs-toolbar">
+            <div style="display: flex; gap: 4px;">
+              <span 
+                v-for="level in logLevels" 
+                :key="level" 
+                class="filter-badge" 
+                :class="{ active: logFilter === level }"
+                @click="logFilter = level"
+              >
+                {{ level === 'all' ? t.logs.all : level.toUpperCase() }}
+              </span>
+            </div>
+            
+            <div style="flex: 1;"></div>
+            
+            <button class="btn btn-secondary btn-small" @click="clearLogs">
+              {{ t.logs.clear }}
+            </button>
+            <button class="btn btn-secondary btn-small" @click="fetchLogs" :disabled="logsLoading">
+              <span v-if="logsLoading">⏳</span>
+              <span v-else>{{ t.logs.refresh }}</span>
+            </button>
+          </div>
+
+          <div v-if="filteredLogs.length > 0" class="logs-stats">
+            {{ t.logs.showing }} {{ filteredLogs.length }} / {{ logs.length }} {{ t.logs.entries }}
+          </div>
+
+          <div class="logs-container" ref="logsContainer">
+            <div v-if="filteredLogs.length === 0 && !logsLoading" style="color: #8b949e; text-align: center; padding: 40px;">
+              {{ t.logs.noLogs }}
+            </div>
+            
+            <div v-for="(log, index) in filteredLogs" :key="index" class="log-line" :class="getLogLevel(log)">
+              <span class="log-level">{{ getLogLevelText(log) }}</span>
+              <span class="log-message">{{ formatLogMessage(log) }}</span>
+            </div>
+            
+            <div v-if="logsLoading && filteredLogs.length === 0" style="color: #8b949e; text-align: center; padding: 40px;">
+              {{ t.logs.loading }}
+            </div>
+          </div>
+          
+          <p style="margin-top: 12px; font-size: 13px; color: #64748b; text-align: center;">
+            {{ t.logs.autoRefreshHint }}
+          </p>
+        </div>
 
       </transition>
     </div>
@@ -860,8 +1218,17 @@
   // Переводы
   const messages = {
     ru: {
-      common: { online: 'онлайн', offline: 'офлайн', logout: 'Выйти', admin: 'Администратор' },
-      nav: { dashboard: '📊 Обзор', session: '🎮 Сессия', players: '👥 Игроки' },
+      common: { 
+        online: 'онлайн', 
+        offline: 'офлайн', 
+        logout: 'Выйти', 
+        admin: 'Администратор',
+        success: 'Успешно',
+        error: 'Ошибка',
+        warning: 'Предупреждение',
+        info: 'Информация'
+      },
+      nav: { dashboard: '📊 Обзор', session: '🎮 Сессия', players: '👥 Игроки', logs: '📋 Логи' },
       dashboard: {
         title: 'Обзор сервера', currentTrack: 'Текущий трек', playersOnline: 'игроков онлайн',
         serverOffline: 'Сервер офлайн', startToSee: 'Запустите сервер для отображения информации',
@@ -880,18 +1247,46 @@
         kg: 'кг', remove: 'Удалить', restrictorHint: 'Рестриктор ограничивает мощность (%), балласт добавляет массу (кг).',
         sessionParams: 'Параметры сессии', tyreWear: 'Износ шин', damage: 'Повреждения', fuelConsumption: 'Расход топлива',
         duration: 'Длительность', practice: 'Практика (мин)', qualifying: 'Квалификация (мин)', race: 'Гонка (кругов)',
-        saveSession: '💾 Сохранить сессию', enabled: 'Включено', disabled: 'Отключено', assists: 'Помощники',
+        saveSession: '💾 Сохранить сессию', saving: 'Сохранение...',
+        enabled: 'Включено', disabled: 'Отключено', assists: 'Помощники',
         graphics: 'Графика', baseTempAmbient: 'Темп. воздуха', baseTempRoad: 'Темп. трассы',
-        variationAmbient: 'Вариация воздуха', variationRoad: 'Вариация трассы'
+        variationAmbient: 'Вариация воздуха', variationRoad: 'Вариация трассы',
+        saveSuccess: 'Сессия успешно сохранена',
+        saveError: 'Не удалось сохранить сессию'
       },
       players: {
         title: 'Игроки на сервере', refresh: '🔄 Обновить', realtimeHint: 'Список игроков обновляется в реальном времени',
         serverOffline: 'Сервер не запущен', goToDashboard: 'Запустите сервер на вкладке Dashboard, чтобы увидеть список игроков.'
+      },
+      logs: {
+        title: 'Логи сервера',
+        hint: 'Логи сервера Assetto Corsa в реальном времени',
+        refresh: '🔄 Обновить',
+        clear: '🗑️ Очистить',
+        pause: 'Приостановить автообновление',
+        resume: 'Возобновить автообновление',
+        autoRefreshOn: 'Автообновление',
+        autoRefreshOff: 'Приостановлено',
+        all: 'Все',
+        showing: 'Показано',
+        entries: 'записей',
+        noLogs: 'Нет логов для отображения',
+        loading: 'Загрузка логов...',
+        autoRefreshHint: 'Логи автоматически обновляются каждые 10 секунд. Используйте фильтры для поиска.'
       }
     },
     en: {
-      common: { online: 'online', offline: 'offline', logout: 'Logout', admin: 'Administrator' },
-      nav: { dashboard: '📊 Dashboard', session: '🎮 Session', players: '👥 Players' },
+      common: { 
+        online: 'online', 
+        offline: 'offline', 
+        logout: 'Logout', 
+        admin: 'Administrator',
+        success: 'Success',
+        error: 'Error',
+        warning: 'Warning',
+        info: 'Information'
+      },
+      nav: { dashboard: '📊 Dashboard', session: '🎮 Session', players: '👥 Players', logs: '📋 Logs' },
       dashboard: {
         title: 'Server Overview', currentTrack: 'Current Track', playersOnline: 'players online',
         serverOffline: 'Server offline', startToSee: 'Start the server to see information',
@@ -910,13 +1305,32 @@
         restrictorHint: 'Restrictor limits power (%), ballast adds weight (kg).',
         sessionParams: 'Session Parameters', tyreWear: 'Tyre Wear', damage: 'Damage', fuelConsumption: 'Fuel Consumption',
         duration: 'Duration', practice: 'Practice (min)', qualifying: 'Qualifying (min)', race: 'Race (laps)',
-        saveSession: '💾 Save Session', enabled: 'Enabled', disabled: 'Disabled', assists: 'Assists',
+        saveSession: '💾 Save Session', saving: 'Saving...',
+        enabled: 'Enabled', disabled: 'Disabled', assists: 'Assists',
         graphics: 'Graphics', baseTempAmbient: 'Ambient Temp', baseTempRoad: 'Road Temp',
-        variationAmbient: 'Ambient Variation', variationRoad: 'Road Variation'
+        variationAmbient: 'Ambient Variation', variationRoad: 'Road Variation',
+        saveSuccess: 'Session saved successfully',
+        saveError: 'Failed to save session'
       },
       players: {
         title: 'Players on Server', refresh: '🔄 Refresh', realtimeHint: 'Player list updates in real time',
         serverOffline: 'Server is offline', goToDashboard: 'Start the server on the Dashboard tab to see the player list.'
+      },
+      logs: {
+        title: 'Server Logs',
+        hint: 'Assetto Corsa server logs in real-time',
+        refresh: '🔄 Refresh',
+        clear: '🗑️ Clear',
+        pause: 'Pause auto-refresh',
+        resume: 'Resume auto-refresh',
+        autoRefreshOn: 'Auto-refresh',
+        autoRefreshOff: 'Paused',
+        all: 'All',
+        showing: 'Showing',
+        entries: 'entries',
+        noLogs: 'No logs to display',
+        loading: 'Loading logs...',
+        autoRefreshHint: 'Logs auto-refresh every 10 seconds. Use filters to search.'
       }
     }
   }
@@ -942,26 +1356,98 @@
         weather: [
           { graphics: '3_clear', baseTemperatureAmbient: 18, baseTemperatureRoad: 6, variationAmbient: 1, variationRoad: 1 }
         ],
-        cars: [], tracks: [], players: [], loading: false, csrfToken: ''
+        cars: [], tracks: [], players: [], loading: false, csrfToken: '',
+        saving: false,
+        
+        // Toast notifications
+        toasts: [],
+        toastId: 0,
+        
+        // ЛОГИ
+        logs: [],
+        logsLoading: false,
+        logsAutoRefresh: true,
+        logsRefreshTimer: null,
+        logsRefreshCountdown: 10,
+        logsCountdownInterval: null,
+        logFilter: 'all',
+        logLevels: ['all', 'error', 'warning', 'info']
       }
     },
     computed: {
-      t() { return messages[this.locale] || messages.ru }
+      t() { return messages[this.locale] || messages.ru },
+      
+      filteredLogs() {
+        if (this.logFilter === 'all') return this.logs
+        
+        return this.logs.filter(log => {
+          const level = this.getLogLevel(log)
+          return level === this.logFilter
+        })
+      }
     },
     methods: {
+      // Toast methods
+      showToast(type, title, message, duration = 4000) {
+        const id = ++this.toastId
+        const icons = {
+          success: '✅',
+          error: '❌',
+          warning: '⚠️',
+          info: 'ℹ️'
+        }
+        
+        this.toasts.push({
+          id,
+          type,
+          icon: icons[type] || 'ℹ️',
+          title: title || this.t.common[type] || '',
+          message
+        })
+        
+        setTimeout(() => {
+          this.removeToast(id)
+        }, duration)
+      },
+      
+      removeToast(id) {
+        const index = this.toasts.findIndex(t => t.id === id)
+        if (index > -1) {
+          const toast = this.toasts[index]
+          toast.removing = true
+          setTimeout(() => {
+            this.toasts = this.toasts.filter(t => t.id !== id)
+          }, 300)
+        }
+      },
+      
+      success(message, title = null) {
+        this.showToast('success', title || this.t.common.success, message)
+      },
+      
+      error(message, title = null) {
+        this.showToast('error', title || this.t.common.error, message)
+      },
+      
+      warning(message, title = null) {
+        this.showToast('warning', title || this.t.common.warning, message)
+      },
+      
+      info(message, title = null) {
+        this.showToast('info', title || this.t.common.info, message)
+      },
+      
       toggleLanguage() { this.locale = this.locale === 'ru' ? 'en' : 'ru' },
       addWeatherSlot() {
         this.weather.push({ graphics: '3_clear', baseTemperatureAmbient: 18, baseTemperatureRoad: 6, variationAmbient: 1, variationRoad: 1 })
       },
       removeWeatherSlot(index) { if (this.weather.length > 1) this.weather.splice(index, 1) },
       
-      // Преобразование 1/0 в true/false при загрузке
       boolFromApi(value) {
         if (typeof value === 'boolean') return value
         return value === 1 || value === '1'
       },
       
-      // Преобразование true/false в 1/0 при сохранении
       boolToApi(value) {
         return value ? 1 : 0
       },
@@ -983,12 +1469,118 @@
           return await res.json()
         } catch (e) { console.warn('API error:', e); return {} }
       },
+      
       async fetchCsrf() {
         try {
           const res = await fetch('/api/csrf')
           if (res.ok) { const data = await res.json(); this.csrfToken = data.token || '' }
         } catch (e) {}
       },
+      
+      async fetchLogs(limit = 100) {
+        if (this.logsLoading) return
+        
+        this.logsLoading = true
+        try {
+          const res = await fetch(`/api/logs?limit=${limit}`)
+          if (res.ok) { 
+            const data = await res.json()
+            this.logs = data.logs || []
+            
+            this.$nextTick(() => {
+              const container = this.$refs.logsContainer
+              if (container && this.logsAutoRefresh) {
+                const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 100
+                if (isNearBottom) {
+                  container.scrollTop = container.scrollHeight
+                }
+              }
+            })
+          }
+        } catch (e) { 
+          console.warn('Failed to fetch logs:', e) 
+        } finally { 
+          this.logsLoading = false
+          this.resetCountdown()
+        }
+      },
+      
+      getLogLevel(logLine) {
+        const lower = logLine.toLowerCase()
+        if (lower.includes('error') || lower.includes('fail') || lower.includes('crash')) return 'error'
+        if (lower.includes('warn') || lower.includes('warning')) return 'warning'
+        if (lower.includes('info') || lower.includes('connected') || lower.includes('loaded')) return 'info'
+        return 'debug'
+      },
+      
+      getLogLevelText(logLine) {
+        const level = this.getLogLevel(logLine)
+        return `[${level.toUpperCase()}]`
+      },
+      
+      formatLogTimestamp(logLine) {
+        const match = logLine.match(/^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}|\d{2}:\d{2}:\d{2})/)
+        return match ? match[0] : new Date().toLocaleTimeString()
+      },
+      
+      formatLogMessage(logLine) {
+        return logLine.replace(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} /, '').replace(/^\d{2}:\d{2}:\d{2} /, '')
+      },
+      
+      startAutoRefresh() {
+        this.stopAutoRefresh()
+        
+        if (!this.logsAutoRefresh) return
+        
+        this.logsRefreshTimer = setInterval(() => {
+          if (this.tab === 'logs' && this.logsAutoRefresh) {
+            this.fetchLogs()
+          }
+        }, 10000)
+        
+        this.resetCountdown()
+        this.logsCountdownInterval = setInterval(() => {
+          if (this.tab === 'logs' && this.logsAutoRefresh) {
+            this.logsRefreshCountdown--
+            if (this.logsRefreshCountdown <= 0) {
+              this.logsRefreshCountdown = 10
+            }
+          }
+        }, 1000)
+      },
+      
+      stopAutoRefresh() {
+        if (this.logsRefreshTimer) clearInterval(this.logsRefreshTimer)
+        if (this.logsCountdownInterval) clearInterval(this.logsCountdownInterval)
+        this.logsRefreshTimer = null
+        this.logsCountdownInterval = null
+      },
+      
+      resetCountdown() {
+        this.logsRefreshCountdown = 10
+      },
+      
+      toggleAutoRefresh() {
+        this.logsAutoRefresh = !this.logsAutoRefresh
+        if (this.logsAutoRefresh) {
+          this.startAutoRefresh()
+          if (this.tab === 'logs') this.fetchLogs()
+        } else {
+          this.stopAutoRefresh()
+        }
+      },
+      
+      clearLogs() {
+        this.logs = []
+        this.info(this.t.logs.cleared || 'Логи очищены')
+      },
+      
+      async openLogsTab() {
+        this.tab = 'logs'
+        await this.fetchLogs()
+        this.startAutoRefresh()
+      },
+      
       normalizeSessionCars(carsData) {
         if (!Array.isArray(carsData)) return []
         return carsData.map(item => {
@@ -999,6 +1591,7 @@
           return { id: '', restrictor: 0, ballast: 0 }
         }).filter(c => c.id)
       },
+      
       async fetchAll() {
         this.loading = true
         try {
@@ -1030,7 +1623,6 @@
             this.session.allowedTyresOut = se.allowedTyresOut ?? 2
             this.session.legalTyres = se.legalTyres ?? 'V70;'
             
-            // Преобразование 1/0 → true/false
             this.session.absAllowed = this.boolFromApi(se.absAllowed)
             this.session.tcAllowed = this.boolFromApi(se.tcAllowed)
             this.session.stabilityAllowed = this.boolFromApi(se.stabilityAllowed)
@@ -1058,15 +1650,38 @@
           })
         } finally { this.loading = false }
       },
-      async start() { await this.api('/api/server/start', { method: 'POST' }); await this.fetchAll() },
-      async stop() { await this.api('/api/server/stop', { method: 'POST' }); await this.fetchAll() },
+      
+      async start() { 
+        let res = await this.api('/api/server/start', { method: 'POST' })
+        if (res.success===false){
+          this.error('Ошибка запуска сервера')
+        }else{
+          this.success("Сервер запущен")
+        }
+        await this.fetchAll()
+      },
+      
+      async stop() { 
+        let res = await this.api('/api/server/stop', { method: 'POST' })
+        if (res.success===false){
+          this.error('Ошибка остановки сервера')
+        }else{
+          this.success("Сервер остановлен")
+        }
+        await this.fetchAll()
+      },
+      
       addCar() {
         if (this.cars.length) {
           this.session.cars.push({ id: this.cars[0].id, restrictor: 0, ballast: 0 })
         }
       },
+      
       removeCar(i) { this.session.cars.splice(i, 1) },
+      
       async saveSession() {
+        this.saving = true
+        
         const payload = {
           name: this.session.name,
           password: this.session.password,
@@ -1089,7 +1704,6 @@
           loopMode: this.session.loopMode,
           allowedTyresOut: this.session.allowedTyresOut,
           legalTyres: this.session.legalTyres,
-          // Преобразование true/false → 1/0
           absAllowed: this.boolToApi(this.session.absAllowed),
           tcAllowed: this.boolToApi(this.session.tcAllowed),
           stabilityAllowed: this.boolToApi(this.session.stabilityAllowed),
@@ -1099,25 +1713,57 @@
           registerToLobby: this.boolToApi(this.session.registerToLobby),
           weather: this.weather
         }
-        await this.api('/api/session', {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        })
-        alert(this.locale === 'ru' ? '✅ Сессия успешно сохранена!' : '✅ Session saved successfully!')
-        await this.fetchAll()
+        
+        try {
+          const result = await this.api('/api/session', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          })
+          
+          if (result && result.success) {
+            this.success(
+              this.t.session.saveSuccess,
+              '🏁 ' + this.t.common.success
+            )
+          } else {
+            this.error(
+              result?.message || this.t.session.saveError,
+              this.t.common.error
+            )
+          }
+          await this.fetchAll()
+        } catch (e) {
+          this.error(this.t.session.saveError, this.t.common.error)
+        } finally {
+          this.saving = false
+        }
       },
+      
       async logout() {
         await fetch('/logout', { method: 'POST', headers: this.csrfToken ? { 'X-CSRF-Token': this.csrfToken } : {} })
         window.location.href = '/login'
       },
+      
       refreshIFrame() {
         const iframe = document.getElementById('players-entry-iframe')
         if (iframe) iframe.src = iframe.src
       }
     },
-    mounted() { this.fetchCsrf(); this.fetchAll() },
+    
+    mounted() { 
+      this.fetchCsrf()
+      this.fetchAll()
+    },
+    
     watch: {
+      tab(newTab, oldTab) {
+        if (newTab === 'logs') {
+          this.fetchLogs()
+          this.startAutoRefresh()
+        }
+      },
+      
       'session.track'(val) {
         const track = this.tracks.find(t => t.id === val)
         this.session.trackVariants = track?.layouts || []
@@ -1125,6 +1771,10 @@
           this.session.trackVariant = this.session.trackVariants[0] || ''
         }
       }
+    },
+    
+    beforeUnmount() {
+      this.stopAutoRefresh()
     }
   }).mount('#app')
 </script>
