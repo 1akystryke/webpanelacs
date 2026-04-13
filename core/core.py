@@ -141,7 +141,8 @@ class Core:
             folders = [
                 x
                 for x in os.listdir(track_path)
-                if os.path.isdir(os.path.join(track_path, x)) and x != "data"
+                if os.path.isdir(os.path.join(track_path, x))
+                and x not in ["data", "extension", "skins", "ui"]
             ]
 
             track_obj["id"] = track
