@@ -1033,7 +1033,7 @@
                       <div class="car-skin-select">
                         <select v-model="car.skin" class="input">
                           <div v-for="carOption in cars" :key="carOption.id">
-                            <option v-if="carOption.id == car.model" v-for="skin in carOption.skins">{{ skin }}</option>
+                            <option v-for="skin in getCarSkins(car.model)" :key="skin" :value="skin">{{ skin }}</option>
                           </div>
                         </select>
                       </div>
@@ -1532,6 +1532,12 @@
         filteredLogs() {
           if (this.logFilter === 'all') return this.logs;
           return this.logs.filter(log => this.getLogLevel(log) === this.logFilter)
+        },
+        getCarSkins() {
+          return (carModel) => {
+            const car = this.cars.find(c => c.id === carModel)
+            return car ? car.skins : []
+          }
         }
       },
       methods: {
@@ -1764,6 +1770,7 @@
               this.session.tyreBlanketsAllowed = this.boolFromApi(se.tyreBlanketsAllowed);
               this.session.forceVirtualMirror = this.boolFromApi(se.forceVirtualMirror);
               this.session.registerToLobby = this.boolFromApi(se.registerToLobby);
+              this.session.maxClients = se.maxClients ?? 0;
               if (se.weather && Array.isArray(se.weather) && se.weather.length) this.weather = se.weather
             }
             this.cars = c || [];
@@ -1840,7 +1847,8 @@
             tyreBlanketsAllowed: this.boolToApi(this.session.tyreBlanketsAllowed),
             forceVirtualMirror: this.boolToApi(this.session.forceVirtualMirror),
             registerToLobby: this.boolToApi(this.session.registerToLobby),
-            weather: this.weather
+            weather: this.weather,
+            maxClients: this.session.maxClients,
           };
           try {
             const res = await this.api('/api/session', {
