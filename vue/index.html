@@ -998,10 +998,12 @@
                 <select v-model="session.track" class="input" style="margin-bottom:20px;">
                   <option v-for="t in tracks" :key="t.id" :value="t.id">{{ t.name || t.id }}</option>
                 </select>
-                <div class="label">{{ t.session.trackVariant }}</div>
-                <select v-model="session.trackVariant" class="input">
-                  <option v-for="v in session.trackVariants" :key="v" :value="v">{{ v }}</option>
-                </select>
+                <div v-if="session.trackVariants.length !== 0">
+                  <div class="label">{{ t.session.trackVariant }}</div>
+                  <select v-model="session.trackVariant" class="input">
+                    <option v-for="v in session.trackVariants" :key="v" :value="v">{{ v }}</option>
+                  </select>
+                </div>
                 <p style="margin-top: 20px; font-size: 13px; color: #94a3b8;">{{ t.session.trackHint }}</p>
               </div>
 

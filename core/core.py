@@ -107,20 +107,38 @@ class Core:
         default_cars: list = None
         server_cars = os.listdir(self.cars_path)
 
-        with open("core/resources/cars.json", "r", encoding="utf-8") as f:
+        with open(
+            os.path.join("core/resources/cars.json"),
+            "r",
+            encoding="utf-8",
+        ) as f:
             cars = json.load(f)
+            for car in cars:
+                car["is_mod"] = False
             default_cars = cars
 
         mod_cars = set.difference(set(server_cars), (x["id"] for x in default_cars))
 
         result_cars = default_cars
         for mod_car in list(mod_cars):
+            car_obj = {}
+
+            skins_path = os.path.join(self.cars_path, mod_car, "skins")
+            skins = [] if not os.path.exists(skins_path) else os.listdir(skins_path)
+
+            car_obj["skins"] = skins
+            car_obj["is_mod"] = True
+
             ui_path = os.path.join(self.cars_path, mod_car, "ui", "ui_car.json")
             with open(ui_path, "r", encoding="utf-8-sig") as f:
                 content = f.read()
                 content = content.replace("\t", "").replace("\n", "")
                 data = json.loads(content)
-                result_cars.append({"id": mod_car, "name": data["name"]})
+
+                car_obj["id"] = mod_car
+                car_obj["name"] = data["name"]
+
+                result_cars.append(car_obj)
 
         return result_cars
 
@@ -130,26 +148,37 @@ class Core:
         return weather
 
     def list_tracks(self):
-        tracks = []
-        tracks_dirs = os.listdir(self.tracks_path)
+        default_tracks: list = None
+        server_tracks = os.listdir(self.tracks_path)
 
-        for track in tracks_dirs:
+        with open("core/resources/tracks.json", "r", encoding="utf-8") as f:
+            tracks = json.load(f)
+            for track in tracks:
+                track["is_mod"] = False
+            default_tracks = tracks
+
+        mod_tracks = set.difference(
+            set(server_tracks), (x["id"] for x in default_tracks)
+        )
+
+        result_tracks = default_tracks
+        for mod_track in mod_tracks:
             track_obj = {}
 
-            track_path = os.path.join(self.tracks_path, track)
-            folders = os.listdir(track_path)
-            folders = [
-                x
-                for x in os.listdir(track_path)
-                if os.path.isdir(os.path.join(track_path, x))
-                and x not in ["data", "extension", "skins", "ui"]
+            mod_track_path = os.path.join(self.tracks_path, mod_track)
+            layouts = [
+                folder
+                for folder in os.listdir(mod_track_path)
+                if folder not in ["data", "extension", "skins", "ui", "ai"]
+                and os.path.isdir(os.path.join(mod_track_path, folder))
             ]
 
-            track_obj["id"] = track
-            track_obj["layouts"] = folders
-            tracks.append(track_obj)
+            track_obj["id"] = mod_track
+            track_obj["layouts"] = layouts
+            track_obj["is_mod"] = True
 
-        return tracks
+            result_tracks.append(track_obj)
+        return result_tracks
 
     def set_car_list(self, car_list):
         car_data = [

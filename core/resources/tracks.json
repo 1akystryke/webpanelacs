@@ -1,0 +1,132 @@
+[
+    {
+        "id": "drift",
+        "layouts": []
+    },
+    {
+        "id": "imola",
+        "layouts": []
+    },
+    {
+        "id": "ks_barcelona",
+        "layouts": [
+            "layout_gp",
+            "layout_moto"
+        ]
+    },
+    {
+        "id": "ks_black_cat_county",
+        "layouts": [
+            "layout_int",
+            "layout_long",
+            "layout_short"
+        ]
+    },
+    {
+        "id": "ks_brands_hatch",
+        "layouts": [
+            "gp",
+            "indy"
+        ]
+    },
+    {
+        "id": "ks_drag",
+        "layouts": [
+            "drag1000",
+            "drag200",
+            "drag2000",
+            "drag400",
+            "drag500"
+        ]
+    },
+    {
+        "id": "ks_highlands",
+        "layouts": [
+            "layout_drift",
+            "layout_int",
+            "layout_long",
+            "layout_short"
+        ]
+    },
+    {
+        "id": "ks_laguna_seca",
+        "layouts": []
+    },
+    {
+        "id": "ks_monza66",
+        "layouts": [
+            "full",
+            "junior",
+            "road"
+        ]
+    },
+    {
+        "id": "ks_nordschleife",
+        "layouts": [
+            "endurance",
+            "endurance_cup",
+            "nordschleife",
+            "touristenfahrten"
+        ]
+    },
+    {
+        "id": "ks_nurburgring",
+        "layouts": [
+            "layout_gp_a",
+            "layout_gp_b",
+            "layout_sprint_a",
+            "layout_sprint_b"
+        ]
+    },
+    {
+        "id": "ks_red_bull_ring",
+        "layouts": [
+            "layout_gp",
+            "layout_national"
+        ]
+    },
+    {
+        "id": "ks_silverstone",
+        "layouts": [
+            "gp",
+            "international",
+            "national"
+        ]
+    },
+    {
+        "id": "ks_silverstone1967",
+        "layouts": []
+    },
+    {
+        "id": "ks_vallelunga",
+        "layouts": [
+            "classic_circuit",
+            "club_circuit",
+            "extended_circuit"
+        ]
+    },
+    {
+        "id": "ks_zandvoort",
+        "layouts": []
+    },
+    {
+        "id": "magione",
+        "layouts": []
+    },
+    {
+        "id": "monza",
+        "layouts": []
+    },
+    {
+        "id": "mugello",
+        "layouts": []
+    },
+    {
+        "id": "spa",
+        "layouts": []
+    },
+    {
+        "id": "trento-bondone",
+        "layouts": []
+    }
+]
