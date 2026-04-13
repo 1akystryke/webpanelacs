@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,7 +9,11 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
 
-    * { box-sizing: border-box; margin: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+    }
+
     :root {
       --primary: #ff2a2a;
       --primary-light: #ff6a6a;
@@ -24,7 +29,11 @@
       color: #111827;
     }
 
-    .app { display: flex; height: 100vh; overflow: hidden; }
+    .app {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
 
     /* TOAST NOTIFICATIONS */
     .toast-container {
@@ -45,7 +54,7 @@
       background: white;
       border-radius: 16px;
       padding: 16px 20px;
-      box-shadow: 0 20px 40px -8px rgba(0,0,0,0.15), 0 4px 12px rgba(0,0,0,0.05);
+      box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.05);
       display: flex;
       align-items: flex-start;
       gap: 12px;
@@ -113,6 +122,7 @@
         transform: translateX(100%);
         opacity: 0;
       }
+
       to {
         transform: translateX(0);
         opacity: 1;
@@ -128,6 +138,7 @@
         transform: translateX(0);
         opacity: 1;
       }
+
       to {
         transform: translateX(100%);
         opacity: 0;
@@ -142,7 +153,7 @@
       padding: 28px 20px;
       display: flex;
       flex-direction: column;
-      box-shadow: 4px 0 20px rgba(0,0,0,0.12);
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.12);
     }
 
     .logo {
@@ -179,18 +190,22 @@
     }
 
     .nav-item:hover {
-      background: rgba(255,42,42,0.15);
+      background: rgba(255, 42, 42, 0.15);
       color: white;
     }
 
     .nav-item.active {
       background: #ff2a2a;
       color: white;
-      box-shadow: 0 4px 15px rgba(255,42,42,0.35);
+      box-shadow: 0 4px 15px rgba(255, 42, 42, 0.35);
     }
 
     /* MAIN LAYOUT */
-    .main { flex: 1; display: flex; flex-direction: column; }
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
 
     .header {
       height: 76px;
@@ -200,7 +215,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
     }
 
     .header-title {
@@ -224,7 +239,7 @@
     .lang-btn:hover {
       border-color: #ff2a2a;
       color: #ff2a2a;
-      box-shadow: 0 6px 16px rgba(255,42,42,0.15);
+      box-shadow: 0 6px 16px rgba(255, 42, 42, 0.15);
     }
 
     .logout-btn {
@@ -241,7 +256,7 @@
     .logout-btn:hover {
       border-color: #ff2a2a;
       color: #ff2a2a;
-      box-shadow: 0 6px 16px rgba(255,42,42,0.15);
+      box-shadow: 0 6px 16px rgba(255, 42, 42, 0.15);
     }
 
     .content {
@@ -256,11 +271,13 @@
       background: white;
       border-radius: 24px;
       padding: 32px;
-      box-shadow: 0 12px 40px -8px rgba(0,0,0,0.08);
+      box-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.08);
       transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .card:hover { transform: translateY(-4px); }
+    .card:hover {
+      transform: translateY(-4px);
+    }
 
     .flex {
       display: flex;
@@ -283,7 +300,11 @@
       gap: 8px;
     }
 
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+    }
 
     /* Session cards grid */
     .session-cards-grid {
@@ -312,12 +333,12 @@
     .btn-primary {
       background: linear-gradient(90deg, #ff2a2a, #ff6a6a);
       color: white;
-      box-shadow: 0 6px 20px rgba(255,42,42,0.4);
+      box-shadow: 0 6px 20px rgba(255, 42, 42, 0.4);
     }
 
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(255,42,42,0.5);
+      box-shadow: 0 10px 25px rgba(255, 42, 42, 0.5);
     }
 
     .btn-primary:disabled {
@@ -366,7 +387,7 @@
     .spinner {
       width: 16px;
       height: 16px;
-      border: 2px solid rgba(255,255,255,0.3);
+      border: 2px solid rgba(255, 255, 255, 0.3);
       border-top-color: white;
       border-radius: 50%;
       animation: spin 0.6s linear infinite;
@@ -374,11 +395,14 @@
     }
 
     @keyframes spin {
-      to { transform: rotate(360deg); }
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     /* FORMS */
-    .input, select {
+    .input,
+    select {
       width: 100%;
       padding: 14px 18px;
       border-radius: 14px;
@@ -388,10 +412,11 @@
       background: white;
     }
 
-    .input:focus, select:focus {
+    .input:focus,
+    select:focus {
       outline: none;
       border-color: #ff2a2a;
-      box-shadow: 0 0 0 4px rgba(255,42,42,0.15);
+      box-shadow: 0 0 0 4px rgba(255, 42, 42, 0.15);
     }
 
     .label {
@@ -434,9 +459,20 @@
       text-transform: capitalize;
     }
 
-    .online { background: #ecfdf5; color: #10b981; }
-    .offline { background: #fef2f2; color: #ef4444; }
-    .loading { background: #fefce8; color: #ca8a04; }
+    .online {
+      background: #ecfdf5;
+      color: #10b981;
+    }
+
+    .offline {
+      background: #fef2f2;
+      color: #ef4444;
+    }
+
+    .loading {
+      background: #fefce8;
+      color: #ca8a04;
+    }
 
     /* CARS LIST - NEW DESIGN */
     .car-list {
@@ -495,7 +531,8 @@
       margin-top: 6px;
     }
 
-    .restrictor-group, .ballast-group {
+    .restrictor-group,
+    .ballast-group {
       display: inline-flex;
       align-items: center;
       gap: 8px;
@@ -503,14 +540,16 @@
       padding: 6px 16px 6px 12px;
       border-radius: 40px;
       border: 1px solid #e2e8f0;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
     }
 
-    .restrictor-group span:first-child, .ballast-group span:first-child {
+    .restrictor-group span:first-child,
+    .ballast-group span:first-child {
       font-size: 18px;
     }
 
-    .restrictor-group input, .ballast-group input {
+    .restrictor-group input,
+    .ballast-group input {
       width: 70px;
       padding: 8px 4px;
       border: none;
@@ -520,12 +559,14 @@
       font-size: 15px;
     }
 
-    .restrictor-group input:focus, .ballast-group input:focus {
+    .restrictor-group input:focus,
+    .ballast-group input:focus {
       outline: none;
       box-shadow: none;
     }
 
-    .restrictor-group span:last-child, .ballast-group span:last-child {
+    .restrictor-group span:last-child,
+    .ballast-group span:last-child {
       color: #64748b;
       font-weight: 500;
       font-size: 13px;
@@ -627,7 +668,7 @@
       line-height: 1.5;
       max-height: 600px;
       overflow-y: auto;
-      box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
       border: 1px solid #30363d;
     }
 
@@ -750,324 +791,1113 @@
     }
 
     /* TRANSITIONS */
-    .fade-enter-active, .fade-leave-active { transition: opacity 0.25s; }
-    .fade-enter-from, .fade-leave-to { opacity: 0; }
+    .fade-enter-active,
+    .fade-leave-active {
+      transition: opacity 0.25s;
+    }
+
+    .fade-enter-from,
+    .fade-leave-to {
+      opacity: 0;
+    }
 
     /* RESPONSIVE FIXES */
     @media (max-width: 1100px) {
-      .session-cards-grid { grid-template-columns: 1fr; }
+      .session-cards-grid {
+        grid-template-columns: 1fr;
+      }
     }
+
     @media (max-width: 900px) {
-      .header { padding: 0 20px; flex-wrap: wrap; height: auto; min-height: 76px; }
-      .car-card-header { flex-direction: column; align-items: stretch; }
-      .car-card-controls { flex-wrap: wrap; justify-content: flex-start; }
-      .remove-car-btn { margin-left: 0; align-self: flex-end; }
-      .logs-toolbar { justify-content: flex-start; }
-      .log-line { flex-wrap: wrap; }
-      .toast { min-width: 280px; max-width: 360px; }
+      .header {
+        padding: 0 20px;
+        flex-wrap: wrap;
+        height: auto;
+        min-height: 76px;
+      }
+
+      .car-card-header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .car-card-controls {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+      }
+
+      .remove-car-btn {
+        margin-left: 0;
+        align-self: flex-end;
+      }
+
+      .logs-toolbar {
+        justify-content: flex-start;
+      }
+
+      .log-line {
+        flex-wrap: wrap;
+      }
+
+      .toast {
+        min-width: 280px;
+        max-width: 360px;
+      }
     }
   </style>
 </head>
+
 <body>
-<div id="app" class="app">
-  <!-- TOAST CONTAINER -->
-  <div class="toast-container">
-    <div v-for="toast in toasts" :key="toast.id" :class="['toast', toast.type]" @click="removeToast(toast.id)">
-      <div class="toast-icon">{{ toast.icon }}</div>
-      <div class="toast-content">
-        <div class="toast-title">{{ toast.title }}</div>
-        <div class="toast-message">{{ toast.message }}</div>
+  <div id="app" class="app">
+    <!-- TOAST CONTAINER -->
+    <div class="toast-container">
+      <div v-for="toast in toasts" :key="toast.id" :class="['toast', toast.type]" @click="removeToast(toast.id)">
+        <div class="toast-icon">{{ toast.icon }}</div>
+        <div class="toast-content">
+          <div class="toast-title">{{ toast.title }}</div>
+          <div class="toast-message">{{ toast.message }}</div>
+        </div>
+        <button class="toast-close" @click.stop="removeToast(toast.id)">×</button>
       </div>
-      <button class="toast-close" @click.stop="removeToast(toast.id)">×</button>
-    </div>
-  </div>
-
-  <!-- SIDEBAR -->
-  <div class="sidebar">
-    <div class="logo">AC Control</div>
-
-    <div class="nav-item" :class="{active: tab==='dashboard'}" @click="tab='dashboard'">
-      {{ t.nav.dashboard }}
-    </div>
-    <div class="nav-item" :class="{active: tab==='session'}" @click="tab='session'">
-      {{ t.nav.session }}
-    </div>
-    <div class="nav-item" :class="{active: tab==='players'}" @click="tab='players'">
-      {{ t.nav.players }}
-    </div>
-    <div class="nav-item" :class="{active: tab==='logs'}" @click="openLogsTab">
-      {{ t.nav.logs }}
     </div>
 
-    <div style="margin-top: auto; padding-top: 40px; border-top: 1px solid #334155; font-size: 13px; color: #64748b;">
-      Assetto Corsa Dedicated<br>
-      <span style="color:#94a3b8">v1.92 • Production Build</span>
-    </div>
-  </div>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="logo">AC Control</div>
 
-  <!-- MAIN PANEL -->
-  <div class="main">
-    <div class="header">
-      <div class="header-title">
-        {{ tab === 'dashboard' ? t.dashboard.title : tab === 'session' ? t.session.title : tab === 'players' ? t.players.title : t.logs.title }}
+      <div class="nav-item" :class="{active: tab==='dashboard'}" @click="tab='dashboard'">
+        {{ t.nav.dashboard }}
+      </div>
+      <div class="nav-item" :class="{active: tab==='session'}" @click="tab='session'">
+        {{ t.nav.session }}
+      </div>
+      <div class="nav-item" :class="{active: tab==='players'}" @click="tab='players'">
+        {{ t.nav.players }}
+      </div>
+      <div class="nav-item" :class="{active: tab==='logs'}" @click="openLogsTab">
+        {{ t.nav.logs }}
       </div>
 
-      <div style="display: flex; align-items: center; gap: 16px;">
-        <span :class="['status', server.status]">{{ server.status === 'online' ? t.common.online : t.common.offline }}</span>
+      <div style="margin-top: auto; padding-top: 40px; border-top: 1px solid #334155; font-size: 13px; color: #64748b;">
+        Assetto Corsa Dedicated<br>
+        <span style="color:#94a3b8">v1.92 • Production Build</span>
+      </div>
+    </div>
 
-        <button class="lang-btn" @click="toggleLanguage">
-          {{ locale === 'ru' ? '🇬🇧 EN' : '🇷🇺 RU' }}
-        </button>
-        <button class="logout-btn" @click="logout">{{ t.common.logout }}</button>
+    <!-- MAIN PANEL -->
+    <div class="main">
+      <div class="header">
+        <div class="header-title">
+          {{ tab === 'dashboard' ? t.dashboard.title : tab === 'session' ? t.session.title : tab === 'players' ?
+          t.players.title : t.logs.title }}
+        </div>
 
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <div style="text-align: right;">
-            <div style="font-weight:600; font-size:15px;">{{ t.common.admin }}</div>
-            <div style="font-size:13px; color:#64748b;">admin@acserver.pro</div>
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <span :class="['status', server.status]">{{ server.status === 'online' ? t.common.online : t.common.offline
+            }}</span>
+
+          <button class="lang-btn" @click="toggleLanguage">
+            {{ locale === 'ru' ? '🇬🇧 EN' : '🇷🇺 RU' }}
+          </button>
+          <button class="logout-btn" @click="logout">{{ t.common.logout }}</button>
+
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="text-align: right;">
+              <div style="font-weight:600; font-size:15px;">{{ t.common.admin }}</div>
+              <div style="font-size:13px; color:#64748b;">admin@acserver.pro</div>
+            </div>
+            <div
+              style="width:42px; height:42px; background:linear-gradient(135deg,#ff2a2a,#ff6a6a); border-radius:50%; color:white; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:20px;">
+              A</div>
           </div>
-          <div style="width:42px; height:42px; background:linear-gradient(135deg,#ff2a2a,#ff6a6a); border-radius:50%; color:white; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:20px;">A</div>
         </div>
       </div>
-    </div>
 
-    <div class="content">
-      <transition name="fade" mode="out-in">
+      <div class="content">
+        <transition name="fade" mode="out-in">
 
-        <!-- DASHBOARD -->
-        <div v-if="tab==='dashboard'" key="dash" class="flex">
-          <div v-if="server.status === 'online'" class="card" style="flex: 2; min-width: 280px;">
-            <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
-              <span style="font-size: 32px;">🏁</span>
-              <div>
-                <div style="font-size: 20px; font-weight: 600; color: #64748b;">{{ t.dashboard.currentTrack }}</div>
-                <div style="font-size: 32px; font-weight: 700; line-height: 1.2;">{{ server.track || '—' }}</div>
+          <!-- DASHBOARD -->
+          <div v-if="tab==='dashboard'" key="dash" class="flex">
+            <div v-if="server.status === 'online'" class="card" style="flex: 2; min-width: 280px;">
+              <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+                <span style="font-size: 32px;">🏁</span>
+                <div>
+                  <div style="font-size: 20px; font-weight: 600; color: #64748b;">{{ t.dashboard.currentTrack }}</div>
+                  <div style="font-size: 32px; font-weight: 700; line-height: 1.2;">{{ server.track || '—' }}</div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: baseline; gap: 8px;">
+                <span style="font-size: 56px; font-weight: 700;">{{ server.clients || 0 }}</span>
+                <span style="font-size: 28px; color: #64748b;">/{{ server.maxclients || 0 }}</span>
+              </div>
+              <p style="margin-top: 8px; color: #64748b; font-size: 16px;">{{ t.dashboard.playersOnline }}</p>
+            </div>
+            <div v-else class="card"
+              style="flex: 2; min-width: 280px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px;">
+              <span style="font-size: 48px;">🔴</span>
+              <div style="font-size: 24px; font-weight: 600;">{{ t.dashboard.serverOffline }}</div>
+              <p style="color: #64748b;">{{ t.dashboard.startToSee }}</p>
+            </div>
+
+            <div class="card"
+              style="flex: 1; min-width: 240px; display: flex; flex-direction: column; justify-content: center;">
+              <div style="display: flex; gap: 12px; flex-direction: column;">
+                <button class="btn btn-primary" style="padding: 18px;" @click="start">
+                  {{ t.dashboard.startServer }}
+                </button>
+                <button class="btn btn-secondary" style="padding: 18px;" @click="stop">
+                  {{ t.dashboard.stopServer }}
+                </button>
+              </div>
+              <p style="margin-top: 20px; font-size: 13px; color: #94a3b8; text-align: center;">
+                {{ t.dashboard.manageHint }}
+              </p>
+            </div>
+          </div>
+
+          <!-- SESSION TAB -->
+          <div v-if="tab==='session'" key="sess">
+            <div style="margin-bottom: 24px;">
+              <div class="section-title">{{ t.session.title }}</div>
+              <p style="color:#64748b;">{{ t.session.changesHint }}</p>
+            </div>
+
+            <div class="session-cards-grid">
+              <!-- КАРТОЧКА 1: СЕРВЕР -->
+              <div class="card">
+                <div class="card-title"><span>🖥️</span> {{ t.session.serverCard }}</div>
+                <div class="label">{{ t.session.serverName }}</div>
+                <input type="text" v-model="session.name" class="input" style="margin-bottom: 16px;"
+                  :placeholder="t.session.serverNamePlaceholder">
+                <div class="label">{{ t.session.password }}</div>
+                <input type="text" v-model="session.password" class="input" style="margin-bottom: 16px;"
+                  :placeholder="t.session.passwordPlaceholder">
+                <div class="label">{{ t.session.adminPassword }}</div>
+                <input type="text" v-model="session.adminPassword" class="input" style="margin-bottom: 20px;"
+                  :placeholder="t.session.adminPasswordPlaceholder">
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                  <div>
+                    <div class="label">UDP_PORT</div><input type="number" v-model.number="session.udpPort"
+                      class="input">
+                  </div>
+                  <div>
+                    <div class="label">TCP_PORT</div><input type="number" v-model.number="session.tcpPort"
+                      class="input">
+                  </div>
+                  <div>
+                    <div class="label">HTTP_PORT</div><input type="number" v-model.number="session.httpPort"
+                      class="input">
+                  </div>
+                </div>
+              </div>
+
+              <!-- КАРТОЧКА 2: ТРАССА -->
+              <div class="card">
+                <div class="card-title"><span>🏁</span> {{ t.session.trackCard }}</div>
+                <div class="label">{{ t.session.track }}</div>
+                <select v-model="session.track" class="input" style="margin-bottom:20px;">
+                  <option v-for="t in tracks" :key="t.id" :value="t.id">{{ t.name || t.id }}</option>
+                </select>
+                <div class="label">{{ t.session.trackVariant }}</div>
+                <select v-model="session.trackVariant" class="input">
+                  <option v-for="v in session.trackVariants" :key="v" :value="v">{{ v }}</option>
+                </select>
+                <p style="margin-top: 20px; font-size: 13px; color: #94a3b8;">{{ t.session.trackHint }}</p>
+              </div>
+
+              <!-- КАРТОЧКА 3: АВТОМОБИЛИ (НОВЫЙ ДИЗАЙН) -->
+              <div class="card" style="display: flex; flex-direction: column;">
+                <div class="card-title"><span>🏎️</span> {{ t.session.carsCard }}</div>
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+                  <div class="label" style="margin-bottom: 0;">{{ t.session.carsLabel }} ({{ session.cars.length }})
+                  </div>
+                  <button class="btn btn-secondary btn-small" @click="addCar">+ {{ t.session.addCar }}</button>
+                </div>
+
+                <div class="car-list">
+                  <div v-if="session.cars.length === 0"
+                    style="padding: 24px; text-align: center; color: #94a3b8; background: #f8fafc; border-radius: 20px;">
+                    {{ t.session.noCars }}
+                  </div>
+
+                  <div v-for="(car, idx) in session.cars" :key="idx" class="car-card">
+                    <!-- Верхняя строка: выбор модели + скин как заголовок -->
+                    <div class="car-card-header">
+                      <div class="car-model-select">
+                        <select v-model="car.model" class="input">
+                          <option v-for="carOption in cars" :key="carOption.id" :value="carOption.id">{{ carOption.name
+                            }}</option>
+                        </select>
+                      </div>
+
+                      <div class="car-skin-select">
+                        <select v-model="car.skin" class="input">
+                          <div v-for="carOption in cars" :key="carOption.id">
+                            <option v-if="carOption.id == car.model" v-for="skin in carOption.skins">{{ skin }}</option>
+                          </div>
+                        </select>
+                      </div>
+                      <button class="remove-car-btn" @click="removeCar(idx)" :title="t.session.remove">✕</button>
+                    </div>
+
+                    <!-- Нижняя строка: рестриктор + балласт -->
+                    <div class="car-card-controls">
+                      <div class="restrictor-group">
+                        <span>🔧</span>
+                        <input type="number" v-model.number="car.restrictor" min="0" max="100" step="1"
+                          placeholder="0" />
+                        <span>%</span>
+                      </div>
+                      <div class="ballast-group">
+                        <span>⚖️</span>
+                        <input type="number" v-model.number="car.ballast" min="0" step="1" placeholder="0" />
+                        <span>{{ t.session.kg }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <p style="margin-top: 20px; font-size: 13px; color: #94a3b8;">{{ t.session.restrictorHint }}</p>
+              </div>
+
+              <!-- КАРТОЧКА 4: ПАРАМЕТРЫ СЕССИИ -->
+              <div class="card">
+                <div class="card-title"><span>⚙️</span> {{ t.session.sessionParams }}</div>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;">
+                  <div>
+                    <div class="label">{{ t.session.tyreWear }}</div><input type="number"
+                      v-model.number="session.tyreWear" min="0" step="0.1" class="input">
+                  </div>
+                  <div>
+                    <div class="label">{{ t.session.damage }}</div><input type="number" v-model.number="session.damage"
+                      min="0" step="0.1" class="input">
+                  </div>
+                  <div>
+                    <div class="label">{{ t.session.fuelConsumption }}</div><input type="number"
+                      v-model.number="session.fuelConsumption" min="0" step="0.1" class="input">
+                  </div>
+                  <div>
+                    <div class="label">SUN_ANGLE</div><input type="number" v-model.number="session.sunAngle"
+                      class="input">
+                  </div>
+                </div>
+                <div style="margin-bottom: 24px;">
+                  <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 16px; color: #64748b;">{{
+                    t.session.duration }}</h4>
+                  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                    <div>
+                      <div class="label">{{ t.session.practice }}</div><input type="number"
+                        v-model.number="session.practiceDuration" min="0" class="input">
+                    </div>
+                    <div>
+                      <div class="label">{{ t.session.qualifying }}</div><input type="number"
+                        v-model.number="session.qualifyingDuration" min="0" class="input">
+                    </div>
+                    <div>
+                      <div class="label">{{ t.session.race }}</div><input type="number"
+                        v-model.number="session.raceLaps" min="0" class="input">
+                    </div>
+                  </div>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+                  <div>
+                    <div class="label">PICKUP_MODE</div><select v-model.number="session.pickupMode" class="input">
+                      <option :value="0">{{ t.session.disabled }}</option>
+                      <option :value="1">{{ t.session.enabled }}</option>
+                    </select>
+                  </div>
+                  <div>
+                    <div class="label">LOOP_MODE</div><select v-model.number="session.loopMode" class="input">
+                      <option :value="0">{{ t.session.disabled }}</option>
+                      <option :value="1">{{ t.session.enabled }}</option>
+                    </select>
+                  </div>
+                  <div>
+                    <div class="label">ALLOWED_TYRES_OUT</div><input type="number"
+                      v-model.number="session.allowedTyresOut" class="input">
+                  </div>
+                  <div>
+                    <div class="label">LEGAL_TYRES</div><input type="text" v-model="session.legalTyres" class="input">
+                  </div>
+                </div>
+                <div style="margin-top: 24px;">
+                  <h4 style="font-size: 14px; font-weight: 600; margin-bottom: 12px; color: #64748b;">{{
+                    t.session.assists }}</h4>
+                  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+                    <div class="checkbox-group"><input type="checkbox" v-model="session.absAllowed" id="abs"><label
+                        for="abs">ABS_ALLOWED</label></div>
+                    <div class="checkbox-group"><input type="checkbox" v-model="session.tcAllowed" id="tc"><label
+                        for="tc">TC_ALLOWED</label></div>
+                    <div class="checkbox-group"><input type="checkbox" v-model="session.stabilityAllowed"
+                        id="stability"><label for="stability">STABILITY_ALLOWED</label></div>
+                    <div class="checkbox-group"><input type="checkbox" v-model="session.autoclutchAllowed"
+                        id="autoclutch"><label for="autoclutch">AUTOCLUTCH_ALLOWED</label></div>
+                    <div class="checkbox-group"><input type="checkbox" v-model="session.tyreBlanketsAllowed"
+                        id="blankets"><label for="blankets">TYRE_BLANKETS_ALLOWED</label></div>
+                    <div class="checkbox-group"><input type="checkbox" v-model="session.forceVirtualMirror"
+                        id="mirror"><label for="mirror">FORCE_VIRTUAL_MIRROR</label></div>
+                    <div class="checkbox-group"><input type="checkbox" v-model="session.registerToLobby"
+                        id="lobby"><label for="lobby">REGISTER_TO_LOBBY</label></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- КАРТОЧКА 5: ПОГОДА -->
+              <div class="card" style="grid-column: span 2;">
+                <div class="card-title"><span>🌤️</span> {{ t.session.weatherCard }}</div>
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+                  <p style="color: #64748b; font-size: 14px;">{{ t.session.weatherHint }}</p>
+                  <button class="btn btn-secondary btn-small" @click="addWeatherSlot">+ {{ t.session.addWeatherSlot
+                    }}</button>
+                </div>
+                <div class="weather-slots-container">
+                  <div v-for="(w, index) in weather" :key="index" class="weather-slot">
+                    <div class="weather-slot-header">
+                      <div class="weather-slot-title">{{ t.session.weatherSlot }} {{ index+1 }}</div>
+                      <button v-if="weather.length > 1" class="btn-icon" @click="removeWeatherSlot(index)"
+                        :title="t.session.removeWeatherSlot">✕</button>
+                    </div>
+                    <div class="weather-grid">
+                      <div>
+                        <div class="label">{{ t.session.graphics }}</div><select v-model="w.graphics" class="input">
+                          <option v-for="weather in weatherList" :key="weather.weather" :value="weather.weather">{{
+                            weather.pretty_name }}</option>
+                        </select>
+                      </div>
+                      <div></div>
+                      <div>
+                        <div class="label">{{ t.session.baseTempAmbient }}</div><input type="number"
+                          v-model.number="w.baseTemperatureAmbient" class="input">
+                      </div>
+                      <div>
+                        <div class="label">{{ t.session.baseTempRoad }}</div><input type="number"
+                          v-model.number="w.baseTemperatureRoad" class="input">
+                      </div>
+                      <div>
+                        <div class="label">{{ t.session.variationAmbient }}</div><input type="number"
+                          v-model.number="w.variationAmbient" class="input">
+                      </div>
+                      <div>
+                        <div class="label">{{ t.session.variationRoad }}</div><input type="number"
+                          v-model.number="w.variationRoad" class="input">
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-            <div style="display: flex; align-items: baseline; gap: 8px;">
-              <span style="font-size: 56px; font-weight: 700;">{{ server.clients || 0 }}</span>
-              <span style="font-size: 28px; color: #64748b;">/{{ server.maxclients || 0 }}</span>
+
+            <div style="margin-top: 32px; text-align: right;">
+              <button class="btn btn-primary" style="padding: 16px 40px; font-size: 17px;" @click="saveSession"
+                :disabled="saving">
+                <span v-if="saving"><span class="spinner"></span> {{ t.session.saving }}</span>
+                <span v-else>{{ t.session.saveSession }}</span>
+              </button>
             </div>
-            <p style="margin-top: 8px; color: #64748b; font-size: 16px;">{{ t.dashboard.playersOnline }}</p>
-          </div>
-          <div v-else class="card" style="flex: 2; min-width: 280px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px;">
-            <span style="font-size: 48px;">🔴</span>
-            <div style="font-size: 24px; font-weight: 600;">{{ t.dashboard.serverOffline }}</div>
-            <p style="color: #64748b;">{{ t.dashboard.startToSee }}</p>
           </div>
 
-          <div class="card" style="flex: 1; min-width: 240px; display: flex; flex-direction: column; justify-content: center;">
-            <div style="display: flex; gap: 12px; flex-direction: column;">
-              <button class="btn btn-primary" style="padding: 18px;" @click="start">
-                {{ t.dashboard.startServer }}
-              </button>
-              <button class="btn btn-secondary" style="padding: 18px;" @click="stop">
-                {{ t.dashboard.stopServer }}
-              </button>
+          <!-- PLAYERS TAB -->
+          <div v-if="tab==='players'" key="pl" class="card">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+              <div class="section-title">{{ t.players.title }}</div>
+              <button class="btn btn-secondary" @click="refreshIFrame" :disabled="server.status !== 'online'">{{
+                t.players.refresh }}</button>
             </div>
-            <p style="margin-top: 20px; font-size: 13px; color: #94a3b8; text-align: center;">
-              {{ t.dashboard.manageHint }}
+            <div v-if="server.status === 'online'">
+              <div class="iframe-container"><iframe id="players-entry-iframe" src="/api/entry"
+                  title="Entry list"></iframe></div>
+              <p style="margin-top: 12px; font-size: 13px; color: #64748b; text-align: center;">{{
+                t.players.realtimeHint }}</p>
+            </div>
+            <div v-else class="empty-state"><span style="font-size: 40px;">🔌</span>
+              <h3>{{ t.players.serverOffline }}</h3>
+              <p>{{ t.players.goToDashboard }}</p>
+            </div>
+          </div>
+
+          <!-- LOGS TAB -->
+          <div v-if="tab==='logs'" key="logs" class="card">
+            <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+              <div>
+                <div class="section-title">{{ t.logs.title }}</div>
+                <p style="color:#64748b;">{{ t.logs.hint }}</p>
+              </div>
+              <div style="display: flex; gap: 12px;">
+                <div class="auto-refresh-indicator" :class="{ active: logsAutoRefresh }"><span>{{ logsAutoRefresh ? '🔄'
+                    : '⏸️' }}</span> {{ logsAutoRefresh ? t.logs.autoRefreshOn : t.logs.autoRefreshOff }} <span
+                    v-if="logsAutoRefresh">({{ logsRefreshCountdown }}s)</span></div>
+                <button class="pause-btn" @click="toggleAutoRefresh">{{ logsAutoRefresh ? '⏸️' : '▶️' }}</button>
+              </div>
+            </div>
+            <div class="logs-toolbar">
+              <div style="display:flex; gap:4px;"><span v-for="level in logLevels" :key="level" class="filter-badge"
+                  :class="{ active: logFilter === level }" @click="logFilter = level">{{ level === 'all' ? t.logs.all :
+                  level.toUpperCase() }}</span></div>
+              <div style="flex:1;"></div><button class="btn btn-secondary btn-small" @click="clearLogs">{{ t.logs.clear
+                }}</button><button class="btn btn-secondary btn-small" @click="fetchLogs" :disabled="logsLoading"><span
+                  v-if="logsLoading">⏳</span><span v-else>{{ t.logs.refresh }}</span></button>
+            </div>
+            <div v-if="filteredLogs.length > 0" class="logs-stats">{{ t.logs.showing }} {{ filteredLogs.length }} / {{
+              logs.length }} {{ t.logs.entries }}</div>
+            <div class="logs-container" ref="logsContainer">
+              <div v-if="filteredLogs.length === 0 && !logsLoading"
+                style="color:#8b949e; text-align:center; padding:40px;">{{ t.logs.noLogs }}</div>
+              <div v-for="(log, index) in filteredLogs" :key="index" class="log-line" :class="getLogLevel(log)"><span
+                  class="log-level">{{ getLogLevelText(log) }}</span><span class="log-message">{{ formatLogMessage(log)
+                  }}</span></div>
+              <div v-if="logsLoading && filteredLogs.length === 0"
+                style="color:#8b949e; text-align:center; padding:40px;">{{ t.logs.loading }}</div>
+            </div>
+            <p style="margin-top:12px; font-size:13px; color:#64748b; text-align:center;">{{ t.logs.autoRefreshHint }}
             </p>
           </div>
-        </div>
-
-        <!-- SESSION TAB -->
-        <div v-if="tab==='session'" key="sess">
-          <div style="margin-bottom: 24px;">
-            <div class="section-title">{{ t.session.title }}</div>
-            <p style="color:#64748b;">{{ t.session.changesHint }}</p>
-          </div>
-
-          <div class="session-cards-grid">
-            <!-- КАРТОЧКА 1: СЕРВЕР -->
-            <div class="card">
-              <div class="card-title"><span>🖥️</span> {{ t.session.serverCard }}</div>
-              <div class="label">{{ t.session.serverName }}</div>
-              <input type="text" v-model="session.name" class="input" style="margin-bottom: 16px;" :placeholder="t.session.serverNamePlaceholder">
-              <div class="label">{{ t.session.password }}</div>
-              <input type="text" v-model="session.password" class="input" style="margin-bottom: 16px;" :placeholder="t.session.passwordPlaceholder">
-              <div class="label">{{ t.session.adminPassword }}</div>
-              <input type="text" v-model="session.adminPassword" class="input" style="margin-bottom: 20px;" :placeholder="t.session.adminPasswordPlaceholder">
-              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
-                <div><div class="label">UDP_PORT</div><input type="number" v-model.number="session.udpPort" class="input"></div>
-                <div><div class="label">TCP_PORT</div><input type="number" v-model.number="session.tcpPort" class="input"></div>
-                <div><div class="label">HTTP_PORT</div><input type="number" v-model.number="session.httpPort" class="input"></div>
-              </div>
-            </div>
-
-            <!-- КАРТОЧКА 2: ТРАССА -->
-            <div class="card">
-              <div class="card-title"><span>🏁</span> {{ t.session.trackCard }}</div>
-              <div class="label">{{ t.session.track }}</div>
-              <select v-model="session.track" class="input" style="margin-bottom:20px;">
-                <option v-for="t in tracks" :key="t.id" :value="t.id">{{ t.name || t.id }}</option>
-              </select>
-              <div class="label">{{ t.session.trackVariant }}</div>
-              <select v-model="session.trackVariant" class="input">
-                <option v-for="v in session.trackVariants" :key="v" :value="v">{{ v }}</option>
-              </select>
-              <p style="margin-top: 20px; font-size: 13px; color: #94a3b8;">{{ t.session.trackHint }}</p>
-            </div>
-
-            <!-- КАРТОЧКА 3: АВТОМОБИЛИ (НОВЫЙ ДИЗАЙН) -->
-            <div class="card" style="display: flex; flex-direction: column;">
-              <div class="card-title"><span>🏎️</span> {{ t.session.carsCard }}</div>
-              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-                <div class="label" style="margin-bottom: 0;">{{ t.session.carsLabel }} ({{ session.cars.length }})</div>
-                <button class="btn btn-secondary btn-small" @click="addCar">+ {{ t.session.addCar }}</button>
-              </div>
-
-              <div class="car-list">
-                <div v-if="session.cars.length === 0" style="padding: 24px; text-align: center; color: #94a3b8; background: #f8fafc; border-radius: 20px;">
-                  {{ t.session.noCars }}
-                </div>
-                
-                <div v-for="(car, idx) in session.cars" :key="idx" class="car-card">
-                  <!-- Верхняя строка: выбор модели + скин как заголовок -->
-                  <div class="car-card-header">
-                    <div class="car-model-select">
-                      <select v-model="car.model" class="input">
-                        <option v-for="carOption in cars" :key="carOption.id" :value="carOption.id">{{ carOption.name }}</option>
-                      </select>
-                    </div>
-
-                    <div class="car-skin-select">
-                      <select v-model="car.skin" class="input">
-                        <div v-for="carOption in cars" :key="carOption.id">
-                          <option v-if="carOption.id == car.model" v-for="skin in carOption.skins">{{ skin }}</option>
-                        </div>
-                      </select>
-                    </div>
-                    <button class="remove-car-btn" @click="removeCar(idx)" :title="t.session.remove">✕</button>
-                  </div>
-                  
-                  <!-- Нижняя строка: рестриктор + балласт -->
-                  <div class="car-card-controls">
-                    <div class="restrictor-group">
-                      <span>🔧</span>
-                      <input type="number" v-model.number="car.restrictor" min="0" max="100" step="1" placeholder="0" />
-                      <span>%</span>
-                    </div>
-                    <div class="ballast-group">
-                      <span>⚖️</span>
-                      <input type="number" v-model.number="car.ballast" min="0" step="1" placeholder="0" />
-                      <span>{{ t.session.kg }}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <p style="margin-top: 20px; font-size: 13px; color: #94a3b8;">{{ t.session.restrictorHint }}</p>
-            </div>
-
-            <!-- КАРТОЧКА 4: ПАРАМЕТРЫ СЕССИИ -->
-            <div class="card">
-              <div class="card-title"><span>⚙️</span> {{ t.session.sessionParams }}</div>
-              <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;">
-                <div><div class="label">{{ t.session.tyreWear }}</div><input type="number" v-model.number="session.tyreWear" min="0" step="0.1" class="input"></div>
-                <div><div class="label">{{ t.session.damage }}</div><input type="number" v-model.number="session.damage" min="0" step="0.1" class="input"></div>
-                <div><div class="label">{{ t.session.fuelConsumption }}</div><input type="number" v-model.number="session.fuelConsumption" min="0" step="0.1" class="input"></div>
-                <div><div class="label">SUN_ANGLE</div><input type="number" v-model.number="session.sunAngle" class="input"></div>
-              </div>
-              <div style="margin-bottom: 24px;">
-                <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 16px; color: #64748b;">{{ t.session.duration }}</h4>
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
-                  <div><div class="label">{{ t.session.practice }}</div><input type="number" v-model.number="session.practiceDuration" min="0" class="input"></div>
-                  <div><div class="label">{{ t.session.qualifying }}</div><input type="number" v-model.number="session.qualifyingDuration" min="0" class="input"></div>
-                  <div><div class="label">{{ t.session.race }}</div><input type="number" v-model.number="session.raceLaps" min="0" class="input"></div>
-                </div>
-              </div>
-              <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
-                <div><div class="label">PICKUP_MODE</div><select v-model.number="session.pickupMode" class="input"><option :value="0">{{ t.session.disabled }}</option><option :value="1">{{ t.session.enabled }}</option></select></div>
-                <div><div class="label">LOOP_MODE</div><select v-model.number="session.loopMode" class="input"><option :value="0">{{ t.session.disabled }}</option><option :value="1">{{ t.session.enabled }}</option></select></div>
-                <div><div class="label">ALLOWED_TYRES_OUT</div><input type="number" v-model.number="session.allowedTyresOut" class="input"></div>
-                <div><div class="label">LEGAL_TYRES</div><input type="text" v-model="session.legalTyres" class="input"></div>
-              </div>
-              <div style="margin-top: 24px;">
-                <h4 style="font-size: 14px; font-weight: 600; margin-bottom: 12px; color: #64748b;">{{ t.session.assists }}</h4>
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
-                  <div class="checkbox-group"><input type="checkbox" v-model="session.absAllowed" id="abs"><label for="abs">ABS_ALLOWED</label></div>
-                  <div class="checkbox-group"><input type="checkbox" v-model="session.tcAllowed" id="tc"><label for="tc">TC_ALLOWED</label></div>
-                  <div class="checkbox-group"><input type="checkbox" v-model="session.stabilityAllowed" id="stability"><label for="stability">STABILITY_ALLOWED</label></div>
-                  <div class="checkbox-group"><input type="checkbox" v-model="session.autoclutchAllowed" id="autoclutch"><label for="autoclutch">AUTOCLUTCH_ALLOWED</label></div>
-                  <div class="checkbox-group"><input type="checkbox" v-model="session.tyreBlanketsAllowed" id="blankets"><label for="blankets">TYRE_BLANKETS_ALLOWED</label></div>
-                  <div class="checkbox-group"><input type="checkbox" v-model="session.forceVirtualMirror" id="mirror"><label for="mirror">FORCE_VIRTUAL_MIRROR</label></div>
-                  <div class="checkbox-group"><input type="checkbox" v-model="session.registerToLobby" id="lobby"><label for="lobby">REGISTER_TO_LOBBY</label></div>
-                </div>
-              </div>
-            </div>
-
-            <!-- КАРТОЧКА 5: ПОГОДА -->
-            <div class="card" style="grid-column: span 2;">
-              <div class="card-title"><span>🌤️</span> {{ t.session.weatherCard }}</div>
-              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-                <p style="color: #64748b; font-size: 14px;">{{ t.session.weatherHint }}</p>
-                <button class="btn btn-secondary btn-small" @click="addWeatherSlot">+ {{ t.session.addWeatherSlot }}</button>
-              </div>
-              <div class="weather-slots-container">
-                <div v-for="(w, index) in weather" :key="index" class="weather-slot">
-                  <div class="weather-slot-header">
-                    <div class="weather-slot-title">{{ t.session.weatherSlot }} {{ index+1 }}</div>
-                    <button v-if="weather.length > 1" class="btn-icon" @click="removeWeatherSlot(index)" :title="t.session.removeWeatherSlot">✕</button>
-                  </div>
-                  <div class="weather-grid">
-                    <div><div class="label">{{ t.session.graphics }}</div><select v-model="w.graphics" class="input"><option v-for="weather in weatherList" :key="weather.weather" :value="weather.weather">{{ weather.pretty_name }}</option></select></div>
-                    <div></div>
-                    <div><div class="label">{{ t.session.baseTempAmbient }}</div><input type="number" v-model.number="w.baseTemperatureAmbient" class="input"></div>
-                    <div><div class="label">{{ t.session.baseTempRoad }}</div><input type="number" v-model.number="w.baseTemperatureRoad" class="input"></div>
-                    <div><div class="label">{{ t.session.variationAmbient }}</div><input type="number" v-model.number="w.variationAmbient" class="input"></div>
-                    <div><div class="label">{{ t.session.variationRoad }}</div><input type="number" v-model.number="w.variationRoad" class="input"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div style="margin-top: 32px; text-align: right;">
-            <button class="btn btn-primary" style="padding: 16px 40px; font-size: 17px;" @click="saveSession" :disabled="saving">
-              <span v-if="saving"><span class="spinner"></span> {{ t.session.saving }}</span>
-              <span v-else>{{ t.session.saveSession }}</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- PLAYERS TAB -->
-        <div v-if="tab==='players'" key="pl" class="card">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
-            <div class="section-title">{{ t.players.title }}</div>
-            <button class="btn btn-secondary" @click="refreshIFrame" :disabled="server.status !== 'online'">{{ t.players.refresh }}</button>
-          </div>
-          <div v-if="server.status === 'online'">
-            <div class="iframe-container"><iframe id="players-entry-iframe" src="/api/entry" title="Entry list"></iframe></div>
-            <p style="margin-top: 12px; font-size: 13px; color: #64748b; text-align: center;">{{ t.players.realtimeHint }}</p>
-          </div>
-          <div v-else class="empty-state"><span style="font-size: 40px;">🔌</span><h3>{{ t.players.serverOffline }}</h3><p>{{ t.players.goToDashboard }}</p></div>
-        </div>
-        
-        <!-- LOGS TAB -->
-        <div v-if="tab==='logs'" key="logs" class="card">
-          <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
-            <div><div class="section-title">{{ t.logs.title }}</div><p style="color:#64748b;">{{ t.logs.hint }}</p></div>
-            <div style="display: flex; gap: 12px;">
-              <div class="auto-refresh-indicator" :class="{ active: logsAutoRefresh }"><span>{{ logsAutoRefresh ? '🔄' : '⏸️' }}</span> {{ logsAutoRefresh ? t.logs.autoRefreshOn : t.logs.autoRefreshOff }} <span v-if="logsAutoRefresh">({{ logsRefreshCountdown }}s)</span></div>
-              <button class="pause-btn" @click="toggleAutoRefresh">{{ logsAutoRefresh ? '⏸️' : '▶️' }}</button>
-            </div>
-          </div>
-          <div class="logs-toolbar"><div style="display:flex; gap:4px;"><span v-for="level in logLevels" :key="level" class="filter-badge" :class="{ active: logFilter === level }" @click="logFilter = level">{{ level === 'all' ? t.logs.all : level.toUpperCase() }}</span></div><div style="flex:1;"></div><button class="btn btn-secondary btn-small" @click="clearLogs">{{ t.logs.clear }}</button><button class="btn btn-secondary btn-small" @click="fetchLogs" :disabled="logsLoading"><span v-if="logsLoading">⏳</span><span v-else>{{ t.logs.refresh }}</span></button></div>
-          <div v-if="filteredLogs.length > 0" class="logs-stats">{{ t.logs.showing }} {{ filteredLogs.length }} / {{ logs.length }} {{ t.logs.entries }}</div>
-          <div class="logs-container" ref="logsContainer"><div v-if="filteredLogs.length === 0 && !logsLoading" style="color:#8b949e; text-align:center; padding:40px;">{{ t.logs.noLogs }}</div><div v-for="(log, index) in filteredLogs" :key="index" class="log-line" :class="getLogLevel(log)"><span class="log-level">{{ getLogLevelText(log) }}</span><span class="log-message">{{ formatLogMessage(log) }}</span></div><div v-if="logsLoading && filteredLogs.length === 0" style="color:#8b949e; text-align:center; padding:40px;">{{ t.logs.loading }}</div></div>
-          <p style="margin-top:12px; font-size:13px; color:#64748b; text-align:center;">{{ t.logs.autoRefreshHint }}</p>
-        </div>
-      </transition>
+        </transition>
+      </div>
     </div>
   </div>
-</div>
 
-<script>
-  const { createApp } = Vue
-  const messages = {
-    ru: { common: { online: 'онлайн', offline: 'офлайн', logout: 'Выйти', admin: 'Администратор', success: 'Успешно', error: 'Ошибка', warning: 'Предупреждение', info: 'Информация' }, nav: { dashboard: '📊 Обзор', session: '🎮 Сессия', players: '👥 Игроки', logs: '📋 Логи' }, dashboard: { title: 'Обзор сервера', currentTrack: 'Текущий трек', playersOnline: 'игроков онлайн', serverOffline: 'Сервер офлайн', startToSee: 'Запустите сервер для отображения информации', startServer: '▶ Запустить сервер', stopServer: '⏹ Остановить сервер', manageHint: 'Управление состоянием выделенного сервера' }, session: { title: 'Настройка сессии', changesHint: 'Все изменения применяются после нажатия «Сохранить»', serverCard: 'Сервер', serverName: 'Имя сервера', serverNamePlaceholder: 'AC Server', password: 'Пароль', passwordPlaceholder: 'Оставьте пустым, если без пароля', adminPassword: 'Админ-пароль', adminPasswordPlaceholder: 'Пароль администратора', trackCard: 'Трасса', carsCard: 'Автомобили', weatherCard: 'Погода', weatherHint: 'Настройте погодные слоты. Минимум один слот обязателен.', addWeatherSlot: 'Добавить слот погоды', removeWeatherSlot: 'Удалить слот', weatherSlot: 'Слот погоды', track: 'Трасса', trackVariant: 'Вариант трассы', trackHint: 'Выберите трассу и её конфигурацию', carsLabel: 'Автомобили', addCar: 'Добавить', noCars: 'Нет добавленных автомобилей', kg: 'кг', remove: 'Удалить', restrictorHint: 'Рестриктор ограничивает мощность (%), балласт добавляет массу (кг).', sessionParams: 'Параметры сессии', tyreWear: 'Износ шин', damage: 'Повреждения', fuelConsumption: 'Расход топлива', duration: 'Длительность', practice: 'Практика (мин)', qualifying: 'Квалификация (мин)', race: 'Гонка (кругов)', saveSession: '💾 Сохранить сессию', saving: 'Сохранение...', enabled: 'Включено', disabled: 'Отключено', assists: 'Помощники', graphics: 'Графика', baseTempAmbient: 'Темп. воздуха', baseTempRoad: 'Темп. трассы', variationAmbient: 'Вариация воздуха', variationRoad: 'Вариация трассы', saveSuccess: 'Сессия успешно сохранена', saveError: 'Не удалось сохранить сессию' }, players: { title: 'Игроки на сервере', refresh: '🔄 Обновить', realtimeHint: 'Список игроков обновляется в реальном времени', serverOffline: 'Сервер не запущен', goToDashboard: 'Запустите сервер на вкладке Dashboard, чтобы увидеть список игроков.' }, logs: { title: 'Логи сервера', hint: 'Логи сервера Assetto Corsa в реальном времени', refresh: '🔄 Обновить', clear: '🗑️ Очистить', pause: 'Приостановить автообновление', resume: 'Возобновить автообновление', autoRefreshOn: 'Автообновление', autoRefreshOff: 'Приостановлено', all: 'Все', showing: 'Показано', entries: 'записей', noLogs: 'Нет логов для отображения', loading: 'Загрузка логов...', autoRefreshHint: 'Логи автоматически обновляются каждые 10 секунд. Используйте фильтры для поиска.' } },
-    en: { common: { online: 'online', offline: 'offline', logout: 'Logout', admin: 'Administrator', success: 'Success', error: 'Error', warning: 'Warning', info: 'Information' }, nav: { dashboard: '📊 Dashboard', session: '🎮 Session', players: '👥 Players', logs: '📋 Logs' }, dashboard: { title: 'Server Overview', currentTrack: 'Current Track', playersOnline: 'players online', serverOffline: 'Server offline', startToSee: 'Start the server to see information', startServer: '▶ Start Server', stopServer: '⏹ Stop Server', manageHint: 'Dedicated server state management' }, session: { title: 'Session Configuration', changesHint: 'Changes are applied after clicking "Save"', serverCard: 'Server', serverName: 'Server Name', serverNamePlaceholder: 'AC Server', password: 'Password', passwordPlaceholder: 'Leave empty for no password', adminPassword: 'Admin Password', adminPasswordPlaceholder: 'Administrator password', trackCard: 'Track', carsCard: 'Cars', weatherCard: 'Weather', weatherHint: 'Configure weather slots. At least one slot is required.', addWeatherSlot: 'Add Weather Slot', removeWeatherSlot: 'Remove Slot', weatherSlot: 'Weather Slot', track: 'Track', trackVariant: 'Track Variant', trackHint: 'Select track and its layout', carsLabel: 'Cars', addCar: 'Add', noCars: 'No cars added', kg: 'kg', remove: 'Remove', restrictorHint: 'Restrictor limits power (%), ballast adds weight (kg).', sessionParams: 'Session Parameters', tyreWear: 'Tyre Wear', damage: 'Damage', fuelConsumption: 'Fuel Consumption', duration: 'Duration', practice: 'Practice (min)', qualifying: 'Qualifying (min)', race: 'Race (laps)', saveSession: '💾 Save Session', saving: 'Saving...', enabled: 'Enabled', disabled: 'Disabled', assists: 'Assists', graphics: 'Graphics', baseTempAmbient: 'Ambient Temp', baseTempRoad: 'Road Temp', variationAmbient: 'Ambient Variation', variationRoad: 'Road Variation', saveSuccess: 'Session saved successfully', saveError: 'Failed to save session' }, players: { title: 'Players on Server', refresh: '🔄 Refresh', realtimeHint: 'Player list updates in real time', serverOffline: 'Server is offline', goToDashboard: 'Start the server on the Dashboard tab to see the player list.' }, logs: { title: 'Server Logs', hint: 'Assetto Corsa server logs in real-time', refresh: '🔄 Refresh', clear: '🗑️ Clear', pause: 'Pause auto-refresh', resume: 'Resume auto-refresh', autoRefreshOn: 'Auto-refresh', autoRefreshOff: 'Paused', all: 'All', showing: 'Showing', entries: 'entries', noLogs: 'No logs to display', loading: 'Loading logs...', autoRefreshHint: 'Logs auto-refresh every 10 seconds. Use filters to search.' } }
-  }
-  createApp({ data() { return { locale: 'ru', moddedWeather: false, tab: 'dashboard', server: { status: 'offline', clients: 0, maxclients: 0, track: '' }, weatherList: [], session: { name: '', password: '', adminPassword: '', udpPort: 9600, tcpPort: 9600, httpPort: 8081, cars: [], track: '', trackVariant: '', trackVariants: [], tyreWear: 1, damage: 1, fuelConsumption: 1, sunAngle: 48, practiceDuration: 0, qualifyingDuration: 0, raceLaps: 0, pickupMode: 1, loopMode: 1, allowedTyresOut: 2, legalTyres: 'V70;', absAllowed: true, tcAllowed: true, stabilityAllowed: false, autoclutchAllowed: true, tyreBlanketsAllowed: true, forceVirtualMirror: false, registerToLobby: true }, weather: [ { graphics: '3_clear', baseTemperatureAmbient: 18, baseTemperatureRoad: 6, variationAmbient: 1, variationRoad: 1 } ], cars: [], tracks: [], players: [], loading: false, csrfToken: '', saving: false, toasts: [], toastId: 0, logs: [], logsLoading: false, logsAutoRefresh: true, logsRefreshTimer: null, logsRefreshCountdown: 10, logsCountdownInterval: null, logFilter: 'all', logLevels: ['all', 'error', 'warning', 'info'] } }, computed: { t() { return messages[this.locale] || messages.ru }, filteredLogs() { if (this.logFilter === 'all') return this.logs; return this.logs.filter(log => this.getLogLevel(log) === this.logFilter) } }, methods: { showToast(type, title, message, duration=4000) { const id=++this.toastId, icons={success:'✅',error:'❌',warning:'⚠️',info:'ℹ️'}; this.toasts.push({id,type,icon:icons[type]||'ℹ️',title:title||this.t.common[type]||'',message}); setTimeout(()=>this.removeToast(id),duration) }, removeToast(id){ const index=this.toasts.findIndex(t=>t.id===id); if(index>-1) setTimeout(()=>{this.toasts=this.toasts.filter(t=>t.id!==id)},300) }, success(m,t=null){this.showToast('success',t||this.t.common.success,m)}, error(m,t=null){this.showToast('error',t||this.t.common.error,m)}, warning(m,t=null){this.showToast('warning',t||this.t.common.warning,m)}, info(m,t=null){this.showToast('info',t||this.t.common.info,m)}, toggleLanguage(){this.locale=this.locale==='ru'?'en':'ru'}, addWeatherSlot(){this.weather.push({graphics:'3_clear',baseTemperatureAmbient:18,baseTemperatureRoad:6,variationAmbient:1,variationRoad:1})}, removeWeatherSlot(i){if(this.weather.length>1)this.weather.splice(i,1)}, boolFromApi(v){return typeof v==='boolean'?v:v===1||v==='1'}, boolToApi(v){return v?1:0}, async api(url,opts={}){ const opt={...opts}; opt.headers={...(opt.headers||{})}; if(opt.method && opt.method!=='GET' && this.csrfToken) opt.headers['X-CSRF-Token']=this.csrfToken; try{ const res=await fetch(url,opt); if(res.status===401){ window.location.href=`/login?next=${encodeURIComponent(window.location.pathname||'/')}`; return{} } if(!res.ok) return{}; return await res.json() }catch(e){console.warn(e); return{}} }, async fetchCsrf(){ try{const r=await fetch('/api/csrf'); if(r.ok){const d=await r.json(); this.csrfToken=d.token||''}}catch(e){}}, async fetchLogs(limit=100){ if(this.logsLoading)return; this.logsLoading=true; try{ const r=await fetch(`/api/logs?limit=${limit}`); if(r.ok){ const d=await r.json(); this.logs=d.logs||[]; this.$nextTick(()=>{ const c=this.$refs.logsContainer; if(c && this.logsAutoRefresh && c.scrollHeight-c.scrollTop-c.clientHeight<100) c.scrollTop=c.scrollHeight }) } }catch(e){console.warn(e)}finally{ this.logsLoading=false; this.resetCountdown() } }, getLogLevel(l){ const low=l.toLowerCase(); if(low.includes('error')||low.includes('fail')||low.includes('crash')) return 'error'; if(low.includes('warn')) return 'warning'; if(low.includes('info')||low.includes('connected')) return 'info'; return 'debug' }, getLogLevelText(l){ return `[${this.getLogLevel(l).toUpperCase()}]` }, formatLogTimestamp(l){ const m=l.match(/^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}|\d{2}:\d{2}:\d{2})/); return m?m[0]:new Date().toLocaleTimeString() }, formatLogMessage(l){ return l.replace(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} /,'').replace(/^\d{2}:\d{2}:\d{2} /,'') }, startAutoRefresh(){ this.stopAutoRefresh(); if(!this.logsAutoRefresh)return; this.logsRefreshTimer=setInterval(()=>{if(this.tab==='logs' && this.logsAutoRefresh)this.fetchLogs()},10000); this.resetCountdown(); this.logsCountdownInterval=setInterval(()=>{if(this.tab==='logs' && this.logsAutoRefresh){this.logsRefreshCountdown--; if(this.logsRefreshCountdown<=0)this.logsRefreshCountdown=10}},1000) }, stopAutoRefresh(){ if(this.logsRefreshTimer)clearInterval(this.logsRefreshTimer); if(this.logsCountdownInterval)clearInterval(this.logsCountdownInterval); this.logsRefreshTimer=null; this.logsCountdownInterval=null }, resetCountdown(){this.logsRefreshCountdown=10}, toggleAutoRefresh(){ this.logsAutoRefresh=!this.logsAutoRefresh; if(this.logsAutoRefresh){this.startAutoRefresh(); if(this.tab==='logs')this.fetchLogs()}else this.stopAutoRefresh() }, clearLogs(){this.logs=[]; this.info('Логи очищены')}, async openLogsTab(){this.tab='logs'; await this.fetchLogs(); this.startAutoRefresh() }, normalizeSessionCars(cd){ if(!Array.isArray(cd))return []; return cd.map(i=>{if(typeof i==='string')return {model:i,restrictor:0,ballast:0,skin:''}; if(i&&typeof i==='object')return {model:i.model||i.id||'',restrictor:i.restrictor??0,ballast:i.ballast??0,skin:i.skin||''}; return {model:'',restrictor:0,ballast:0,skin:''}}).filter(c=>c.model) }, async fetchAll(){ this.loading=true; try{ const [s,se,c,t,w]=await Promise.all([this.api('/api/info'),this.api('/api/session'),this.api('/api/cars'),this.api('/api/tracks'),this.api('/api/weather')]); this.server=s||{status:'offline',clients:0,maxclients:0,track:''}; if(se){ this.session.name=se.name||''; this.session.password=se.password||''; this.session.adminPassword=se.adminPassword||''; this.session.udpPort=se.udpPort??9600; this.session.tcpPort=se.tcpPort??9600; this.session.httpPort=se.httpPort??8081; this.session.cars=se.cars ? se.cars.map(c=>({model:c.id||c.model||'',restrictor:c.restrictor??0,ballast:c.ballast??0,skin:c.skin||''})) : (se.cars ? this.normalizeSessionCars(se.cars) : []); this.session.track=se.track||''; this.session.trackVariant=se.trackVariant||''; this.session.trackVariants=se.trackVariants||[]; this.session.tyreWear=se.tyreWear??1; this.session.damage=se.damage??1; this.session.fuelConsumption=se.fuelConsumption??1; this.session.sunAngle=se.sunAngle??48; this.session.practiceDuration=se.practiceDuration??0; this.session.qualifyingDuration=se.qualifyingDuration??0; this.session.raceLaps=se.raceLaps??0; this.session.pickupMode=se.pickupMode??1; this.session.loopMode=se.loopMode??1; this.session.allowedTyresOut=se.allowedTyresOut??2; this.session.legalTyres=se.legalTyres??'SV'; this.session.absAllowed=this.boolFromApi(se.absAllowed); this.session.tcAllowed=this.boolFromApi(se.tcAllowed); this.session.stabilityAllowed=this.boolFromApi(se.stabilityAllowed); this.session.autoclutchAllowed=this.boolFromApi(se.autoclutchAllowed); this.session.tyreBlanketsAllowed=this.boolFromApi(se.tyreBlanketsAllowed); this.session.forceVirtualMirror=this.boolFromApi(se.forceVirtualMirror); this.session.registerToLobby=this.boolFromApi(se.registerToLobby); if(se.weather && Array.isArray(se.weather) && se.weather.length) this.weather=se.weather } this.cars=c||[]; this.tracks=t||[]; this.weatherList=w||[]; this.$nextTick(()=>{ const tr=this.tracks.find(t=>t.id===this.session.track); if(tr){ this.session.trackVariants=tr.layouts||[]; if(!this.session.trackVariants.includes(this.session.trackVariant)) this.session.trackVariant=this.session.trackVariants[0]||'' } }) }finally{this.loading=false} }, async start(){ await this.api('/api/server/start',{method:'POST'}); await this.fetchAll(); this.success('Сервер запущен') }, async stop(){ await this.api('/api/server/stop',{method:'POST'}); await this.fetchAll(); this.success('Сервер остановлен') }, addCar(){ if(this.cars.length) this.session.cars.push({model:this.cars[0].id,restrictor:0,ballast:0,skin:''}) }, removeCar(i){this.session.cars.splice(i,1)}, async saveSession(){ this.saving=true; const payload={ name:this.session.name, password:this.session.password, adminPassword:this.session.adminPassword, udpPort:this.session.udpPort, tcpPort:this.session.tcpPort, httpPort:this.session.httpPort, cars:this.session.cars.map(c=>({id:c.model,restrictor:c.restrictor,ballast:c.ballast,skin:c.skin})), track:this.session.track, trackVariant:this.session.trackVariant, tyreWear:this.session.tyreWear, damage:this.session.damage, fuelConsumption:this.session.fuelConsumption, sunAngle:this.session.sunAngle, practiceDuration:this.session.practiceDuration, qualifyingDuration:this.session.qualifyingDuration, raceLaps:this.session.raceLaps, pickupMode:this.session.pickupMode, loopMode:this.session.loopMode, allowedTyresOut:this.session.allowedTyresOut, legalTyres:this.session.legalTyres, absAllowed:this.boolToApi(this.session.absAllowed), tcAllowed:this.boolToApi(this.session.tcAllowed), stabilityAllowed:this.boolToApi(this.session.stabilityAllowed), autoclutchAllowed:this.boolToApi(this.session.autoclutchAllowed), tyreBlanketsAllowed:this.boolToApi(this.session.tyreBlanketsAllowed), forceVirtualMirror:this.boolToApi(this.session.forceVirtualMirror), registerToLobby:this.boolToApi(this.session.registerToLobby), weather:this.weather }; try{ const res=await this.api('/api/session',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); if(res&&res.success){ this.success(this.t.session.saveSuccess) }else{ this.error(res?.message||this.t.session.saveError) } await this.fetchAll() }catch(e){ this.error(this.t.session.saveError) }finally{this.saving=false} }, async logout(){ await fetch('/logout',{method:'POST',headers:this.csrfToken?{'X-CSRF-Token':this.csrfToken}:{}}); window.location.href='/login' }, refreshIFrame(){ const iframe=document.getElementById('players-entry-iframe'); if(iframe) iframe.src=iframe.src } }, mounted(){ this.fetchCsrf(); this.fetchAll() }, watch: { tab(newTab){ if(newTab==='logs'){ this.fetchLogs(); this.startAutoRefresh() } }, 'session.track'(val){ const tr=this.tracks.find(t=>t.id===val); this.session.trackVariants=tr?.layouts||[]; if(!this.session.trackVariants.includes(this.session.trackVariant)) this.session.trackVariant=this.session.trackVariants[0]||'' } }, beforeUnmount(){ this.stopAutoRefresh() } }).mount('#app')
-</script>
+  <script>
+    const {
+      createApp
+    } = Vue
+    const messages = {
+      ru: {
+        common: {
+          online: 'онлайн',
+          offline: 'офлайн',
+          logout: 'Выйти',
+          admin: 'Администратор',
+          success: 'Успешно',
+          error: 'Ошибка',
+          warning: 'Предупреждение',
+          info: 'Информация'
+        },
+        nav: {
+          dashboard: '📊 Обзор',
+          session: '🎮 Сессия',
+          players: '👥 Игроки',
+          logs: '📋 Логи'
+        },
+        dashboard: {
+          title: 'Обзор сервера',
+          currentTrack: 'Текущий трек',
+          playersOnline: 'игроков онлайн',
+          serverOffline: 'Сервер офлайн',
+          startToSee: 'Запустите сервер для отображения информации',
+          startServer: '▶ Запустить сервер',
+          stopServer: '⏹ Остановить сервер',
+          manageHint: 'Управление состоянием выделенного сервера'
+        },
+        session: {
+          title: 'Настройка сессии',
+          changesHint: 'Все изменения применяются после нажатия «Сохранить»',
+          serverCard: 'Сервер',
+          serverName: 'Имя сервера',
+          serverNamePlaceholder: 'AC Server',
+          password: 'Пароль',
+          passwordPlaceholder: 'Оставьте пустым, если без пароля',
+          adminPassword: 'Админ-пароль',
+          adminPasswordPlaceholder: 'Пароль администратора',
+          trackCard: 'Трасса',
+          carsCard: 'Автомобили',
+          weatherCard: 'Погода',
+          weatherHint: 'Настройте погодные слоты. Минимум один слот обязателен.',
+          addWeatherSlot: 'Добавить слот погоды',
+          removeWeatherSlot: 'Удалить слот',
+          weatherSlot: 'Слот погоды',
+          track: 'Трасса',
+          trackVariant: 'Вариант трассы',
+          trackHint: 'Выберите трассу и её конфигурацию',
+          carsLabel: 'Автомобили',
+          addCar: 'Добавить',
+          noCars: 'Нет добавленных автомобилей',
+          kg: 'кг',
+          remove: 'Удалить',
+          restrictorHint: 'Рестриктор ограничивает мощность (%), балласт добавляет массу (кг).',
+          sessionParams: 'Параметры сессии',
+          tyreWear: 'Износ шин',
+          damage: 'Повреждения',
+          fuelConsumption: 'Расход топлива',
+          duration: 'Длительность',
+          practice: 'Практика (мин)',
+          qualifying: 'Квалификация (мин)',
+          race: 'Гонка (кругов)',
+          saveSession: '💾 Сохранить сессию',
+          saving: 'Сохранение...',
+          enabled: 'Включено',
+          disabled: 'Отключено',
+          assists: 'Помощники',
+          graphics: 'Графика',
+          baseTempAmbient: 'Темп. воздуха',
+          baseTempRoad: 'Темп. трассы',
+          variationAmbient: 'Вариация воздуха',
+          variationRoad: 'Вариация трассы',
+          saveSuccess: 'Сессия успешно сохранена',
+          saveError: 'Не удалось сохранить сессию'
+        },
+        players: {
+          title: 'Игроки на сервере',
+          refresh: '🔄 Обновить',
+          realtimeHint: 'Список игроков обновляется в реальном времени',
+          serverOffline: 'Сервер не запущен',
+          goToDashboard: 'Запустите сервер на вкладке Dashboard, чтобы увидеть список игроков.'
+        },
+        logs: {
+          title: 'Логи сервера',
+          hint: 'Логи сервера Assetto Corsa в реальном времени',
+          refresh: '🔄 Обновить',
+          clear: '🗑️ Очистить',
+          pause: 'Приостановить автообновление',
+          resume: 'Возобновить автообновление',
+          autoRefreshOn: 'Автообновление',
+          autoRefreshOff: 'Приостановлено',
+          all: 'Все',
+          showing: 'Показано',
+          entries: 'записей',
+          noLogs: 'Нет логов для отображения',
+          loading: 'Загрузка логов...',
+          autoRefreshHint: 'Логи автоматически обновляются каждые 10 секунд. Используйте фильтры для поиска.'
+        }
+      },
+      en: {
+        common: {
+          online: 'online',
+          offline: 'offline',
+          logout: 'Logout',
+          admin: 'Administrator',
+          success: 'Success',
+          error: 'Error',
+          warning: 'Warning',
+          info: 'Information'
+        },
+        nav: {
+          dashboard: '📊 Dashboard',
+          session: '🎮 Session',
+          players: '👥 Players',
+          logs: '📋 Logs'
+        },
+        dashboard: {
+          title: 'Server Overview',
+          currentTrack: 'Current Track',
+          playersOnline: 'players online',
+          serverOffline: 'Server offline',
+          startToSee: 'Start the server to see information',
+          startServer: '▶ Start Server',
+          stopServer: '⏹ Stop Server',
+          manageHint: 'Dedicated server state management'
+        },
+        session: {
+          title: 'Session Configuration',
+          changesHint: 'Changes are applied after clicking "Save"',
+          serverCard: 'Server',
+          serverName: 'Server Name',
+          serverNamePlaceholder: 'AC Server',
+          password: 'Password',
+          passwordPlaceholder: 'Leave empty for no password',
+          adminPassword: 'Admin Password',
+          adminPasswordPlaceholder: 'Administrator password',
+          trackCard: 'Track',
+          carsCard: 'Cars',
+          weatherCard: 'Weather',
+          weatherHint: 'Configure weather slots. At least one slot is required.',
+          addWeatherSlot: 'Add Weather Slot',
+          removeWeatherSlot: 'Remove Slot',
+          weatherSlot: 'Weather Slot',
+          track: 'Track',
+          trackVariant: 'Track Variant',
+          trackHint: 'Select track and its layout',
+          carsLabel: 'Cars',
+          addCar: 'Add',
+          noCars: 'No cars added',
+          kg: 'kg',
+          remove: 'Remove',
+          restrictorHint: 'Restrictor limits power (%), ballast adds weight (kg).',
+          sessionParams: 'Session Parameters',
+          tyreWear: 'Tyre Wear',
+          damage: 'Damage',
+          fuelConsumption: 'Fuel Consumption',
+          duration: 'Duration',
+          practice: 'Practice (min)',
+          qualifying: 'Qualifying (min)',
+          race: 'Race (laps)',
+          saveSession: '💾 Save Session',
+          saving: 'Saving...',
+          enabled: 'Enabled',
+          disabled: 'Disabled',
+          assists: 'Assists',
+          graphics: 'Graphics',
+          baseTempAmbient: 'Ambient Temp',
+          baseTempRoad: 'Road Temp',
+          variationAmbient: 'Ambient Variation',
+          variationRoad: 'Road Variation',
+          saveSuccess: 'Session saved successfully',
+          saveError: 'Failed to save session'
+        },
+        players: {
+          title: 'Players on Server',
+          refresh: '🔄 Refresh',
+          realtimeHint: 'Player list updates in real time',
+          serverOffline: 'Server is offline',
+          goToDashboard: 'Start the server on the Dashboard tab to see the player list.'
+        },
+        logs: {
+          title: 'Server Logs',
+          hint: 'Assetto Corsa server logs in real-time',
+          refresh: '🔄 Refresh',
+          clear: '🗑️ Clear',
+          pause: 'Pause auto-refresh',
+          resume: 'Resume auto-refresh',
+          autoRefreshOn: 'Auto-refresh',
+          autoRefreshOff: 'Paused',
+          all: 'All',
+          showing: 'Showing',
+          entries: 'entries',
+          noLogs: 'No logs to display',
+          loading: 'Loading logs...',
+          autoRefreshHint: 'Logs auto-refresh every 10 seconds. Use filters to search.'
+        }
+      }
+    }
+    createApp({
+      data() {
+        return {
+          locale: 'ru',
+          moddedWeather: false,
+          tab: 'dashboard',
+          server: {
+            status: 'offline',
+            clients: 0,
+            maxclients: 0,
+            track: ''
+          },
+          weatherList: [],
+          session: {
+            name: '',
+            password: '',
+            adminPassword: '',
+            udpPort: 9600,
+            tcpPort: 9600,
+            httpPort: 8081,
+            cars: [],
+            track: '',
+            trackVariant: '',
+            trackVariants: [],
+            tyreWear: 1,
+            damage: 1,
+            fuelConsumption: 1,
+            sunAngle: 48,
+            practiceDuration: 0,
+            qualifyingDuration: 0,
+            raceLaps: 0,
+            pickupMode: 1,
+            loopMode: 1,
+            allowedTyresOut: 2,
+            legalTyres: 'V70;',
+            absAllowed: true,
+            tcAllowed: true,
+            stabilityAllowed: false,
+            autoclutchAllowed: true,
+            tyreBlanketsAllowed: true,
+            forceVirtualMirror: false,
+            registerToLobby: true
+          },
+          weather: [{
+            graphics: '3_clear',
+            baseTemperatureAmbient: 18,
+            baseTemperatureRoad: 6,
+            variationAmbient: 1,
+            variationRoad: 1
+          }],
+          cars: [],
+          tracks: [],
+          players: [],
+          loading: false,
+          csrfToken: '',
+          saving: false,
+          toasts: [],
+          toastId: 0,
+          logs: [],
+          logsLoading: false,
+          logsAutoRefresh: true,
+          logsRefreshTimer: null,
+          logsRefreshCountdown: 10,
+          logsCountdownInterval: null,
+          logFilter: 'all',
+          logLevels: ['all', 'error', 'warning', 'info']
+        }
+      },
+      computed: {
+        t() {
+          return messages[this.locale] || messages.ru
+        },
+        filteredLogs() {
+          if (this.logFilter === 'all') return this.logs;
+          return this.logs.filter(log => this.getLogLevel(log) === this.logFilter)
+        }
+      },
+      methods: {
+        showToast(type, title, message, duration = 4000) {
+          const id = ++this.toastId,
+            icons = {
+              success: '✅',
+              error: '❌',
+              warning: '⚠️',
+              info: 'ℹ️'
+            };
+          this.toasts.push({
+            id,
+            type,
+            icon: icons[type] || 'ℹ️',
+            title: title || this.t.common[type] || '',
+            message
+          });
+          setTimeout(() => this.removeToast(id), duration)
+        },
+        removeToast(id) {
+          const index = this.toasts.findIndex(t => t.id === id);
+          if (index > -1) setTimeout(() => {
+            this.toasts = this.toasts.filter(t => t.id !== id)
+          }, 300)
+        },
+        success(m, t = null) {
+          this.showToast('success', t || this.t.common.success, m)
+        },
+        error(m, t = null) {
+          this.showToast('error', t || this.t.common.error, m)
+        },
+        warning(m, t = null) {
+          this.showToast('warning', t || this.t.common.warning, m)
+        },
+        info(m, t = null) {
+          this.showToast('info', t || this.t.common.info, m)
+        },
+        toggleLanguage() {
+          this.locale = this.locale === 'ru' ? 'en' : 'ru'
+        },
+        addWeatherSlot() {
+          this.weather.push({
+            graphics: '3_clear',
+            baseTemperatureAmbient: 18,
+            baseTemperatureRoad: 6,
+            variationAmbient: 1,
+            variationRoad: 1
+          })
+        },
+        removeWeatherSlot(i) {
+          if (this.weather.length > 1) this.weather.splice(i, 1)
+        },
+        boolFromApi(v) {
+          return typeof v === 'boolean' ? v : v === 1 || v === '1'
+        },
+        boolToApi(v) {
+          return v ? 1 : 0
+        },
+        async api(url, opts = {}) {
+          const opt = {
+            ...opts
+          };
+          opt.headers = {
+            ...(opt.headers || {})
+          };
+          if (opt.method && opt.method !== 'GET' && this.csrfToken) opt.headers['X-CSRF-Token'] = this.csrfToken;
+          try {
+            const res = await fetch(url, opt);
+            if (res.status === 401) {
+              window.location.href = `/login?next=${encodeURIComponent(window.location.pathname || '/')}`;
+              return {}
+            }
+            if (!res.ok) return {};
+            return await res.json()
+          } catch (e) {
+            console.warn(e);
+            return {}
+          }
+        },
+        async fetchCsrf() {
+          try {
+            const r = await fetch('/api/csrf');
+            if (r.ok) {
+              const d = await r.json();
+              this.csrfToken = d.token || ''
+            }
+          } catch (e) { }
+        },
+        async fetchLogs(limit = 100) {
+          if (this.logsLoading) return;
+          this.logsLoading = true;
+          try {
+            const r = await fetch(`/api/logs?limit=${limit}`);
+            if (r.ok) {
+              const d = await r.json();
+              this.logs = d.logs || [];
+              this.$nextTick(() => {
+                const c = this.$refs.logsContainer;
+                if (c && this.logsAutoRefresh && c.scrollHeight - c.scrollTop - c.clientHeight < 100) c.scrollTop = c.scrollHeight
+              })
+            }
+          } catch (e) {
+            console.warn(e)
+          } finally {
+            this.logsLoading = false;
+            this.resetCountdown()
+          }
+        },
+        getLogLevel(l) {
+          const low = l.toLowerCase();
+          if (low.includes('error') || low.includes('fail') || low.includes('crash')) return 'error';
+          if (low.includes('warn')) return 'warning';
+          if (low.includes('info') || low.includes('connected')) return 'info';
+          return 'debug'
+        },
+        getLogLevelText(l) {
+          return `[${this.getLogLevel(l).toUpperCase()}]`
+        },
+        formatLogTimestamp(l) {
+          const m = l.match(/^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}|\d{2}:\d{2}:\d{2})/);
+          return m ? m[0] : new Date().toLocaleTimeString()
+        },
+        formatLogMessage(l) {
+          return l.replace(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} /, '').replace(/^\d{2}:\d{2}:\d{2} /, '')
+        },
+        startAutoRefresh() {
+          this.stopAutoRefresh();
+          if (!this.logsAutoRefresh) return;
+          this.logsRefreshTimer = setInterval(() => {
+            if (this.tab === 'logs' && this.logsAutoRefresh) this.fetchLogs()
+          }, 10000);
+          this.resetCountdown();
+          this.logsCountdownInterval = setInterval(() => {
+            if (this.tab === 'logs' && this.logsAutoRefresh) {
+              this.logsRefreshCountdown--;
+              if (this.logsRefreshCountdown <= 0) this.logsRefreshCountdown = 10
+            }
+          }, 1000)
+        },
+        stopAutoRefresh() {
+          if (this.logsRefreshTimer) clearInterval(this.logsRefreshTimer);
+          if (this.logsCountdownInterval) clearInterval(this.logsCountdownInterval);
+          this.logsRefreshTimer = null;
+          this.logsCountdownInterval = null
+        },
+        resetCountdown() {
+          this.logsRefreshCountdown = 10
+        },
+        toggleAutoRefresh() {
+          this.logsAutoRefresh = !this.logsAutoRefresh;
+          if (this.logsAutoRefresh) {
+            this.startAutoRefresh();
+            if (this.tab === 'logs') this.fetchLogs()
+          } else this.stopAutoRefresh()
+        },
+        clearLogs() {
+          this.logs = [];
+          this.info('Логи очищены')
+        },
+        async openLogsTab() {
+          this.tab = 'logs';
+          await this.fetchLogs();
+          this.startAutoRefresh()
+        },
+        normalizeSessionCars(cd) {
+          if (!Array.isArray(cd)) return [];
+          return cd.map(i => {
+            if (typeof i === 'string') return {
+              model: i,
+              restrictor: 0,
+              ballast: 0,
+              skin: ''
+            };
+            if (i && typeof i === 'object') return {
+              model: i.model || i.id || '',
+              restrictor: i.restrictor ?? 0,
+              ballast: i.ballast ?? 0,
+              skin: i.skin || ''
+            };
+            return {
+              model: '',
+              restrictor: 0,
+              ballast: 0,
+              skin: ''
+            }
+          }).filter(c => c.model)
+        },
+        async fetchAll() {
+          this.loading = true;
+          try {
+            const [s, se, c, t, w] = await Promise.all([this.api('/api/info'), this.api('/api/session'), this.api('/api/cars'), this.api('/api/tracks'), this.api('/api/weather')]);
+            this.server = s || {
+              status: 'offline',
+              clients: 0,
+              maxclients: 0,
+              track: ''
+            };
+            if (se) {
+              this.session.name = se.name || '';
+              this.session.password = se.password || '';
+              this.session.adminPassword = se.adminPassword || '';
+              this.session.udpPort = se.udpPort ?? 9600;
+              this.session.tcpPort = se.tcpPort ?? 9600;
+              this.session.httpPort = se.httpPort ?? 8081;
+              this.session.cars = se.cars ? se.cars.map(c => ({
+                model: c.id || c.model || '',
+                restrictor: c.restrictor ?? 0,
+                ballast: c.ballast ?? 0,
+                skin: c.skin || ''
+              })) : (se.cars ? this.normalizeSessionCars(se.cars) : []);
+              this.session.track = se.track || '';
+              this.session.trackVariant = se.trackVariant || '';
+              this.session.trackVariants = se.trackVariants || [];
+              this.session.tyreWear = se.tyreWear ?? 1;
+              this.session.damage = se.damage ?? 1;
+              this.session.fuelConsumption = se.fuelConsumption ?? 1;
+              this.session.sunAngle = se.sunAngle ?? 48;
+              this.session.practiceDuration = se.practiceDuration ?? 0;
+              this.session.qualifyingDuration = se.qualifyingDuration ?? 0;
+              this.session.raceLaps = se.raceLaps ?? 0;
+              this.session.pickupMode = se.pickupMode ?? 1;
+              this.session.loopMode = se.loopMode ?? 1;
+              this.session.allowedTyresOut = se.allowedTyresOut ?? 2;
+              this.session.legalTyres = se.legalTyres ?? 'SV';
+              this.session.absAllowed = this.boolFromApi(se.absAllowed);
+              this.session.tcAllowed = this.boolFromApi(se.tcAllowed);
+              this.session.stabilityAllowed = this.boolFromApi(se.stabilityAllowed);
+              this.session.autoclutchAllowed = this.boolFromApi(se.autoclutchAllowed);
+              this.session.tyreBlanketsAllowed = this.boolFromApi(se.tyreBlanketsAllowed);
+              this.session.forceVirtualMirror = this.boolFromApi(se.forceVirtualMirror);
+              this.session.registerToLobby = this.boolFromApi(se.registerToLobby);
+              if (se.weather && Array.isArray(se.weather) && se.weather.length) this.weather = se.weather
+            }
+            this.cars = c || [];
+            this.tracks = t || [];
+            this.weatherList = w || [];
+            this.$nextTick(() => {
+              const tr = this.tracks.find(t => t.id === this.session.track);
+              if (tr) {
+                this.session.trackVariants = tr.layouts || [];
+                if (!this.session.trackVariants.includes(this.session.trackVariant)) this.session.trackVariant = this.session.trackVariants[0] || ''
+              }
+            })
+          } finally {
+            this.loading = false
+          }
+        },
+        async start() {
+          await this.api('/api/server/start', {
+            method: 'POST'
+          });
+          await this.fetchAll();
+          this.success('Сервер запущен')
+        },
+        async stop() {
+          await this.api('/api/server/stop', {
+            method: 'POST'
+          });
+          await this.fetchAll();
+          this.success('Сервер остановлен')
+        },
+        addCar() {
+          if (this.cars.length) this.session.cars.push({
+            model: this.cars[0].id,
+            restrictor: 0,
+            ballast: 0,
+            skin: ''
+          })
+        },
+        removeCar(i) {
+          this.session.cars.splice(i, 1)
+        },
+        async saveSession() {
+          this.saving = true;
+          const payload = {
+            name: this.session.name,
+            password: this.session.password,
+            adminPassword: this.session.adminPassword,
+            udpPort: this.session.udpPort,
+            tcpPort: this.session.tcpPort,
+            httpPort: this.session.httpPort,
+            cars: this.session.cars.map(c => ({
+              id: c.model,
+              restrictor: c.restrictor,
+              ballast: c.ballast,
+              skin: c.skin
+            })),
+            track: this.session.track,
+            trackVariant: this.session.trackVariant,
+            tyreWear: this.session.tyreWear,
+            damage: this.session.damage,
+            fuelConsumption: this.session.fuelConsumption,
+            sunAngle: this.session.sunAngle,
+            practiceDuration: this.session.practiceDuration,
+            qualifyingDuration: this.session.qualifyingDuration,
+            raceLaps: this.session.raceLaps,
+            pickupMode: this.session.pickupMode,
+            loopMode: this.session.loopMode,
+            allowedTyresOut: this.session.allowedTyresOut,
+            legalTyres: this.session.legalTyres,
+            absAllowed: this.boolToApi(this.session.absAllowed),
+            tcAllowed: this.boolToApi(this.session.tcAllowed),
+            stabilityAllowed: this.boolToApi(this.session.stabilityAllowed),
+            autoclutchAllowed: this.boolToApi(this.session.autoclutchAllowed),
+            tyreBlanketsAllowed: this.boolToApi(this.session.tyreBlanketsAllowed),
+            forceVirtualMirror: this.boolToApi(this.session.forceVirtualMirror),
+            registerToLobby: this.boolToApi(this.session.registerToLobby),
+            weather: this.weather
+          };
+          try {
+            const res = await this.api('/api/session', {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(payload)
+            });
+            if (res && res.success) {
+              this.success(this.t.session.saveSuccess)
+            } else {
+              this.error(res?.message || this.t.session.saveError)
+            }
+            await this.fetchAll()
+          } catch (e) {
+            this.error(this.t.session.saveError)
+          } finally {
+            this.saving = false
+          }
+        },
+        async logout() {
+          await fetch('/logout', {
+            method: 'POST',
+            headers: this.csrfToken ? {
+              'X-CSRF-Token': this.csrfToken
+            } : {}
+          });
+          window.location.href = '/login'
+        },
+        refreshIFrame() {
+          const iframe = document.getElementById('players-entry-iframe');
+          if (iframe) iframe.src = iframe.src
+        }
+      },
+      mounted() {
+        this.fetchCsrf();
+        this.fetchAll()
+      },
+      watch: {
+        tab(newTab) {
+          if (newTab === 'logs') {
+            this.fetchLogs();
+            this.startAutoRefresh()
+          }
+        },
+        'session.track'(val) {
+          const tr = this.tracks.find(t => t.id === val);
+          this.session.trackVariants = tr?.layouts || [];
+          if (!this.session.trackVariants.includes(this.session.trackVariant)) this.session.trackVariant = this.session.trackVariants[0] || ''
+        }
+      },
+      beforeUnmount() {
+        this.stopAutoRefresh()
+      }
+    }).mount('#app')
+  </script>
 </body>
+
 </html>

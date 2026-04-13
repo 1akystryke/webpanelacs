@@ -66,7 +66,7 @@ class Core:
                 check=True,
             )
         except subprocess.CalledProcessError as e:
-            return ("error",e.stderr)
+            return ("error", e.stderr)
         return result.stdout.strip(), result.stderr.strip()
 
     def supervisor_start(self):
@@ -78,7 +78,7 @@ class Core:
                 check=True,
             )
         except subprocess.CalledProcessError as e:
-            return ("error",e.stderr)
+            return ("error", e.stderr)
         return result.stdout.strip(), result.stderr.strip()
 
     def supervisor_restart(self):
@@ -90,9 +90,8 @@ class Core:
                 check=True,
             )
         except subprocess.CalledProcessError as e:
-            return ("error",e.stderr)
+            return ("error", e.stderr)
         return result.stdout.strip(), result.stderr.strip()
-
 
     def supervisor_status(self):
 
@@ -124,10 +123,12 @@ class Core:
                 result_cars.append({"id": mod_car, "name": data["name"]})
 
         return result_cars
+
     def list_weathers(self):
         with open("core/resources/weather.json", "r", encoding="utf-8") as f:
             weather = json.load(f)
         return weather
+
     def list_tracks(self):
         tracks = []
         tracks_dirs = os.listdir(self.tracks_path)
@@ -152,10 +153,10 @@ class Core:
     def set_car_list(self, car_list):
         car_data = [
             {
-                "MODEL": car["model"],
+                "MODEL": car["id"],
                 "RESTRICTOR": car["restrictor"],
                 "BALLAST": car["ballast"],
-                "SKIN": car["skin"]
+                "SKIN": car["skin"],
             }
             for car in car_list
         ]
@@ -167,7 +168,7 @@ class Core:
 
     def apply_session(self, data):
         server_data = cp.get_server_config(self.server_cfg_path)
-        
+
         server_data = {k: v for k, v in server_data.items() if not "WEATHER_" in k}
 
         for param in data.keys():
@@ -185,7 +186,7 @@ class Core:
                 server_data[f"WEATHER_{index}"][self.map_weather_param_names[key]] = (
                     weather[key]
                 )
-        
+
         cp.write_new_server_cfg(server_data, self.server_cfg_path)
 
     def get_session_state(self):
@@ -196,9 +197,9 @@ class Core:
         output_object["cars"] = [
             {
                 "model": car["MODEL"],
-                "restrictor": car.get("RESTRICTOR",""),
-                "ballast": car.get("BALLAST",""),
-                "skin": car.get("SKIN","")
+                "restrictor": car.get("RESTRICTOR", ""),
+                "ballast": car.get("BALLAST", ""),
+                "skin": car.get("SKIN", ""),
             }
             for car in car_data
         ]
@@ -219,10 +220,10 @@ class Core:
         return output_object
 
     def get_ac_server_logs(self):
-        ac_log_path = self.log_path+"acserver.log"
-        ac_err_path = self.log_path+"acserver.err"
-        flask_log_path = self.log_path+"servicepy.log"
-        flask_err_path = self.log_path+"servicepy.err"
+        ac_log_path = self.log_path + "acserver.log"
+        ac_err_path = self.log_path + "acserver.err"
+        flask_log_path = self.log_path + "servicepy.log"
+        flask_err_path = self.log_path + "servicepy.err"
         with open(ac_log_path) as f:
             log_file_content = f.read()
         return log_file_content.split("\n")
