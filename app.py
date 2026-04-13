@@ -144,6 +144,10 @@ def get_tracks():
     tracks_list = server_controller.list_tracks()
     return jsonify(tracks_list)
 
+@app.route("/api/weather")
+def get_weather():
+    weather = server_controller.list_weathers()
+    return jsonify(weather)
 
 # ---------------------
 # INFO

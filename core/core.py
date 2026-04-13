@@ -124,7 +124,10 @@ class Core:
                 result_cars.append({"id": mod_car, "name": data["name"]})
 
         return result_cars
-
+    def list_weathers(self):
+        with open("core/resources/weather.json", "r", encoding="utf-8") as f:
+            weather = json.load(f)
+        return weather
     def list_tracks(self):
         tracks = []
         tracks_dirs = os.listdir(self.tracks_path)
@@ -152,6 +155,7 @@ class Core:
                 "MODEL": car["model"],
                 "RESTRICTOR": car["restrictor"],
                 "BALLAST": car["ballast"],
+                "SKIN": car["skin"]
             }
             for car in car_list
         ]
@@ -163,6 +167,9 @@ class Core:
 
     def apply_session(self, data):
         server_data = cp.get_server_config(self.server_cfg_path)
+        
+        server_data = {k: v for k, v in server_data.items() if not "WEATHER_" in k}
+
         for param in data.keys():
             if param not in self.map_parameters_name.keys():
                 continue
@@ -178,9 +185,7 @@ class Core:
                 server_data[f"WEATHER_{index}"][self.map_weather_param_names[key]] = (
                     weather[key]
                 )
-        print(data)
-        print("\n")
-        print(server_data)
+        
         cp.write_new_server_cfg(server_data, self.server_cfg_path)
 
     def get_session_state(self):
@@ -191,8 +196,9 @@ class Core:
         output_object["cars"] = [
             {
                 "model": car["MODEL"],
-                "restrictor": car["RESTRICTOR"],
-                "ballast": car["BALLAST"],
+                "restrictor": car.get("RESTRICTOR",""),
+                "ballast": car.get("BALLAST",""),
+                "skin": car.get("SKIN","")
             }
             for car in car_data
         ]
