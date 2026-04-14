@@ -1,5 +1,6 @@
 <template>
-  <v-navigation-drawer width="260" class="sidebar" permanent>
+  <div class="sidebar">
+  
     <div class="logo">AC Control</div>
 
     <div
@@ -16,7 +17,7 @@
       Assetto Corsa Dedicated<br />
       <span>v1.92 • Production Build</span>
     </div>
-  </v-navigation-drawer>
+  </div>
 </template>
 
 <script setup>

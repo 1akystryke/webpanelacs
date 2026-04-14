@@ -120,8 +120,7 @@ body {
 
 /* Sidebar */
 .sidebar {
-  width: 260px;
-  flex-shrink: 0;
+  position: static !important;
   background: #0f172a;
   color: #f1f5f9;
   padding: 28px 20px;
