@@ -7,6 +7,7 @@ import time
 import requests
 import zipfile
 from werkzeug.utils import secure_filename
+import shutil
 
 
 
@@ -105,6 +106,25 @@ def validate_mod_structure(path):
 
     return True
 
+def if_mod_is_car(path):
+    for a in os.listdir(path):
+        data_acd_path = path+f"/{a}/data.acd"
+        #print(data_acd_path)
+        break
+
+    
+    if not os.path.exists(data_acd_path):
+        return False, path+f"/{a}"
+    return True, path+f"/{a}"
+
+def move_mod_as_car(mod_path,server_path):
+    target_path = server_path+"/content/cars"
+    shutil.move(mod_path,target_path)
+
+def move_mod_as_track(mod_path,server_path):
+    target_path = server_path+"/content/tracks"
+    shutil.move(mod_path,target_path)
+    
 
 @app.before_request
 def require_login():
@@ -213,10 +233,15 @@ def upload_mod():
             safe_extract(zip_ref, extract_path)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
+    
     # валидация структуры
-    if not validate_mod_structure(extract_path):
-        return jsonify({"error": "Неверная структура мода"}), 400
+    is_car,cont_path = if_mod_is_car(extract_path)
+    
+    if is_car:
+        move_mod_as_car(cont_path,PATH)
+    else:
+        move_mod_as_track(cont_path,PATH)
+
 
     return jsonify({"status": "ok"})
 
