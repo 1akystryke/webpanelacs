@@ -332,7 +332,7 @@ def login():
     if username == auth_env["username"] and password == auth_env["password"] and username:
         session["auth"] = True
         _clear_login_failures(ip)
-        next_url = request.form.get("next") or request.args.get("next") or "/"
+        next_url = request.form.get("next") or request.args.get("next") or "/fe"
         return redirect(next_url)
     _record_login_failure(ip)
     return redirect(url_for("login", error="1"))
@@ -342,9 +342,13 @@ def logout():
     session.clear()
     return redirect(url_for("login"))
 
-@app.route("/")
+@app.route('/')
 def index():
-    return send_file("vue/index.html")
+    return send_file('./static/index.html')
+
+@app.route('/<path:path>')
+def static_proxy(path):
+    return send_file("./static/"+path)
 
 
 # ----------------------
