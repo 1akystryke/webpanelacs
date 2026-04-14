@@ -18,6 +18,7 @@ class Core:
         self.cfg_path = self.server_path / "cfg"
         self.server_cfg_path = self.cfg_path / "server_cfg.ini"
         self.entry_list_path = self.cfg_path / "entry_list.ini"
+        self.presets_path = self.server_path / "race_presets"
         self.log_path = "/var/log/"
         self.map_parameters_name = {
             "name": ["SERVER", "NAME"],
@@ -56,6 +57,7 @@ class Core:
             "variationAmbient": "VARIATION_AMBIENT",
             "variationRoad": "VARIATION_ROAD",
         }
+        os.mkdir(self.presets_path,exist_ok=True)
 
     def supervisor_stop(self):
         try:
@@ -257,3 +259,22 @@ class Core:
         with open(ac_log_path) as f:
             log_file_content = f.read()
         return log_file_content.split("\n")
+
+
+    def save_preset(self,preset_name):
+        target_path = self.presets_path+f"/{preset_name}"
+        car_data = cp.get_current_cars(self.entry_list_path)
+        server_data = cp.get_server_config(self.server_cfg_path)
+        preset_dict = {"server":server_data,"entry_list":car_data}
+        with open(target_path,"w") as f:
+            f.write(json.dumps(preset_dict))
+
+    def load_preset(self,preset_name):
+        preset_path = self.presets_path+f"/{preset_name}"
+        with open(preset_path,"r") as f:
+            obj = json.loads(f.read())
+        car_data = obj["entry_list"]
+        server_data = obj["server"]
+        cp.generate_entry_list(car_data, self.entry_list_path)
+        cp.write_new_server_cfg(server_data, self.server_cfg_path)
+

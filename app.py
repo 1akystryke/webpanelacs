@@ -204,7 +204,22 @@ def get_weather():
     weather = server_controller.list_weathers()
     return jsonify(weather)
 
+@app.route("/api/presets")
+def list_presets():
+    presets = server_controller.list_presets()
+    return jsonify(presets)
 
+@app.route("/api/presets/load")
+def load_preset():
+    preset_name = request.args.get("name")
+    server_controller.load_preset(preset_name)
+    return jsonify({"success":True,"preset_name":preset_name})
+
+@app.route("/api/presets/save")
+def save_preset():
+    preset_name = request.args.get("name")
+    server_controller.save_preset(preset_name)
+    return jsonify({"success":True,"preset_name":preset_name})
 # -----------------------------
 # MOD UPLOAD
 # -----------------------------
