@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AC Control • Production</title>
   <script src="https://unpkg.com/vue@3"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
 
@@ -843,6 +844,41 @@
         min-width: 280px;
         max-width: 360px;
       }
+      
+    }
+    .content-list {
+        max-height: 500px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .content-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #f8fafc;
+        border: 1px solid #eef2f6;
+        border-radius: 14px;
+        padding: 12px 16px;
+      }
+
+      .badge {
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .badge.mod {
+        background: #fee2e2;
+        color: #b91c1c;
+      }
+
+      .badge.vanilla {
+        background: #ecfdf5;
+        color: #047857;
     }
   </style>
 </head>
@@ -874,6 +910,9 @@
       <div class="nav-item" :class="{active: tab==='players'}" @click="tab='players'">
         {{ t.nav.players }}
       </div>
+      <div class="nav-item" :class="{active: tab==='content'}" @click="tab='content'">
+        {{ t.nav.content }}
+      </div>
       <div class="nav-item" :class="{active: tab==='logs'}" @click="openLogsTab">
         {{ t.nav.logs }}
       </div>
@@ -888,8 +927,13 @@
     <div class="main">
       <div class="header">
         <div class="header-title">
-          {{ tab === 'dashboard' ? t.dashboard.title : tab === 'session' ? t.session.title : tab === 'players' ?
-          t.players.title : t.logs.title }}
+          {{
+            tab === 'dashboard' ? t.dashboard.title :
+            tab === 'session' ? t.session.title :
+            tab === 'players' ? t.players.title :
+            tab === 'content' ? t.content.title :
+            t.logs.title
+          }}
         </div>
 
         <div style="display: flex; align-items: center; gap: 16px;">
@@ -1216,6 +1260,86 @@
             </div>
           </div>
 
+          
+          <!-- CONTENT TAB -->
+          <div v-if="tab==='content'" key="content">
+            <input type="file" webkitdirectory @change="handleFolder" />
+                      <div v-if="progress > 0">
+                        Архивация: {{ progress }}%
+                      </div>
+
+                      <button @click="uploadZip" :disabled="!zipBlob">
+                        Загрузить мод
+                      </button>
+            <div style="margin-bottom: 24px;">
+              <div class="section-title">{{ t.content.title }}</div>
+              <p style="color:#64748b;">{{ t.content.hint }}</p>
+            </div>
+
+            <div class="grid">
+              
+              <!-- CARS -->
+              <div class="card">
+                <div class="card-title">🏎️ {{ t.content.cars }}</div>
+
+                <input
+                  type="text"
+                  v-model="contentSearch.cars"
+                  class="input"
+                  :placeholder="t.content.searchCars"
+                  style="margin-bottom:16px;"
+                />
+
+                <div class="content-list">
+                  <div v-for="car in filteredContentCars" :key="car.id" class="content-item">
+                    <div>
+                      <div style="font-weight:600;">{{ car.name }}</div>
+                      <div style="font-size:12px; color:#64748b;">{{ car.id }}</div>
+                    </div>
+
+                    <span class="badge" :class="car.is_mod ? 'mod' : 'vanilla'">
+                      {{ car.is_mod ? t.content.mod : t.content.vanilla }}
+                    </span>
+                  </div>
+
+                  <div v-if="filteredContentCars.length === 0" class="empty-state">
+                    {{ t.content.noCars }}
+                  </div>
+                </div>
+              </div>
+
+              <!-- TRACKS -->
+              <div class="card">
+                <div class="card-title">🏁 {{ t.content.tracks }}</div>
+
+                <input
+                  type="text"
+                  v-model="contentSearch.tracks"
+                  class="input"
+                  :placeholder="t.content.searchTracks"
+                  style="margin-bottom:16px;"
+                />
+
+                <div class="content-list">
+                  <div v-for="track in filteredContentTracks" :key="track.id" class="content-item">
+                    <div>
+                      <div style="font-weight:600;">{{ track.name }}</div>
+                      <div style="font-size:12px; color:#64748b;">{{ track.id }}</div>
+                    </div>
+
+                    <span class="badge" :class="track.is_mod ? 'mod' : 'vanilla'">
+                      {{ track.is_mod ? t.content.mod : t.content.vanilla }}
+                    </span>
+                  </div>
+
+                  <div v-if="filteredContentTracks.length === 0" class="empty-state">
+                    {{ t.content.noTracks }}
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
           <!-- LOGS TAB -->
           <div v-if="tab==='logs'" key="logs" class="card">
             <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
@@ -1277,7 +1401,8 @@
           dashboard: '📊 Обзор',
           session: '🎮 Сессия',
           players: '👥 Игроки',
-          logs: '📋 Логи'
+          logs: '📋 Логи',
+          content: "📦 Контент"
         },
         dashboard: {
           title: 'Обзор сервера',
@@ -1358,6 +1483,18 @@
           noLogs: 'Нет логов для отображения',
           loading: 'Загрузка логов...',
           autoRefreshHint: 'Логи автоматически обновляются каждые 10 секунд. Используйте фильтры для поиска.'
+        },
+        content: {
+          title: 'Контент сервера',
+          hint: 'Список установленных машин и трасс',
+          cars: 'Машины',
+          tracks: 'Трассы',
+          searchCars: 'Поиск машин...',
+          searchTracks: 'Поиск трасс...',
+          noCars: 'Нет машин',
+          noTracks: 'Нет трасс',
+          mod: 'Мод',
+          vanilla: 'Сток'
         }
       },
       en: {
@@ -1375,7 +1512,8 @@
           dashboard: '📊 Dashboard',
           session: '🎮 Session',
           players: '👥 Players',
-          logs: '📋 Logs'
+          logs: '📋 Logs',
+          content: "📦 Content"
         },
         dashboard: {
           title: 'Server Overview',
@@ -1456,6 +1594,18 @@
           noLogs: 'No logs to display',
           loading: 'Loading logs...',
           autoRefreshHint: 'Logs auto-refresh every 10 seconds. Use filters to search.'
+        },
+        content: {
+          title: 'Server Content',
+          hint: 'Installed cars and tracks',
+          cars: 'Cars',
+          tracks: 'Tracks',
+          searchCars: 'Search cars...',
+          searchTracks: 'Search tracks...',
+          noCars: 'No cars found',
+          noTracks: 'No tracks found',
+          mod: 'Mod',
+          vanilla: 'Vanilla'
         }
       }
     }
@@ -1470,6 +1620,12 @@
             clients: 0,
             maxclients: 0,
             track: ''
+          },
+          zipBlob : {},
+          progress : 0,
+          contentSearch: {
+            cars: '',
+            tracks: ''
           },
           weatherList: [],
           session: {
@@ -1540,9 +1696,46 @@
             const car = this.cars.find(c => c.id === carModel)
             return car ? car.skins : []
           }
+        },
+        filteredContentCars() {
+          return this.cars.filter(c =>
+            c.id.toLowerCase().includes(this.contentSearch.cars.toLowerCase())
+          )
+        },
+        filteredContentTracks() {
+          return this.tracks.filter(t =>
+            t.id.toLowerCase().includes(this.contentSearch.tracks.toLowerCase())
+          )
         }
       },
       methods: {
+        async uploadZip() {
+          const formData = new FormData();
+          formData.append("mod", this.zipBlob.value, "mod.zip");
+
+          await fetch("/upload", {
+            method: "POST",
+            body: formData
+          });
+
+          alert("Мод загружен 🚀");
+        },
+        async handleFolder(event) {
+          const files = event.target.files;
+          const zip = new JSZip();
+
+          for (const file of files) {
+            // важно: сохраняем структуру папок
+            zip.file(file.webkitRelativePath, file);
+          }
+
+          this.zipBlob.value = await zip.generateAsync(
+            { type: "blob" },
+            (metadata) => {
+              this.progress.value = Math.round(metadata.percent);
+            }
+          );
+        },
         showToast(type, title, message, duration = 4000) {
           const id = ++this.toastId,
             icons = {

@@ -5,6 +5,10 @@ import secrets
 from core.core import Core
 import time
 import requests
+import zipfile
+from werkzeug.utils import secure_filename
+
+
 
 # PATH = os.getenv("SERVER_PATH", "")
 PATH = "/ac_server"
@@ -16,6 +20,12 @@ app.secret_key = os.getenv("SESSION_SECRET", "dev-insecure-secret")
 app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 app.config["SESSION_COOKIE_SECURE"] = os.getenv("SESSION_COOKIE_SECURE", "0") == "1"
+
+UPLOAD_FOLDER = "uploads"
+EXTRACT_FOLDER = "mods"
+
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+os.makedirs(EXTRACT_FOLDER, exist_ok=True)
 
 def _get_env():
     return {
@@ -70,6 +80,31 @@ def _validate_csrf(token):
 
 def _is_logged_in():
     return session.get("auth") is True
+
+def safe_extract(zip_ref, path):
+    for member in zip_ref.namelist():
+        member_path = os.path.join(path, member)
+
+        if not os.path.realpath(member_path).startswith(os.path.realpath(path)):
+            raise Exception("Попытка path traversal!")
+
+    zip_ref.extractall(path)
+
+def validate_mod_structure(path):
+    content_path = os.path.join(path, "content")
+
+    if not os.path.isdir(content_path):
+        return False
+
+    cars_path = os.path.join(content_path, "cars")
+    tracks_path = os.path.join(content_path, "tracks")
+
+    # хотя бы что-то должно быть
+    if not (os.path.isdir(cars_path) or os.path.isdir(tracks_path)):
+        return False
+
+    return True
+
 
 @app.before_request
 def require_login():
@@ -148,6 +183,44 @@ def get_tracks():
 def get_weather():
     weather = server_controller.list_weathers()
     return jsonify(weather)
+
+
+# -----------------------------
+# MOD UPLOAD
+# -----------------------------
+@app.route("/upload", methods=["POST"])
+def upload_mod():
+    if "mod" not in request.files:
+        return jsonify({"error": "Нет файла"}), 400
+
+    file = request.files["mod"]
+
+    if file.filename == "":
+        return jsonify({"error": "Пустое имя файла"}), 400
+
+    filename = secure_filename(file.filename)
+    zip_path = os.path.join(UPLOAD_FOLDER, filename)
+
+    # сохраняем ZIP
+    file.save(zip_path)
+
+    # папка для распаковки
+    extract_path = os.path.join(EXTRACT_FOLDER, filename.replace(".zip", ""))
+    os.makedirs(extract_path, exist_ok=True)
+
+    try:
+        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+            safe_extract(zip_ref, extract_path)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+    # валидация структуры
+    if not validate_mod_structure(extract_path):
+        return jsonify({"error": "Неверная структура мода"}), 400
+
+    return jsonify({"status": "ok"})
+
+
 
 # ---------------------
 # INFO
