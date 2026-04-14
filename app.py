@@ -206,8 +206,9 @@ def get_weather():
 
 @app.route("/api/presets")
 def list_presets():
-    presets = server_controller.list_presets()
-    return jsonify(presets)
+    pass
+    # presets = server_controller.list_presets()
+    # return jsonify(presets)
 
 @app.route("/api/presets/load")
 def load_preset():

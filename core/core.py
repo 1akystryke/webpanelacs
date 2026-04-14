@@ -57,7 +57,7 @@ class Core:
             "variationAmbient": "VARIATION_AMBIENT",
             "variationRoad": "VARIATION_ROAD",
         }
-        os.mkdir(self.presets_path,exist_ok=True)
+        os.makedirs(self.presets_path, exist_ok=True)
 
     def supervisor_stop(self):
         try:
