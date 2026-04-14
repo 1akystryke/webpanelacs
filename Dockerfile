@@ -4,7 +4,7 @@ FROM node:18 AS builder
 WORKDIR /app
 
 COPY web-app/package*.json ./
-RUN npm install
+RUN npm install webpack-plugin-vuetify@^3.1.0 && npm install
 
 COPY web-app/. .
 RUN npm run build
