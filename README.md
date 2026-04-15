@@ -20,7 +20,7 @@ SESSION_SECRET=your_random_secret_key
 ### Docker run command
 
 ```bash
-docker run \
+docker run -d \
   --env-file .env \
   -p 5002:5000 \
   -p 9600:9600/udp \
