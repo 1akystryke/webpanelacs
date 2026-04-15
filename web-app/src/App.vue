@@ -62,6 +62,8 @@
               :handle-folder="handleFolder"
               :upload-zip="uploadZip"
               :progress="progress"
+              :upload-progress="uploadProgress"
+              :uploading="uploading"
               :zip-ready="zipReady"
             />
 
@@ -118,6 +120,8 @@ const server = reactive({
 
 const zipBlob = ref(null)
 const progress = ref(0)
+const uploadProgress = ref(0)
+const uploading = ref(false)
 
 const contentSearch = reactive({
   cars: '',
@@ -202,7 +206,7 @@ const headerTitle = computed(() => {
   return t.value.logs.title
 })
 
-const zipReady = computed(() => !!zipBlob.value)
+const zipReady = computed(() => !!zipBlob.value && !uploading.value)
 
 const filteredLogs = computed(() => {
   if (logFilter.value === 'all') return logs.value
@@ -556,6 +560,8 @@ const handleFolder = async (event) => {
   if (!files?.length) return
   const zip = new JSZip()
   progress.value = 0
+  uploadProgress.value = 0
+  uploading.value = false
 
   for (const file of files) {
     zip.file(file.webkitRelativePath, file)
@@ -567,16 +573,54 @@ const handleFolder = async (event) => {
 }
 
 const uploadZip = async () => {
-  if (!zipBlob.value) return
+  if (!zipBlob.value || uploading.value) return
+
+  uploading.value = true
+  uploadProgress.value = 0
+
   const formData = new FormData()
   formData.append('mod', zipBlob.value, 'mod.zip')
 
-  await fetch('/upload', {
-    method: 'POST',
-    body: formData
-  })
+  let uploadSuccess = false
+  try {
+    await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest()
+      xhr.open('POST', '/upload')
+      if (csrfToken.value) xhr.setRequestHeader('X-CSRF-Token', csrfToken.value)
 
-  success('Мод загружен 🚀')
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          uploadProgress.value = Math.round((event.loaded / event.total) * 100)
+        }
+      }
+
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          resolve(xhr.response)
+        } else {
+          reject(new Error(`Upload failed (${xhr.status})`))
+        }
+      }
+
+      xhr.onerror = () => reject(new Error('Network error'))
+      xhr.onabort = () => reject(new Error('Upload aborted'))
+      xhr.send(formData)
+    })
+
+    uploadSuccess = true
+    success('Мод загружен 🚀')
+  } catch (err) {
+    error('Ошибка загрузки мода')
+  } finally {
+    uploading.value = false
+    if (uploadSuccess) {
+      zipBlob.value = null
+      progress.value = 0
+      setTimeout(() => {
+        uploadProgress.value = 0
+      }, 500)
+    }
+  }
 }
 
 watch(tab, (newTab) => {
