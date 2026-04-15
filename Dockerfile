@@ -1,3 +1,15 @@
+# building stage
+FROM node:18 AS builder
+
+WORKDIR /app
+
+COPY web-app/package*.json ./
+RUN npm install
+
+COPY web-app/. .
+RUN npm run build
+
+# deployment stage
 FROM python:3.12-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -10,6 +22,7 @@ RUN apt-get update && apt-get install -y supervisor && pip install --no-cache-di
 
 COPY app.py ./
 COPY vue  ./vue/
+COPY --from=builder /app/dist ./static/
 COPY core ./core/
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
