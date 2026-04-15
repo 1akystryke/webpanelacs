@@ -11,7 +11,7 @@
                 <button class="btn btn-primary" @click="uploadZip" :disabled="!zipReady">Загрузить мод</button>
             </div>
 
-            <div class="progress-area" v-if="progress > 0 || uploadProgress > 0 || uploading" style="margin-top: 18px">
+            <div class="progress-area" v-if="progress > 0 || uploadProgress > 0 || uploading" style="margin-top: 18px; margin-bottom: 18px">
                 <div class="progress-block" v-if="progress > 0">
                     <div class="progress-label">Архивация: {{ progress }}%</div>
                     <div class="progress-bar">
