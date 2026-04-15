@@ -26,7 +26,10 @@
       />
     </div>
 
-    <div style="margin-top: 32px; text-align: right;">
+    <div style="margin-top: 32px; display: flex; justify-content: flex-end; gap: 12px;">
+      <button class="btn btn-secondary" style="padding: 16px 40px; font-size: 17px;" @click="savePreset" :disabled="saving">
+        {{ t.session.savePreset }}
+      </button>
       <button class="btn btn-primary" style="padding: 16px 40px; font-size: 17px;" @click="saveSession" :disabled="saving">
         <span v-if="saving"><span class="spinner"></span> {{ t.session.saving }}</span>
         <span v-else>{{ t.session.saveSession }}</span>
@@ -88,6 +91,10 @@ defineProps({
     required: true
   },
   saveSession: {
+    type: Function,
+    required: true
+  },
+  savePreset: {
     type: Function,
     required: true
   },

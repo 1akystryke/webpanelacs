@@ -241,9 +241,8 @@ def get_weather():
 
 @app.route("/api/presets")
 def list_presets():
-    pass
-    # presets = server_controller.list_presets()
-    # return jsonify(presets)
+    presets = server_controller.list_presets()
+    return jsonify(presets)
 
 
 @app.route("/api/presets/load")
@@ -253,10 +252,18 @@ def load_preset():
     return jsonify({"success": True, "preset_name": preset_name})
 
 
-@app.route("/api/presets/save")
+@app.route("/api/presets/save", methods=["POST"])
 def save_preset():
+    data = request.json
+    preset_name = data["name"]
+    server_controller.save_preset(data)
+    return jsonify({"success": True, "preset_name": preset_name})
+
+
+@app.route("/api/presets/delete", methods=["DELETE"])
+def delete_preset():
     preset_name = request.args.get("name")
-    server_controller.save_preset(preset_name)
+    server_controller.delete_preset(preset_name)
     return jsonify({"success": True, "preset_name": preset_name})
 
 

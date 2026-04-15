@@ -41,7 +41,17 @@
               :add-weather-slot="addWeatherSlot"
               :remove-weather-slot="removeWeatherSlot"
               :save-session="saveSession"
+              :save-preset="savePreset"
               :get-car-skins="getCarSkins"
+            />
+
+            <PresetsView
+              v-else-if="tab === 'presets'"
+              key="presets"
+              :t="t"
+              :presets="presets"
+              :apply-preset="applyPreset"
+              :delete-preset="deletePreset"
             />
 
             <PlayersView
@@ -68,7 +78,7 @@
             />
 
             <LogsView
-              v-else
+               v-else-if="tab === 'logs'"
               key="logs"
               :t="t"
               :logs="logs"
@@ -104,6 +114,7 @@ import SidebarNav from './components/SidebarNav.vue'
 import HeaderBar from './components/HeaderBar.vue'
 import DashboardView from './views/DashboardView.vue'
 import SessionView from './views/SessionView.vue'
+import PresetsView from './views/PresetsView.vue'
 import PlayersView from './views/PlayersView.vue'
 import ContentView from './views/ContentView.vue'
 import LogsView from './views/LogsView.vue'
@@ -129,6 +140,7 @@ const contentSearch = reactive({
 })
 
 const weatherList = ref([])
+const presets = ref([])
 const session = reactive({
   name: '',
   password: '',
@@ -195,6 +207,7 @@ const navItems = computed(() => [
   { key: 'session', label: t.value.nav.session },
   { key: 'players', label: t.value.nav.players },
   { key: 'content', label: t.value.nav.content },
+  { key: 'presets', label: t.value.nav.presets },
   { key: 'logs', label: t.value.nav.logs }
 ])
 
@@ -203,7 +216,8 @@ const headerTitle = computed(() => {
   if (tab.value === 'session') return t.value.session.title
   if (tab.value === 'players') return t.value.players.title
   if (tab.value === 'content') return t.value.content.title
-  return t.value.logs.title
+  if (tab.value === 'presets') return t.value.presets.title
+  if (tab.value === 'logs') return t.value.logs.title
 })
 
 const zipReady = computed(() => !!zipBlob.value && !uploading.value)
@@ -306,6 +320,103 @@ const getLogLevelText = (log) => `[${getLogLevel(log).toUpperCase()}]`
 
 const formatLogMessage = (log) =>
   log.replace(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} /, '').replace(/^\d{2}:\d{2}:\d{2} /, '')
+
+const fetchPresets = async () => {
+  try {
+    const data = await api('/api/presets')
+    presets.value = Array.isArray(data) ? data : []
+  } catch (err) {
+    console.warn(err)
+    presets.value = []
+  }
+}
+
+const savePreset = async () => {
+  const presetName = window.prompt(t.value.presets.savePrompt)
+  if (!presetName || !presetName.trim()) return
+
+  const payload = {
+    name: presetName,
+    track: session.track,
+    trackVariant: session.trackVariant,
+    cars: session.cars.map((car) => ({
+      id: car.model,
+      restrictor: car.restrictor,
+      ballast: car.ballast,
+      skin: car.skin
+    })),
+    weather: weather.value,
+    tyreWear: session.tyreWear,
+    damage: session.damage,
+    fuelConsumption: session.fuelConsumption,
+    sunAngle: session.sunAngle,
+    practiceDuration: session.practiceDuration,
+    qualifyingDuration: session.qualifyingDuration,
+    raceLaps: session.raceLaps,
+    pickupMode: session.pickupMode,
+    loopMode: session.loopMode,
+    allowedTyresOut: session.allowedTyresOut,
+    legalTyres: session.legalTyres,
+    absAllowed: boolToApi(session.absAllowed),
+    tcAllowed: boolToApi(session.tcAllowed),
+    stabilityAllowed: boolToApi(session.stabilityAllowed),
+    autoclutchAllowed: boolToApi(session.autoclutchAllowed),
+    tyreBlanketsAllowed: boolToApi(session.tyreBlanketsAllowed),
+    forceVirtualMirror: boolToApi(session.forceVirtualMirror),
+    registerToLobby: boolToApi(session.registerToLobby),
+    maxClients: session.maxClients
+  }
+
+  try {
+    const response = await api(`/api/presets/save?name=${encodeURIComponent(presetName.trim())}`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    })
+    if (response && response.success) {
+      success(t.value.presets.saveSuccess)
+      await fetchPresets()
+    } else {
+      error(response?.message || t.value.presets.saveError)
+    }
+  } catch (err) {
+    error(t.value.presets.saveError)
+  }
+}
+
+const applyPreset = async (preset) => {
+  if (!preset?.name) return
+  try {
+    const response = await api(`/api/presets/load?name=${encodeURIComponent(preset.name)}`)
+    if (response && response.success) {
+      success(t.value.presets.applySuccess)
+      await fetchAll()
+    } else {
+      error(response?.message || t.value.presets.applyError)
+    }
+  } catch (err) {
+    error(t.value.presets.applyError)
+  }
+}
+
+const deletePreset = async (preset) => {
+  if (!preset?.name) return
+  if (!window.confirm(t.value.presets.deleteConfirm)) return
+
+  try {
+    const response = await api(`/api/presets/delete?name=${encodeURIComponent(preset.name)}`, {
+      method: 'DELETE'
+    })
+    if (response && response.success) {
+      success(t.value.presets.deleteSuccess)
+      await fetchPresets()
+    } else {
+      error(response?.message || t.value.presets.deleteError)
+    }
+  } catch (err) {
+    error(t.value.presets.deleteError)
+  }
+}
 
 const startAutoRefresh = () => {
   stopAutoRefresh()
@@ -412,8 +523,8 @@ const fetchAll = async () => {
       if (Array.isArray(sessionData.cars)) {
         session.cars = sessionData.cars.map((car) => ({
           model: car.id || car.model || '',
-          restrictor: car.restrictor ?? 0,
-          ballast: car.ballast ?? 0,
+          restrictor: Number(car.restrictor) ?? 0,
+          ballast: Number(car.ballast) ?? 0,
           skin: car.skin || ''
         }))
       } else if (sessionData.cars) {
@@ -629,6 +740,9 @@ watch(tab, (newTab) => {
     startAutoRefresh()
   } else {
     stopAutoRefresh()
+  }
+  if (newTab === 'presets') {
+    fetchPresets()
   }
 })
 

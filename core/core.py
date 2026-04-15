@@ -205,7 +205,9 @@ class Core:
 
         for param in data.keys():
             if param not in self.map_parameters_name.keys():
+                print(f"Not in map: {param}")
                 continue
+            print(f"In map: {param}")
             key1, key2 = self.map_parameters_name[param]
             if param == "maxClients":
                 server_data[key1][key2] = len(data["cars"])
@@ -260,21 +262,46 @@ class Core:
             log_file_content = f.read()
         return log_file_content.split("\n")
 
+    def save_preset(self, preset_data):
+        print(preset_data)
+        cars = self.list_cars()
+        for i in range(len(preset_data["cars"])):
+            for car in cars:
+                if preset_data["cars"][i]["id"] == car["id"]:
+                    preset_data["cars"][i]["name"] = car["name"]
+                    break
 
-    def save_preset(self,preset_name):
-        target_path = self.presets_path+f"/{preset_name}"
-        car_data = cp.get_current_cars(self.entry_list_path)
-        server_data = cp.get_server_config(self.server_cfg_path)
-        preset_dict = {"server":server_data,"entry_list":car_data}
-        with open(target_path,"w") as f:
-            f.write(json.dumps(preset_dict))
+        target_path = os.path.join(self.presets_path, f"{preset_data["name"]}.json")
+        with open(target_path, "w", encoding="utf-8") as f:
+            f.write(json.dumps(preset_data))
 
-    def load_preset(self,preset_name):
-        preset_path = self.presets_path+f"/{preset_name}"
-        with open(preset_path,"r") as f:
+    def list_presets(self):
+        presets_list = []
+        presets = os.listdir(self.presets_path)
+        for p in presets:
+            preset_path = os.path.join(self.presets_path, p)
+            with open(preset_path, "r") as f:
+                data = json.load(f)
+                presets_list.append(data)
+        return presets_list
+
+    def load_preset(self, preset_name):
+        preset_path = os.path.join(self.presets_path, f"{preset_name}.json")
+        settings = {}
+        with open(preset_path, "r") as f:
             obj = json.loads(f.read())
-        car_data = obj["entry_list"]
-        server_data = obj["server"]
-        cp.generate_entry_list(car_data, self.entry_list_path)
-        cp.write_new_server_cfg(server_data, self.server_cfg_path)
+            settings = obj
 
+        server_data = {}
+        for k in settings.keys():
+            if k == "name":
+                continue
+            server_data[k] = settings[k]
+
+        self.set_car_list(settings["cars"])
+        self.apply_session(server_data)
+
+    def delete_preset(self, preset_name):
+        preset_path = os.path.join(self.presets_path, f"{preset_name}.json")
+        if os.path.exists(preset_path):
+            os.remove(preset_path)

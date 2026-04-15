@@ -6,12 +6,12 @@
         </div>
 
         <div class="card" style="margin-bottom: 24px">
-            <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap; width: 100%">
+            <div style="display: flex; flex-direction: column; gap: 16px; flex-wrap: wrap">
                 <input type="file" webkitdirectory @change="handleFolder" />
-                <button class="btn btn-primary" @click="uploadZip" :disabled="!zipReady">Загрузить мод</button>
+                <button class="btn btn-primary" @click="uploadZip" :disabled="!zipReady" style="width: 10%;">Загрузить мод</button>
             </div>
 
-            <div class="progress-area" v-if="progress > 0 || uploadProgress > 0 || uploading" style="margin-top: 18px; margin-bottom: 18px">
+            <div class="progress-area" v-if="progress > 0 || uploadProgress > 0 || uploading" style="margin-top: 18px; margin-bottom: 18px; width: 30%;">
                 <div class="progress-block" v-if="progress > 0">
                     <div class="progress-label">Архивация: {{ progress }}%</div>
                     <div class="progress-bar">
@@ -27,7 +27,7 @@
                 </div>
             </div>
 
-            <div class="grid">
+            <div class="grid" style="margin-top: 18px">
                 <div class="card">
                     <div class="card-title">🏎️ {{ t.content.cars }}</div>
 
