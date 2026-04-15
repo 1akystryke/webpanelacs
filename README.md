@@ -6,7 +6,34 @@ A web-based control panel for remotely managing Assetto Corsa racing simulator s
 
 <img width="2537" height="1185" alt="image" src="https://github.com/user-attachments/assets/1913f759-9afa-407b-88ab-0138067df5c9" />
 
-## Installation Guide
+
+## Quick start guide
+
+### Create readme file in run directory
+
+```env
+SERVER_PATH=/path/to/your/ac/server   # path to your Assetto Corsa server installation
+PORT=5002
+AUTH_USER=admin
+AUTH_PASS=your_secure_password
+SESSION_SECRET=your_random_secret_key
+```
+
+### Docker run command
+
+```bash
+docker run \
+  --env-file .env \
+  -p ${PORT:-5000}:5000 \
+  -p 9600:9600/udp \
+  -p 9600:9600/tcp \
+  -p 8081:8081 \
+  -v "${SERVER_PATH}:/ac_server:rw" \
+  1akystryke/webpanelac:latest
+```
+
+
+## Build guide
 
 ### Prerequisites
 
