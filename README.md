@@ -9,7 +9,7 @@ A web-based control panel for remotely managing Assetto Corsa racing simulator s
 
 ## Quick start guide
 
-### Create readme file in run directory
+### Create env file in run directory
 
 ```env
 SERVER_PATH=/path/to/your/ac/server   # path to your Assetto Corsa server installation
