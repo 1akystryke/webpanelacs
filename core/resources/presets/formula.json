@@ -1,0 +1,56 @@
+{
+  "name": "formula",
+  "track": "ks_nurburgring",
+  "trackVariant": "layout_gp_a",
+  "cars": [
+    {
+      "id": "ks_ferrari_f2004",
+      "restrictor": 0,
+      "ballast": 0,
+      "skin": "00_official",
+      "name": "Ferrari F2004"
+    },
+    {
+      "id": "ks_ferrari_f138",
+      "restrictor": 5,
+      "ballast": 15,
+      "skin": "01_ferrari_3",
+      "name": "Ferrari F138"
+    },
+    {
+      "id": "ks_ferrari_sf15t",
+      "restrictor": 15,
+      "ballast": 25,
+      "skin": "02_ferrari_7",
+      "name": "Ferrari SF15-T"
+    }
+  ],
+  "weather": [
+    {
+      "baseTemperatureAmbient": 22,
+      "baseTemperatureRoad": 28,
+      "graphics": "3_clear",
+      "variationAmbient": 2,
+      "variationRoad": 3
+    }
+  ],
+  "tyreWear": "100",
+  "damage": "100",
+  "fuelConsumption": "100",
+  "sunAngle": 45,
+  "practiceDuration": "10",
+  "qualifyingDuration": "10",
+  "raceLaps": 6,
+  "pickupMode": "1",
+  "loopMode": 0,
+  "allowedTyresOut": "2",
+  "legalTyres": "S",
+  "absAllowed": 1,
+  "tcAllowed": 1,
+  "stabilityAllowed": 0,
+  "autoclutchAllowed": 1,
+  "tyreBlanketsAllowed": 1,
+  "forceVirtualMirror": 1,
+  "registerToLobby": 1,
+  "maxClients": "3"
+}

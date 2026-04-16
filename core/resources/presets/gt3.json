@@ -1,0 +1,63 @@
+{
+  "name": "gt3",
+  "track": "imola",
+  "trackVariant": "",
+  "cars": [
+    {
+      "id": "bmw_z4_gt3",
+      "restrictor": 0,
+      "ballast": 0,
+      "skin": "fanatec",
+      "name": "BMW Z4 GT3"
+    },
+    {
+      "id": "ks_nissan_gtr_gt3",
+      "restrictor": 0,
+      "ballast": 0,
+      "skin": "kunosart_112",
+      "name": "Nissan GT-R GT3"
+    },
+    {
+      "id": "mclaren_mp412c_gt3",
+      "restrictor": 0,
+      "ballast": 0,
+      "skin": "2012-g_racing",
+      "name": "McLaren MP4-12C GT3"
+    },
+    {
+      "id": "mercedes_sls_gt3",
+      "restrictor": 0,
+      "ballast": 0,
+      "skin": "TCR_2014_05",
+      "name": "Mercedes SLS AMG GT3"
+    }
+  ],
+  "weather": [
+    {
+      "baseTemperatureAmbient": "22",
+      "baseTemperatureRoad": "28",
+      "graphics": "3_clear",
+      "variationAmbient": "2",
+      "variationRoad": "3"
+    }
+  ],
+  "tyreWear": "100",
+  "damage": "100",
+  "fuelConsumption": "100",
+  "sunAngle": "45",
+  "practiceDuration": "10",
+  "qualifyingDuration": "10",
+  "raceLaps": "6",
+  "pickupMode": "1",
+  "loopMode": "0",
+  "allowedTyresOut": "2",
+  "legalTyres": "S",
+  "absAllowed": 1,
+  "tcAllowed": 1,
+  "stabilityAllowed": 0,
+  "autoclutchAllowed": 1,
+  "tyreBlanketsAllowed": 1,
+  "forceVirtualMirror": 1,
+  "registerToLobby": 1,
+  "maxClients": "3"
+}

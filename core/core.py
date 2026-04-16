@@ -3,7 +3,7 @@ import os
 import json
 from pathlib import Path
 import json
-
+import shutil
 
 from . import config_process as cp
 
@@ -58,6 +58,9 @@ class Core:
             "variationRoad": "VARIATION_ROAD",
         }
         os.makedirs(self.presets_path, exist_ok=True)
+        base_path = "core/resources/presets"
+        for file in os.listdir(base_path):
+            shutil.move(base_path+"/"+file, str(self.presets_path)+"/"+file)
 
     def supervisor_stop(self):
         try:
