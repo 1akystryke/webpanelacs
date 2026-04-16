@@ -249,7 +249,13 @@ def list_presets():
 def load_preset():
     preset_name = request.args.get("name")
     server_controller.load_preset(preset_name)
-    return jsonify({"success": True, "preset_name": preset_name})
+    res, err = server_controller.supervisor_restart()
+    if (
+        res != "acserver: stopped\nacserver: started"
+        and res != "acserver: ERROR (not running)\nacserver: started"
+    ):
+        return jsonify({"success": False, "preset_name": preset_name, "error": err}), 500
+    return jsonify({"success": True, "preset_name": preset_name}), 200
 
 
 @app.route("/api/presets/save", methods=["POST"])
@@ -263,8 +269,14 @@ def save_preset():
 @app.route("/api/presets/delete", methods=["DELETE"])
 def delete_preset():
     preset_name = request.args.get("name")
-    server_controller.delete_preset(preset_name)
-    return jsonify({"success": True, "preset_name": preset_name})
+    try:
+        server_controller.delete_preset(preset_name)
+        return jsonify({"success": True, "preset_name": preset_name}), 200
+    except Exception as err:
+        return (
+            jsonify({"success": False, "preset_name": preset_name, "error": err}),
+            500,
+        )
 
 
 # -----------------------------

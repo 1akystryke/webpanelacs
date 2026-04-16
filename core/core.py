@@ -60,7 +60,7 @@ class Core:
         os.makedirs(self.presets_path, exist_ok=True)
         base_path = "core/resources/presets"
         for file in os.listdir(base_path):
-            shutil.move(base_path+"/"+file, str(self.presets_path)+"/"+file)
+            shutil.move(base_path + "/" + file, str(self.presets_path) + "/" + file)
 
     def supervisor_stop(self):
         try:
@@ -306,5 +306,8 @@ class Core:
 
     def delete_preset(self, preset_name):
         preset_path = os.path.join(self.presets_path, f"{preset_name}.json")
-        if os.path.exists(preset_path):
+        try:
             os.remove(preset_path)
+        except Exception as err:
+            print(err)
+            raise
